@@ -1,0 +1,893 @@
+
+% !TeX spellcheck = pt_BR
+% !TEX encoding = UTF-8 Unicode
+
+\chapter{Integrais impróprias}\label{CAP:Improprias}
+
+\ifdefined\updateans
+% Only need to run once in a lifetime, when the file ans.tex needs to be updated.
+\Writetofile{ans}{\protect\section*{Capítulo \ref{CAP:Improprias}}}
+\fi
+
+A integral de Riemann foi definida naturalmente para uma função $f:[a,b]\to \bR$
+contínua, como um limite de somas de retângulos. 
+Nesta seção estudaremos integrais de funções em intervalos \emph{infinitos}, 
+como $[0,\infty)$ ou a reta inteira, ou em intervalos do tipo $(a,b]$, em que a
+função pode possuir alguma descontinuidade (uma assíntota vertical por exemplo)
+em $a$. Tais integrais são chamadas de \emph{impróprias}, e são muito usadas,
+em particular no estudo de \emph{séries} (Cálculo II e CVV) e na
+resolução de \emph{equações diferenciais} (transformada de Laplace,
+transformada de Fourier, etc).
+
+\section{Em intervalos infinitos}
+\index{integral imprópria! em intervalo infinito}
+Consideremos para começar o problema de integrar uma função num
+intervalo infinito, $f:[a,\infty)\to \bR$.
+Vemos imediatamente que não tem como definir somas de Riemann num intervalo
+infinito: qualquer subdivisão de $[a,\infty)$ contém um número
+infinito de retângulos. O que pode ser feito é o seguinte:
+escolheremos um número $L>a$
+\emph{grande mas finito}, calcularemos a integral de Riemann de $f$ em $[a,L]$,
+e \emph{em seguida} tomaremos o\index{limite} limite $L\to \infty$:
+
+\begin{defin}
+Seja $f:[a,\infty)\to \bR$ uma função contínua. Se o limite 
+\eq{\int_a^\infty f(x)\,dx\pardef \lim_{L\to \infty}\int_a^L f(x)\,dx\,,}
+existir e for finito, diremos que \grasA{a integral imprópria 
+$\int_a^\infty f(x)\,dx$ converge}. Caso contrário, ela \grasA{diverge}.
+Integrais impróprias para $f:(-\infty,b]\to \bR$ se definem da mesma maneira:
+\eq{\int_{-\infty}^b f(x)\,dx\pardef \lim_{L\to \infty}\int_{-L}^b f(x)\,dx\,.}
+\end{defin}
+
+
+\begin{ex}
+Considere $f(x)=e^{-x}$ em $[0,+\infty)$:
+$$
+\int_0^\infty e^{-x}\,dx=\lim_{L\to \infty}\int_0^L e^{-x}\,dx=
+\lim_{L\to \infty} \bigl\{-e^{-x}\bigr\}\big|_0^{L}=
+\lim_{L\to \infty} \bigl\{1-e^{-L}\bigr\}=1\,,
+$$ 
+que é finito. Logo, $\int_0^\infty e^{-x}\,dx$ converge e vale $1$.
+Como $e^{-x}$ é uma função positiva no intervalo $[0,\infty)$ todo, o valor de
+$\int_0^\infty e^{-x}\,dx$ pode
+ser interpretado como
+o valor da área delimitada pela parte do gráfico de $e^{-x}$ contida no
+primeiro quadrante,
+pelo eixo $x$ e pelo eixo $y$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[xscale=1.5, yscale=2]
+\fill[areagrafico] (0,0)--plot[domain=0:4](\x,{exp(-\x)})--(4,0)--cycle;
+\draw[thick, domain=-0.2:4] plot (\x,{exp(-\x)});
+\draw[>=latex, ->] (-0.2,0)--(5,0);
+\draw[>=latex, ->] (0,-0.2)--(0,1.2) node[right]{$e^{-x}$};
+\draw (0.55,0.2) node{área$=1$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Observe que
+apesar
+dessa área não possuir
+limitação espacial, ela é finita!
+\end{ex}
+
+\begin{ex}\label{Ex:unsurxdiverge}
+Considere $f(x)=\frac{1}{x}$ em $[1,\infty)$:
+$$
+\int_1^\infty \frac{dx}{x}=\lim_{L\to \infty}\int_1^L \frac{dx}{x}=
+\lim_{L\to \infty} \bigl\{\ln x\bigr\}\big|_1^{L}=
+\lim_{L\to \infty} \ln L=\infty\,.
+$$ 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[xscale=1.5, yscale=2]
+\fill[areagrafico] (1,0)--plot[domain=1:6](\x,1/\x)--(6,0)--cycle;
+\draw[thick, domain=0.8:6] plot (\x,{1/\x});
+\draw[>=latex, ->] (-0.2,0)--(6.5,0);
+\draw[>=latex, ->] (0,-0.2)--(0,1.2) node[right]{$\tfrac1x$};
+\draw (1.8,0.25) node{área$=\infty$};
+\draw[dotted] (1,0)--(1,1);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Neste caso, a interpretação de $\int_1^\infty \frac{dx}{x}=\infty$ é que a área
+delimitada pelo gráfico de $f(x)=\tfrac1x$ é \emph{infinita}.
+\index{gráfico! área debaixo de um}
+\end{ex}
+
+\begin{obs}
+As duas funções consideradas acima, $e^{-x}$ e $\frac1x$, tendem a zero
+no infinito. 
+No entanto, a integral imprópria da primeira converge, enquanto a da segunda
+diverge.
+Assim, vemos que \emph{não basta uma função tender a zero no infinito
+para a sua integral imprópria convergir}!
+De fato, a convergência de uma integral imprópria depende de \emph{quão
+rápido} a função tende a zero.
+Nos exemplos acima, $e^{-x}$ tende a zero muito mais rápido~\footnote{Por
+exemplo, usando a Regra de B.H., 
+$\lim_{x\to \infty}\frac{e^{-x}}{\tfrac1x}=\lim_{x\to
+\infty}\frac{x}{e^{x}}=0$.} que
+$\tfrac1x$.
+No caso, $e^{-x}$ tende a zero \emph{rápido o suficiente} para que a área
+delimitada pelo seu gráfico seja \emph{finita}, e $\tfrac1x$ tende a zero
+\emph{devagar o suficiente} para que a área
+delimitada pelo seu gráfico seja \emph{infinita}.
+\end{obs}
+
+\begin{ex}
+Considere a integral imprópria
+$$\int_1^\infty\frac{1}{\sqrt{x}(x+1)}dx=\lim_{L\to\infty}
+\int_1^L\frac{1}{\sqrt{x}(x+1)}dx\,.$$
+Com $u=\sqrt{x}$ temos $dx=2u\,du$. Logo,
+\begin{align*}
+\int_1^L\frac{1}{\sqrt{x}(x+1)}dx=2
+\int_1^{\sqrt{L}}\frac{1}{u^2+1}du=\bigl\{2\arctan
+u\big\}_1^{\sqrt{L}}
+\end{align*}
+Tomando o limite $L\to \infty$,
+\begin{align*}
+\int_1^\infty\frac{1}{\sqrt{x}(x+1)}dx=2\lim_{L\to\infty}\big\{
+\arctan(\sqrt{L})-\tfrac{\pi}{4}
+\big\}=
+2\bigl\{\tfrac{\pi}{2}-\tfrac{\pi}{4}\bigr\}=\tfrac{\pi}{2}\,,
+\end{align*}
+que é finito. Logo, a integral imprópria acima {converge}, e o seu valor é
+$\tfrac{\pi}{2}$.
+\end{ex}
+
+A função integrada, numa integral imprópria, não precisa ser positiva:
+\begin{ex}
+Considere $\int_0^\infty e^{-x}\sen x\,dx$. 
+Usando integração por partes (veja o Exercício \ref{Exo:porpartesmach}),
+$$\int_0^\infty e^{-x}\sen x\,dx=\lim_{L\to\infty}\bigl\{-\tfrac12 e^{-x}(\sen
+x+\cos x)\bigr\}\Big|_0^L=\tfrac12
+\lim_{L\to\infty}\bigl\{1-e^{-L}(\sen
+L+\cos L)\bigr\}=\tfrac12\,.
+$$
+Logo, a integral converge. Apesar do valor $\frac12$ ser $>0$, a
+sua interpretação em termos de área não é possível neste caso, já que 
+$x\mapsto e^{-x}\sen x$ é negativa em infinitos intervalos:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[xscale=1.5, yscale=2]
+% \fill[areagrafico] (0,0)--plot[domain=0:4](\x,{exp(-\x)*sin(\x
+% r)})--(4,0)--cycle;
+\draw[thick, domain=-0.1:4, samples=70] plot (\x,{exp(-\x)*sin((3*\x)
+r)});
+\draw[>=latex, ->] (-0.2,0)--(5,0);
+\draw[>=latex, ->] (0,-0.2)--(0,1) node[right]{$e^{-x}\sen x$};
+%\draw (0.55,0.2) node{área$=1$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{ex}
+
+\begin{exo}
+Estude a convergência das seguintes integrais impróprias.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itImproprias0} $\int_3^\infty\frac{dx}{x-2}$
+\item\label{itImproprias1} $\int_{2}^\infty x^2\,dx$
+\item\label{itImproprias2} $\int_{1}^\infty \tfrac{dx}{x^7}$
+\item\label{itImproprias3} $\int_0^\infty\cos x\,dx$
+\item\label{itImproprias4} $\int_{0}^\infty \frac{dx}{x^2+1}$
+\item\label{itImproprias5} $\int_{1}^\infty \frac{dx}{x^2+x}$
+\item\label{itImproprias6} $\int_{-\infty}^0 e^{t}\sen(2t)dt$
+\item\label{itImproprias65} $\int_{3}^\infty \frac{\ln x}{x}\,dx$
+\item\label{itImproprias7} $\int_0^\infty\frac{x}{x^4+1}\,dx$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itImproprias0} Com $u=x-2$,
+$\int_3^\infty\frac{dx}{x-2}=\lim_{L\to \infty}\int_3^L\frac{dx}{x-2}=
+\lim_{L\to \infty}\int_1^{L-2}\frac{du}{u}=\lim_{L\to \infty}\ln(L-2)=\infty
+$, diverge.
+\eqref{itImproprias1} Diverge (é a área da região contida entre a parábola
+$x^2$ e o eixo $x$!)
+\eqref{itImproprias2} $\int_{1}^\infty
+\tfrac{dx}{x^7}=\lim_{L\to\infty}\int_{1}^L \tfrac{dx}{x^7}=
+\tfrac16\lim_{L\to\infty}\{1-\frac{1}{L^6}\}=\tfrac16$, logo converge.
+\eqref{itImproprias3} Como $\int_0^L\cos x\,dx=\sen L$, e que $\sen L$ não
+possui limite quando $L\to \infty$, a integral imprópria $\int_0^\infty\cos
+x\,dx$ diverge.
+\eqref{itImproprias4} $\int_{0}^\infty \frac{dx}{x^2+1}=\frac{\pi}{2}$, logo
+converge.
+\eqref{itImproprias5} Temos
+$\frac{1}{x^2+x}=\frac{1}{x(x+1)}=\frac{1}{x}-\frac{1}{x+1}$, logo
+$$\int_1^L\frac{dx}{x^2+x}=\{\ln x\}|_1^L-\{\ln(x+1)\}|_1^L
+=\ln L-\ln(L+1)+\ln 2\,.
+$$
+Mas como $\lim_{L\to \infty}\{\ln L-\ln(L+1)\}=
+\lim_{L\to \infty}\ln\frac{L}{L+1}=\ln 1=0$, temos
+$\int_{1}^\infty \frac{dx}{x^2+x}=\ln 2<\infty$, logo converge.
+\eqref{itImproprias6} converge.
+\eqref{itImproprias65} Com $u=\ln x$, $\int\frac{\ln x}{x}\,dx=\int
+u\,du=\frac{u^2}{2}+C$, logo $\int_{3}^\infty \frac{\ln x}{x}\,dx$ diverge.
+\eqref{itImproprias7} converge (pode escrever $x^4=u^2$, onde $u=x^2$)
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Se $f:[0,\infty)\to \bR$, a \grasA{transformada de Laplace} de $f(x)$ é a
+função $L(s)$ definida pela integral imprópria
+\eq{L(s)\pardef \int_0^\infty e^{-sx}f(x)\,dx\,,\quad s\geq 0\,.}
+Calcule as transformadas de Laplace das seguintes funções $f(x)$:
+\begin{multicols}{4}
+\begin{enumerate}
+\item\label{itTRansfLapl1} $k$ (constante)
+\item\label{itTRansfLapl2} $x$
+\item\label{itTRansfLapl4} $\sen x$
+\item\label{itTRansfLapl5} $e^{-\alpha x}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itTRansfLapl1} $L(s)=\frac{k}{s}$.
+\eqref{itTRansfLapl2} $L(s)=\frac{1}{s^2}$.
+\eqref{itTRansfLapl4} Integrando duas vezes por partes, é fácil
+verificar que $L(s)$ satisfaz $L(s)=\frac{1}{s}(\frac{1}{s}-\frac{1}{s}L(s))$.
+Logo, $L(s)=\frac{1}{1+s^2}$.
+\eqref{itTRansfLapl5} $L(s)=\frac{1}{s+\alpha}$.
+\end{sol}
+\end{exo}
+
+\begin{exo} Estude $f(x)\pardef \frac{x}{x^2+1}$. Em seguida, 
+calcule a área da região contida no semi-espaço $x\geq 0$, delimitada pelo
+gráfico de $f$ e pela sua assíntota horizontal.
+\begin{sol}
+A função tem domínio $\bR$, é ímpar e possui a assíntota horizontal 
+$y=0$, a
+direita e esquerda.
+A sua derivada vale $f'(x)=\frac{1-x^2}{(x^2+1)^2}$. Logo, $f$ decresce em
+$(-\infty,-1]$, possui um mínimo local em $(-1,\tfrac{1}{2})$, cresce em
+$[-1,+1]$, possui um
+um máximo local em $(+1,\tfrac{1}{2})$, e decresce em $[1,+\infty)$.
+A derivada segunda vale $f''(x)=\frac{2x(x^2-3)}{(x^2+1)^3}$. Logo, $f$ possui
+três pontos de inflexão: em $(-\sqrt{3},-\frac{\sqrt{3}}{4})$,
+$(0,0)$ e $(\sqrt{3},\frac{\sqrt{3}}{4})$, e é côncava em
+$(-\infty,-\frac{\sqrt{3}}{4}]$, convexa em $[-\tfrac{\sqrt{3}}{4},0]$, côncava
+em $[0,\tfrac{\sqrt{3}}{4}]$, e convexa em
+$[\tfrac{\sqrt{3}}{4},+\infty)$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{( 2*(#1)/( (#1)^2 + 1 ))}
+\draw[>=latex, ->] (-6,0)--(6,0);
+\draw[>=latex, ->] (0,-1.5)--(0,1.5);
+\draw[thick, domain=-6:6, samples=70] plot (\x,{\funcao{\x}});
+\fill[areagrafico] (0,0)--plot[domain=0:5.5,
+samples=50](\x,{\funcao{\x}})--(5.5,0)--cycle;
+\draw[thick, domain=-6:6, samples=70] plot (\x,{\funcao{\x}});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Vemos que a área procurada é dada pela integral imprópria
+$$
+\int_0^\infty\frac{x}{x^2+1}dx=\lim_{L\to\infty}\int_0^L\frac{x}{x^2+1}dx=\lim_{
+L\to\infty} \ln (L^2+1)=+\infty\,.
+$$
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Estude a função $f(x)\pardef \frac{e^x}{1+e^x}$.
+Em seguida, calcule a área da região contida no semi-plano $x\geq 0$ delimitada
+pelo gráfico de $f$ e pela sua assíntota.
+\begin{sol}
+$f$ tem domínio $\bR$, e é sempre positiva. Já que 
+$$
+\lim_{x\to +\infty} \frac{e^x}{1+e^x}=\lim_{x\to+\infty}
+\frac{1}{1+e^{-x}}=1\,,\quad 
+\lim_{x\to-\infty} \frac{e^x}{1+e^x}=0\,,
+$$
+$f$ tem duas assíntotas horizontais: a reta $y=0$ a esquerda, e a reta $y=1$ a
+direita.
+Como $f'(x)=\frac{e^x}{(1+e^x)^2}$ é sempre positiva, $f$ é crescente em todo
+$x$ (não possui mínimos ou máximos locais). Como
+$f''(x)=\frac{e^x(1-e^x)}{(1+e^x)^2}$,
+e que essa é positiva quando $x\leq 0$, negativa quando $x\geq 0$, temos que $f$
+é convexa em $(-\infty,0]$, côncava em $[0,\infty)$, e possui um ponto de
+inflexão em $(0,\tfrac12)$: 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{(exp(#1))/(1+ exp(#1))}
+\draw[>=latex, ->] (-6,0)--(6,0);
+\draw[>=latex, ->] (0,-0.2)--(0,1.5);
+\draw[dashed] (0,1)--(6,1);
+\fill[areagrafico] (0,0.5)--plot[domain=0:5.5,
+samples=50](\x,{\funcao{\x}})--(5.5,1)--(0,1)--cycle;
+\draw[thick, domain=-6:6, samples=60] plot (\x,{\funcao{\x}});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+A área procurada é dada pela integral imprópria
+$$\int_0^\infty\Big\{1-\frac{e^x}{1+e^x}\Big\}dx=\int_0^\infty\frac{1}{1+e^x}
+dx$$
+Com $u=e^x+1$ dá $du=e^x\,dx=(u-1)\,dx$, e
+$$
+\int \frac{1}{1+e^x}dx=\int\frac{1}{u(u-1)}du\,.
+$$
+A decomposição desta última fração dá
+$$
+\int\frac{1}{u(u-1)}du=-\int\frac{du}{u}+\int \frac{du}{u-1}=-\ln|u|+\ln|u-1|+C
+$$
+Logo,
+\begin{align*}
+\int_0^\infty\frac{1}{1+e^x}dx=\lim_{L\to\infty}\int_0^L\frac{1}{1+e^x}dx=
+&\lim_{L\to\infty}\Big\{
+-\ln (e^x+1)+\ln e^x
+\Big\}_0^L\\
+&=\lim_{L\to\infty}\Big\{
+-\ln (1+e^{-x})
+\Big\}_0^L\\
+&=\ln 2
+\end{align*}
+\end{sol}
+\end{exo}
+
+Intuitivamente, para uma função $f$ 
+contínua possuir uma integral imprópria convergente no infinito, ela precisa
+tender a zero.  Vejamos que precisa de mais do que isso, no seguinte
+exercício:
+\begin{exo}\label{Exo:tendpasverzerointfinie}
+Dê um exemplo de uma função contínua positiva $f:[0,\infty)\to \bR_+$ que não
+tende a zero no infinito, 
+e cuja integral imprópria $\int_0^\infty f(x)\,dx$ converge.
+\begin{sol}
+Considere por exemplo a seguinte função $f$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\n}{7};
+\draw[>=latex, ->] (-0.2,0)--({\n+0.5},0);
+\draw[>=latex, ->] (0,-0.2)--(0,1.3);
+\draw (0,1) node{$-$} node[left]{$1$};
+\foreach \k in {1,...,\n} {
+\draw (\k,0) node{$\shortmid$} node[below]{$\k$};
+\coordinate (A) at (\k,1);
+\coordinate (B) at ({\k-(1/(2^(\k)))},0);
+\coordinate (C) at ({\k+(1/(2^(\k)))},0);
+\fill[areagrafico] (B)--(A)--(C)--cycle; 
+\draw[thick] (B)--(A)--(C);
+}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Fora dos triângulos, $f$ vale zero.
+O primeiro triângulo tem base de largura $1$, o segundo $\frac{1}{2}$, o
+$k$-ésimo $\frac{1}{2^{k-1}}$, etc. Logo, a integral de $f$ é igual à soma
+das áreas dos triângulos:
+$$
+\int_0^\infty f(x)\,dx=\tfrac12+\tfrac14+\tfrac18+\tfrac{1}{16}+\dots=1\,.
+$$
+Assim, a integral imprópria converge. Por outro lado, já que $f(k)=1$ para
+todo inteiro positivo $k$, $f(x)$ não tende a zero quando $x\to \infty$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Considere a \grasA{função Gamma}, definida da seguinte maneira:
+\[ 
+\forall z>0\,,\quad \Gamma(z)\pardef \int_0^\infty x^ze^{-x}\,dx\,.
+\]
+Verifique que $\Gamma(0)=1$, $\Gamma(1)=1$, $\Gamma(2)=2$, $\Gamma(3)=6$.
+Mostre que para todo inteiro $n$,
+\[ 
+\Gamma(n)=n\cdot \Gamma(n-1)\,.
+\]
+Conclua que nos inteiros, $\Gamma(n)=n!$.
+\end{exo}
+
+\section{As integrais $\int_a^\infty\frac{dx}{x^p}$}
+
+Consideremos as funções $f(x)=\frac{1}{x^p}$, onde $p$ é um número positivo.
+Sabemos (lembre da Seção \ref{Subsec:graficpotnegativ}) que quanto maior $p$,
+mais rápido $\tfrac{1}{x^p}$ tende a zero (lembre sa Seção
+\ref{Sec:GraficosPotencias}):
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1]
+\pgfmathsetmacro{\a}{4}
+\draw [thick, domain=0.55:\a, samples=60] plot (\x,{1/(\x)});
+\draw [thick, dotted, domain=0.7:\a, samples=70] plot
+(\x,{1/((\x)^2)});
+\draw [thick, dashed, domain=0.8:\a, samples=70] plot
+(\x,{1/((\x)^3)});
+
+\draw [>=latex, ->] (-0.2,0)--(4,0) node[right]{$x$};
+\draw [>=latex, ->] (0,-0.2)--(0,{2.7}) node[left]{$\tfrac{1}{x^p}$};
+ \pgfmathsetmacro{\b}{5};
+ \pgfmathsetmacro{\c}{2.2};
+ \draw (\b,\c) node[left]{$p=1:$};
+ \draw[thick] (\b,\c)--(\b+1,\c);
+ \draw (\b,\c-0.5) node[left]{$p=2:$};
+ \draw[thick, dotted] (\b,\c-0.5)--(\b+1,\c-0.5);
+ \draw (\b,\c-1) node[left]{$p=3:$};
+ \draw[thick, dashed] (\b,\c-1)--(\b+1,\c-1);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Logo, é razoável acreditar que para
+valores de $p$ suficientemente grandes, a integral
+imprópria $\int_a^\infty\frac{dx}{x^p}$ deve convergir.
+O seguinte resultado determina exatamente os valores de $p$ para os quais a
+integral converge ou diverge, e mostra que o valor $p=1$ é crítico:
+
+\begin{teo}\label{Teo:ConvSerieHarmon} Seja $a>0$. Então
+\eq{\int_a^\infty\frac{dx}{x^p}
+\begin{cases}
+\text{converge se $p>1$}\\
+\text{diverge se $p\leq 1$.}
+\end{cases}}
+\end{teo}
+\begin{proof}
+O caso crítico $p=1$ já foi considerado no Exemplo \eqref{Ex:unsurxdiverge}:
+para todo 
+$a>0$,
+$$\int_a^\infty\frac{dx}{x}=\lim_{L\to\infty}\int_a^L\frac{dx}{x}=\lim_{L\to
+\infty}\bigl\{\ln L-\ln a\big\}=\infty\,.$$
+Por um lado, quando $p\neq 1$, 
+$$\int_a^L\frac{dx}{x^p}=\frac{x^{-p+1}}{-p+1}\Big|_a^L
+=\frac{1}{1-p}\Bigl\{ \frac{1}{L^{p-1}}-\frac{1}{a^{p-1}}\Bigr\}
+$$
+Lembra que pelo Exercício \ref{utilparaimproprias} que se 
+$p>1$ então $p-1>0$, logo $\lim_{L\to\infty}\frac{1}{L^{p-1}}=0$, e a
+integral 
+$$\int_a^\infty\frac{dx}{x^p}=\lim_{L\to\infty}\int_a^L\frac{dx}{x^p}
+=\frac { 1 } { (p-1)a^{p-1}}<\infty\,,$$ logo converge.
+Por outro lado se $p<1$, então $1-p>0$,
+$\lim_{L\to\infty}\frac{1}{L^{p-1}}=\infty$ e
+$$\int_a^\infty\frac{dx}{x^p}=\lim_{L\to\infty}\int_a^L\frac{dx}{x^p}=\infty\,,
+$$
+isto é diverge.
+\end{proof}
+
+% Assim,
+% $\int_1^\infty \frac{dx}{x^{5}}$, $\int_1^\infty
+% \frac{dx}{x^{\frac{5}{2}}}$, $\int_1^\infty \frac{dx}{x^{2}}$, e 
+% $\int_1^\infty \frac{dx}{x^{1,000001}}$ são todas convergentes, enquanto
+% $\int_1^\infty \frac{dx}{x^{\frac{1}{100}}}$, $\int_1^\infty
+% \frac{dx}{x^{\frac{2}{5}}}$, $\int_1^\infty \frac{dx}{\sqrt{x}}$ e 
+% $\int_1^\infty \frac{dx}{x^{0,99999}}$
+% são todas divergentes.
+
+\begin{exo}
+Estude as seguintes integrais impróprias em função do parâmetro $\alpha$:
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itIntImpropp1} $\int_a^\infty\frac{dx}{\sqrt{x}^\alpha}$
+\item\label{itIntImpropp2} $\int_1^\infty\frac{1}{x^{\alpha^2-3}}\,dx$
+\item\label{itIntImpropp3} $\int_a^\infty\frac{dx}{(\ln x)^{2\alpha} x}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itIntImpropp1} Como $\frac{1}{\sqrt{x}^\alpha}=\frac{1}{x^{p}}$ com
+$p=\alpha/2$, a integral 
+converge se e somente se $\alpha>2$.
+\eqref{itIntImpropp2} Defina $p:=\alpha^2-3$.
+Pelo Teorema \ref{Teo:ConvSerieHarmon}, sabemos que a integral converge se
+$p>1$, diverge caso contrário. Logo, a integral converge se
+$\alpha>2$ ou $\alpha<-2$, e ela diverge se $-2\leq \alpha\leq 2$.
+\eqref{itIntImpropp3} Converge se e somente se $\alpha>1/2$ (pode fazer $u=\ln
+x$).
+\end{sol}
+\end{exo}
+
+
+\begin{exo} Fixe $q>0$ e considere o sólido de revolução obtido rodando a
+curva $y=\frac{1}{x^q}$, $x\geq 1$, em
+torno do eixo $x$. Determine para quais valores de $q$ esse sólido tem volume
+finito.
+\begin{sol}
+O volume do sólido é dado pela integral imprópria 
+$$
+V=\pi\int_1^\infty\Bigl(\frac{1}{x^q}\Bigr)^2\,dx=\pi\int_1^\infty\frac{dx}{
+x^{2q}}\,.
+$$
+Pelo Teorema \ref{Teo:ConvSerieHarmon}, essa integral converge se $2q>1$ (isto
+é se $q>\tfrac12$), diverge caso contrário.
+\end{sol}
+\end{exo}
+
+\section{O critério de comparação}
+\index{critério! de comparação}
+Em geral, nas aplicações, a primeira questão é de saber se uma integral
+imprópria converge ou não. Em muitos casos, é mais importante saber se uma
+integral converge do que conhecer o seu valor exato.\\
+
+O nosso objetivo nesta seção será de mostrar como a convergência/divergência de
+uma integral imprópria pode às vezes ser obtida por \emph{comparação} com uma
+outra integral imprópria, mais fácil de estudar. Comecemos com um exemplo
+elementar:
+
+\begin{ex}
+Pela definição, estudar a 
+integral imprópria $\int_1^\infty\frac{dx}{x^3+1}$ significa estudar o limite 
+$\lim_{L\to \infty}\int_1^L\frac{dx}{x^3+1}$. Ora, calcular a
+primitiva de $\frac{1}{x^3+1}$ é possível, mas dá um certo trabalho, como
+visto no Exercício \ref{Exo:PrimitivasDecomposicao}. Por outro lado, 
+em termos do comportamento em $x$ para $x$ grande, a função $\frac{1}{x^3+1}$
+não é muito diferente da função $\frac{1}{x^3}$. Na verdade, para
+todo $x>0$, $x^3+1$ é sempre
+\emph{maior} que $x^3$. Logo, $\frac{1}{x^3+1}$ é \emph{menor} que
+$\frac{1}{x^3}$ no intervalo $[1,\infty)$, o que se traduz, em termos de
+integral definida, por
+$$\int_1^L\frac{dx}{x^3+1}\leq \int_1^L\frac{dx}{x^3}\,.$$
+Tomando o limite $L\to \infty$ em ambos lados obtemos
+\eq{\label{eq:intintint}\int_1^\infty\frac{dx}{x^3+1}\leq
+\int_1^\infty\frac{dx}{x^3}\,.}
+Logo, \emph{se a integral do lado direito de \eqref{eq:intintint} é finita, a do
+lado esquerdo é finita também}. Ora, a do lado direito é da forma
+$\int_1^\infty\frac{dx}{x^p}$ com $p=3>1$. Logo, pelo Teorema
+\ref{Teo:ConvSerieHarmon}, ela converge, portanto \eqref{eq:intintint} implica
+que $\int_1^\infty\frac{dx}{x^3+1}$ converge também. 
+
+Assim, foi provado com custo
+mínimo que  $\int_1^\infty\frac{dx}{x^3+1}$ converge, sem passar pela primitiva
+de $\frac{1}{x^3+1}$.
+O leitor interessado em calcular o valor exato de
+$\int_1^\infty\frac{dx}{x^3+1}$, poderá usar a primitiva obtida no Exercício
+\ref{Exo:PrimitivasDecomposicao}.
+\end{ex}
+
+Comparação pode ser usada também para mostrar que uma integral diverge:
+
+\begin{ex}
+Considere $\int_3^\infty\frac{\ln x}{x}\,dx$. Aqui, podemos lembrar da integral
+$\int_3^\infty\frac{dx}{x}$, que diverge pelo Teorema \ref{Teo:ConvSerieHarmon}.
+As duas integrais podem ser comparadas observando que $\ln x\geq 1$ para todo
+$x\geq 3>e$, logo $\frac{\ln x}{x}\geq \frac{1}{x}$ para todo $x\in
+[3,\infty)$. Logo, após ter tomado o limite $L\to \infty$,
+$$
+\int_3^\infty\frac{\ln x}{x}\,dx\geq \int_3^\infty\frac{dx}{x}\,.
+$$
+Logo, como a integral do lado diverge e vale $+\infty$, a do lado direito
+também.  
+\end{ex}
+
+É importante ressaltar que o método usado acima funciona \emph{somente se as funções comparadas são
+ambas não-negativas!}
+O método de comparação pode ser resumido da seguinte maneira:
+
+\begin{pro}
+Sejam $f,g:[a,\infty)\to \bR$ contínuas, tais que $0\leq f(x)\leq g(x)$ para
+todo $x\in
+[a,\infty)$. Então 
+$$\int_a^\infty f(x)\,dx\leq \int_a^\infty g(x)\,dx$$
+Em particular, se $\int_a^\infty g(x)\,dx$ converge, então 
+$\int_a^\infty f(x)\,dx$ converge também, e se $\int_a^\infty f(x)\,dx$
+diverge, então $\int_a^\infty g(x)\,dx$ diverge também.
+\end{pro}
+
+\begin{obs}
+O método de comparação é útil em certos casos, mas ele não diz 
+\emph{qual} deve ser a função usada na comparação.
+Em geral, a escolha da função depende da situação. Por exemplo, a presença
+de $x^3$ no denominador levou naturalmente a comparar
+$\frac{1}{x^3+1}$ com $\frac{1}{x^3}$, cuja integral imprópria é finita.
+Portanto, para mostrar que uma integral imprópria $\int_a^\infty f(x)\,dx$
+converge, é preciso procurar uma função $g$ tal que $0\leq f(x)\leq g(x)$ e cuja
+integral imprópria é finita;
+para mostrar que $\int_a^\infty f(x)\,dx$
+diverge, é preciso procurar uma função $h$ tal que $f(x)\geq h(x)\geq 0$ e cuja
+integral imprópria é infinita.
+\end{obs}
+
+\begin{exo}
+Quando for possível, estude as seguintes integrais via uma comparação.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itIntCompar1} $\int_1^\infty\frac{dx}{x^2+x}$
+\item\label{itIntCompar2} $\int_1^\infty \frac{dx}{\sqrt{x}(x+1)}$
+\item\label{itIntCompar3} $\int_0^\infty \frac{dx}{1+e^x}$
+\item\label{itIntCompar4} $\int_2^\infty \frac{e^x}{e^x-1}\,dx$
+\item\label{itIntCompar5} $\int_0^\infty\frac{dx}{2x^2+1}$ 
+\item\label{itIntCompar6} $\int_3^\infty\frac{dx}{x^2-1}$ 
+\item\label{itIntCompar22} 
+$\int_1^\infty\frac{\sqrt{x^2+1}}{x^2}dx$
+\item\label{itIntCompar7} $\int_1^\infty\frac{x^2-1}{x^4+1}dx$
+\item\label{itIntCompar8} $\int_1^\infty\frac{x^2+1+\sen x}{x}dx$
+\item\label{itIntCompar9} $\int_{e^2}^\infty e^{-(\ln x)^2}\,dx$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itIntCompar1} Como $x^2+x\geq x^2$ para
+todo $x\in [1,\infty)$, temos também $\frac{1}{x^2+x}\leq \frac{1}{x^2}$ neste
+intervalo, logo
+$\int_1^\infty\frac{dx}{x^2+x}\leq
+\int_1^\infty\frac{dx}{x^2}<\infty$, converge. 
+\eqref{itIntCompar2} Como $x+1\geq x$ para todo $x\geq 1$,
+$\int_1^\infty
+\frac{dx}{\sqrt{x}(x+1)}\leq 
+\int_1^\infty \frac{dx}{\sqrt{x}x}= \int_1^\infty \frac{dx}{x^{3/2}}<\infty$,
+converge.
+\eqref{itIntCompar3} $\int_0^\infty \frac{dx}{1+e^x}\leq \int_0^\infty
+e^{-x}\,dx<\infty$, converge.
+\eqref{itIntCompar4} $\int_1^\infty \frac{e^x}{e^x-1}\,dx\geq 
+\int_1^\infty \frac{e^x}{e^x}\,dx=\int_1^\infty dx=\infty$, diverge.
+\eqref{itIntCompar5} Como
+$\int_0^\infty\frac{dx}{2x^2+1}=\int_0^1\frac{dx}{2x^2+1}
+ +\int_1^\infty\frac{dx}{2x^2+1}$ e
+$\int_1^\infty\frac{dx}{2x^2+1}\leq
+\int_1^\infty\frac{dx}{2x^2}<\infty$, temos que $\int_0^\infty\frac{dx}{2x^2+1}$
+converge.
+\eqref{itIntCompar6} Escrevendo
+$\tfrac{1}{x^2-1}=\tfrac{1}{x^2}\tfrac{x^2}{x^2-1}$, e observando que o máximo
+da função $\tfrac{x^2}{x^2-1}$ no intervalo $[3,\infty)$ é $\tfrac98$, temos 
+$\int_3^\infty\frac{dx}{x^2-1}\leq \tfrac98
+\int_3^\infty\frac{dx}{x^2}<\infty$, logo a integral converge.
+Um outro jeito de fazer é de observar que se $x\geq 3$, então $x^2-1\geq x^{3/2}$.
+\eqref{itIntCompar22} 
+Como $\sqrt{x^2+1}\geq \sqrt{x^2}=x$ em todo o intervalo de integração,
+$\int_1^\infty\frac{\sqrt{x^2+1}}{x^2}dx\geq
+\int_1^\infty\frac{x}{x^2}dx=\int_1^\infty\frac{1}{x}dx$.
+Como aqui é uma integral do tipo $\int_1^\infty\frac{1}{x^p}dx$ com $p=1$, ela é
+divergente. Logo, pelo critério de comparação,
+$\int_1^\infty\frac{\sqrt{x^2+1}}{x^2}dx$ {diverge} também.\\
+% (Obs: pode também calcular a primitiva da função, o que dá mais trabalho. Por
+% exemplo, por partes,
+% \begin{align*}
+% \int\frac{1}{x^2}\sqrt{x^2+1}dx&=\frac{-1}{x}\sqrt{x^2+1}-\int(\frac{-1}{x}
+% )\frac{2x}{2\sqrt{x^2+1}}dx\\
+% &=\frac{-1}{x}\sqrt{x^2+1}+\int\frac{1}{\sqrt{x^2+1}}dx
+% \end{align*}
+% Usando $x=\sec\theta$ nesta última integral dá
+% $\int\frac{1}{\sqrt{x^2+1}}dx=\int \sec\theta
+% d\theta=(\cdots)=\ln|x+\sqrt{x^2+1}|+C$. Logo,
+% $$\int\frac{1}{x^2}\sqrt{x^2+1}dx=\ln|x+\sqrt{x^2+1}|-\frac{\sqrt{x^2+1}}{x}+C\,
+% .$$
+% Calculando aquele limite, obtem-se  também que a integral diverge.)
+\eqref{itIntCompar7} $\int_1^\infty\frac{x^2-1}{x^4+1}\,dx\leq
+\int_1^\infty\frac{x^2}{x^4}\,dx=\int_1^\infty\frac{1}{x^2}\,dx<\infty$,
+converge.
+\eqref{itIntCompar8} Como $\sen x\geq -1$,
+$\int_1^\infty\frac{x^2+1+\sen x}{x}\,dx\geq 
+\int_1^\infty\frac{x^2}{x}\,dx
+=\int_1^\infty x\,dx=\infty$, diverge.
+\eqref{itIntCompar9}
+Como $\ln x \geq 2$ para todo $x\geq e^2$, temos que
+$\int_{e^2}^\infty e^{-(\ln x)^2}\,dx\leq 
+\int_{e^2}^\infty e^{-2\ln x}\,dx=\int_{e^2}^\infty\frac{dx}{x^2}$, que converge.
+\end{sol}
+\end{exo}
+
+Consideremos agora um resultado contraintuitivo, decorrente do manuseio
+de integrais impróprias:
+
+\begin{ex}
+Considere o sólido de revolução obtido rodando o gráfico da função
+$f(x)=\frac{1}{x^q}$ em torno do eixo $x$, para $x\geq 1$ (o sólido obtido é às
+vezes chamado de ``vuvuzela''). O seu volume é dado por
+$$
+V=\int_1^\infty\pi f(x)^2\,dx=\pi\int_1^\infty\frac
+{dx}{x^{2q}}\,,
+$$
+que é convergente se $p>\tfrac12$, divergente caso contrário. Por outro lado, 
+como $f'(x)=\frac{-q}{x^{q+1}}$, a
+área da sua superfície é dada por 
+$$
+A=\int_1^\infty2\pi f(x) \sqrt{1+f'(x)^2}\,dx
+=2\pi\int_1^\infty\tfrac{1}{x^q}\sqrt{1+\tfrac{q^2}{x^{2(q+1)}}}\,dx
+$$
+Como $\sqrt{1+\tfrac{q^2}{x^{2(q+1)}}}\geq 1$, temos
+$A\geq 2\pi \int_1^\infty\tfrac{dx}{x^{q}}$,
+que é divergente se $q\leq 1$. Logo, é interessante observar que quando
+$\tfrac12
+<q\leq 1$, o sólido de revolução considerado possui um volume finito, mas uma
+superfície infinita.
+\end{ex}
+
+
+\section{Integrais impróprias em $\bR$}
+
+Integrais impróprias foram até agora definidas em intervalos
+semi-infinitos, da forma $[a,\infty)$ ou $(-\infty,b]$.
+
+\begin{defin}
+Seja $f:\bR\to \bR$. Se existir um $a\in \bR$ tal que as integrais
+impróprias 
+$$
+\int_{-\infty}^af(t)\,dt\,,\quad \int_a^\infty f(t)\,dt
+$$
+existem, então diz-se que a \grasA{integral imprópria
+$\int_{-\infty}^\infty f(t)\,dt$ converge}, e o seu valor é
+definido como 
+$$\int_{-\infty}^\infty f(t)\,dt\pardef \int_{-\infty}^a f(t)\,dt+\int_{a}^\infty f(t)\,dt\,.$$
+\end{defin}
+
+\begin{exo}
+Mostre que a função definida por 
+$$
+g(t)\pardef \frac{1}{\sqrt{2\pi t}}\int_{-\infty}^\infty
+e^{-\frac{x^2}{2t}}\,dx\,,\quad t>0
+$$
+é bem definida. Isto é: a integral imprópria converge para
+qualquer valor de $t>0$. Em seguida, mostre que $g$ é 
+constante~\footnote{Pode ser mostrado (ver
+Cálculo III) que essa constante é $1$.}.
+\begin{sol} Observe que se $0\leq x<1$, então $e^{-x^2/2t}\leq 1$,
+e se $x\geq 1$, então $x^2\geq x$, logo
+$e^{-x^2/2t}\leq e^{-x/2t}$. Logo,
+$$\int_{0}^\infty
+e^{-\frac{x^2}{2t}}\,dx= \int_{0}^1
+e^{-\frac{x^2}{2t}}\,dx+ \int_{1}^\infty
+e^{-\frac{x^2}{2t}}\,dx \leq \int_0^1 \,dx+\int_1^\infty
+e^{-x/2t}\,dx\,.$$
+Como essa última integral converge (ela pode ser calculada
+explicitamente), por comparação $\int_{0}^\infty
+e^{-\frac{x^2}{2t}}\,dx$ converge também. Como $x\mapsto
+e^{-x^2/2t}$ é par, isso implica que $f(t)$ é bem definida.
+Com a mudança $y=x/\sqrt{t}$, temos 
+$$
+ \frac{1}{\sqrt{2\pi t}}\int_{0}^\infty
+e^{-\frac{x^2}{2t}}\,dx= \frac{1}{\sqrt{2\pi}}\int_{0}^\infty
+e^{-\frac{y^2}{2}}\,dy\,,
+$$
+que não depende de $t$. Assim, $f$ é constante.
+\end{sol}
+\end{exo}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Em intervalos finitos}
+\index{integral imprópria! em intervalo finito}
+
+Consideremos agora o problema de integrar uma função num
+intervalo finito, por exemplo da forma $]a,b]$.
+Aqui, suporemos que $f:]a,b]\to \bR$ é contínua, mas possui uma descontinuidade,
+ou uma assíntota vertical em $a$.
+
+A integral de $f$ em $]a,b]$ será definida de maneira parecida: 
+escolheremos um $\epsilon>0$, calcularemos a integral
+de Riemann de $f$ em $[a+\epsilon,b]$,
+e \emph{em seguida} tomaremos o limite $\epsilon\to 0^+$:
+
+\begin{defin}
+Seja $f:]a,b]\to \bR$ uma função contínua. Se o limite 
+\eq{\int_{a^+}^b f(x)\,dx\pardef \lim_{\epsilon\to 0^+}\int_{a+\epsilon}^b
+f(x)\,dx\,}
+existir e for finito, diremos que \grasA{a integral imprópria 
+$\int_{a^+}^b f(x)\,dx$ converge}. Caso contrário, ela \grasA{diverge}.
+Integrais impróprias para $f:[a,b)\to \bR$ se definem da mesma maneira:
+\eq{\int_{a}^{b^-} f(x)\,dx\pardef \lim_{\epsilon\to 0^+}\int_{a}^{b-\epsilon}
+f(x)\,dx\,.}
+\end{defin}
+
+\begin{ex}
+A função $\frac{1}{\sqrt{x}}$ é contínua no intervalo $]0,1]$, mas possui uma
+assíntota vertical em $x=0$. 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.3]
+\pgfmathsetmacro{\eps}{0.2};
+\draw (\eps,0) node{$\shortmid$} node[below]{$\epsilon$};
+\fill[areagrafico]
+(\eps,0)--(1,0)--plot[domain=1:{1/sqrt(\eps)}]({1/(\x^2)},\x)--(\eps,{
+1/sqrt(\eps)})--cycle;
+\draw[->] (\eps,{0.5/sqrt(\eps)})--({\eps/2},{0.5/sqrt(\eps)});
+\draw[>=latex, ->] (-0.2,0)--(1.5,0);
+\draw[>=latex, ->] (0,-0.2)--(0,2.6) node[left]{$\tfrac{1}{\sqrt{x}}$};
+%\draw (0.55,0.2) node{área$=1$};
+\draw[dotted] (1,0)--(1,1);
+\draw (1,0) node[below]{$1$};
+\draw[thick, domain=\eps/2:1.3] plot (\x,{1/(sqrt(\x))});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Para definir a sua integral em $]0,1]$, usemos uma integral imprópria:
+$$
+\int_{0^+}^1\frac{dx}{\sqrt{x}}\pardef\lim_{\epsilon\to
+0^+}\int_{\epsilon}^1\frac{dx}{\sqrt{x}}=
+\lim_{\epsilon\to 0^+}\bigl\{2\sqrt{x}\bigr\}\Big|_\epsilon^1
+=2\lim_{\epsilon\to 0^+}\{1-\sqrt{\epsilon}\}=2\,.
+$$
+Assim, apesar da função tender a $+\infty$ 
+quando $x\to 0^+$, ela delimita uma área finita.
+\end{ex}
+
+\begin{ex}
+Suponha que se queira calcular a área da região finita delimitada pelo
+eixo $x$ e pelo gráfico da função $f(x)=x(\ln x)^2$ (essa função foi estudada no
+Exercício \ref{Exo:DoisEstudosLegais}):
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[xscale=2, yscale=1.5]
+\fill[areagrafico] (0,0)--plot[domain=0.001:1]
+(\x,{\x*(ln(\x))^2})--cycle;
+\draw [thick, domain=0.001:1.7, samples=250] plot (\x,{\x*(ln(\x))^2})
+node[right]{$x(\ln x)^2$};
+ \draw [>=latex, ->] (0,0)--(1.8,0);
+ \draw [>=latex, ->] (0,-0.1)--(0,0.8);
+\draw (1,0) node{$\shortmid$} node[below]{$1$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Como $f(x)$ não é definida em $x=0$, essa área precisa ser calculada via a
+integral imprópria 
+$$
+\int_{0^+}^1x(\ln x)^2\,dx=\lim_{\epsilon\to 0^+}\int_\epsilon^1 x(\ln
+x)^2\,dx\,.
+$$
+A primitiva de $x(\ln x)^2$ para $x>0$ já foi calculada no Exercício
+\ref{Exo:Bonnardpartessubsit}: logo,
+$$ \int_\epsilon^1 x(\ln
+x)^2\,dx=\Bigl\{
+\tfrac12 x^2(\ln x)^2-\tfrac12 x^2\ln
+x+\tfrac14x^2\Bigr\}\Big|_\epsilon^1=
+\tfrac14-\tfrac12 \epsilon^2(\ln \epsilon)^2+\tfrac12 \epsilon^2\ln
+\epsilon-\tfrac14\epsilon^2
+$$
+Pode ser verificado, usando a Regra de B.H., que 
+$\lim_{\epsilon\to 0^+}\epsilon^2(\ln \epsilon)^2=\lim_{\epsilon\to
+0^+}\epsilon^2\ln \epsilon=0$, logo
+$$
+\int_{0^+}^1x(\ln x)^2\,dx=\tfrac14\,.
+$$
+\end{ex}
+
+
+\begin{exo}
+Estude as integrais impróprias abaixo. Se convergirem, dê os seus valores.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itIntimpropr0} ${\int_{0}^{1^-}\frac{dx}{\sqrt{1-x}}}$
+\item\label{itIntimpropr1} ${\int_{0^+}^1\frac{\ln(x)}{\sqrt{x}}dx}$
+\item\label{itIntimpropr2}  $\int_{0^+}^\infty\frac{dt}{\sqrt{e^t-1}}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itIntimpropr0} Por definição,
+$\int_{0}^{1^-}\frac{dx}{\sqrt{1-x}}=\lim_{\epsilon\to
+0^+}\int_0^{1-\epsilon}\frac{dx}{\sqrt{1-x}}=
+\lim_{\epsilon\to 0^+}\{-2\sqrt{1-x}\}_0^{1-\epsilon}=2$. Logo, a integral
+converge.
+\eqref{itIntimpropr1} $\int_{0^+}^1\frac{\ln(x)}{\sqrt{x}}dx=\lim_{\epsilon\to
+0^+}\int_\epsilon^1\frac{\ln(x)}{\sqrt{x}}dx$.
+Integrando por partes, definindo $f'(x)\pardef \frac{1}{\sqrt{x}}$, $g(x)\pardef
+\ln
+(x)$, temos $f(x)=2\sqrt{x}$, $g'(x)=\frac{1}{x}$, e
+\begin{align*}
+\int \frac{\ln(x)}{\sqrt{x}}dx
+=2\sqrt{x}\ln (x)-2\int \frac{\sqrt{x}}{x}dx
+&=2\sqrt{x}\ln (x)-2\int \frac{1}{\sqrt{x}}dx\\
+&=2\sqrt{x}\ln (x)-4\sqrt{x}+C\,.
+\end{align*}
+(Obs: pode também começar com $u=\sqrt{x}$, e acaba calculando $4\int
+\ln(u)du$.)
+Logo,
+\begin{align*}
+\int_{0^+}^1\frac{\ln(x)}{\sqrt{x}}dx&=\lim_{\epsilon\to 0^+}
+\big\{
+2\sqrt{x}\ln (x)-4\sqrt{x}+C
+\big\}_\epsilon^1\\
+&=\lim_{\epsilon\to 0^+}
+-4-2\sqrt{\epsilon}\ln (\epsilon)+4\sqrt{\epsilon}=-4\,.\\
+\end{align*}
+Este último passo é justificado porqué $\lim_{\epsilon\to
+0^+}\sqrt{\epsilon}=0$, e porqué uma simples aplicação da Regra de
+Bernoulli-l'Hôpital dá $\lim_{\epsilon\to 0^+}\sqrt{\epsilon}\ln
+(\epsilon)=-\lim_{y\to +\infty}\frac{\ln (y)}{\sqrt{y}}=0$.
+Como o limite existe e é finito, a integral imprópria acima { converge e o
+seu valor é $-4$}.
+
+\eqref{itIntimpropr2}
+Observe que a função $\frac{1}{\sqrt{e^t-1}}$ não é definida em $t=0$, logo é
+necessário dividir a integral em duas integrais impróprias: 
+\begin{align*}
+\int_{0^+}^\infty\frac{1}{\sqrt{e^t-1}}dt&=\int_{0^+}^1\frac{1}{\sqrt{e^t-1}}
+dt+\int_1^\infty\frac{1}{\sqrt{e^t-1}}dt\\
+&=\lim_{\epsilon\to 0^+}\int_\epsilon^1\frac{1}{\sqrt{e^t-1}}dt+\lim_{L\to
+\infty}\int_1^L\frac{1}{\sqrt{e^t-1}}dt\,.
+\end{align*}
+Para calcular a primitiva, seja $u=\sqrt{e^t-1}$,
+$du=\frac{e^t}{2\sqrt{e^t-1}}dt$, i.é. $dt=\frac{2u}{u^2+1}du$, e 
+\begin{align*}
+\int\frac{1}{\sqrt{e^t-1}}dt=2\int\frac{du}{u^2+1} &=2\arctan (u)+C\\
+&=2\arctan\sqrt{e^t-1}+C
+\end{align*}
+Logo,
+$$\lim_{\epsilon\to
+0^+}\int_\epsilon^1\frac{1}{\sqrt{e^t-1}}dt=2\lim_{\epsilon\to
+0^+}\arctan\sqrt{e^t-1}\big|_\epsilon^1=2\arctan\sqrt{e-1}$$
+$$\lim_{L\to \infty}\int_1^L\frac{1}{\sqrt{e^t-1}}dt=2\lim_{L\to
+\infty}\arctan\sqrt{e^t-1}\big|_1^L=\pi-2\arctan\sqrt{e-1}$$
+Como esses dois limites existem, 
+$\int_0^\infty\frac{dt}{\sqrt{e^t-1}}$ {converge, e o seu valor é
+$\pi$}.
+\end{sol}
+\end{exo}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\newpage

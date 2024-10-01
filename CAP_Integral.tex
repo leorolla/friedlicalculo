@@ -1,0 +1,2895 @@
+
+% !TeX spellcheck = pt_BR
+% !TEX encoding = UTF-8 Unicode
+
+\chapter{Integral}\label{CAP:Integral}
+
+\ifdefined\updateans
+% Only need to run once in a lifetime, when the file ans.tex needs to be updated.
+\Writetofile{ans}{\protect\section*{Capítulo \ref{CAP:Integral}}}
+\fi
+
+O problema original e fundamental do \emph{cálculo integral} era
+de \emph{calcular comprimentos, áreas, e volumes} de objetos geométricos no
+plano ou no espaço, em particular de objetos 
+mais gerais do que aqueles
+considerados em geometria elementar que são retângulos,
+triângulos, círculos (no plano), ou paralelepípedos, cones,
+esferas (no espaço).\\
+
+O maior avanço no cálculo integral 
+veio com os trabalhos de Newton e Leibniz
+no fim do século XVI, em que a noção de derivada tem papel fundamental.
+Os métodos desenvolvidos por Newton e Leibniz
+tornaram a integral uma ferramenta com inúmeras aplicações, bem além da 
+geometria, em todas as áreas da ciência e da engenharia.
+\\
+
+Nesse capítulo introduziremos a noção de \emph{integral} para uma função $f$ de
+uma variável real~\footnote{Integrais \emph{múltiplas} serão estudadas em
+Cálculo III.} $x$, a partir da Seção \ref{Sec:IntRiemann}.
+O \emph{Teorema Fundamental do Cálculo} 
+(Teoremas \ref{Teo:TFC} e \ref{Teo:TFC2}) será provado na Seção
+\ref{Sec:TeoremaFundamental}.
+
+\section{Introdução}
+
+\emph{Como calcular, em geral, a área de uma região limitada do plano?}
+Para sermos um pouco mais específicos, faremos a mesma pergunta para áreas
+delimitadas pelo gráfico de uma função. \emph{Dada uma função positiva
+$f:[a,b]\to \bR$,
+como calcular a área debaixo do seu gráfico, isto é, a área da região $R$,
+delimitada pelo gráfico de $f$, pelo eixo $x$, e pelas retas $x=a$, $x=b$?}
+\index{gráfico! área debaixo de um}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1]
+%\clip (0.5,0.5) rectangle (1.5,1.5);
+\newcommand{\funcao}[1]{(0.05*(#1)^3-0.2*(#1)^2+2)}
+\fill[areagrafico] (1,0)--plot[domain=1:3](\x,{\funcao{\x}})--(3,0)--cycle;
+\draw [dotted, domain=0.5:3.5] plot (\x,{\funcao{\x}});
+\draw [thick, domain=1:3] plot (\x,{\funcao{\x}});
+\draw (2,0.8) node {$R$};
+\draw (1,-0.22) node{$a$};
+\draw (3,-0.2) node{$b$};
+\draw (4,1.8) node {$f(x)$};
+\draw [>=latex, ->] (0.5,0)--(3.5,0) node[right] {$x$};
+\draw [dashed] (3,-0.05)--(3,1.52);
+\draw [dashed] (1,-0.05)--(1,{\funcao{1}});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+
+Para as funções elementares a seguir, a resposta pode ser dada sem muito
+esforço.
+Por exemplo, se $f$ é constante, $f(x)=h>0$, $R$ é um retângulo, logo
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.9]
+%\clip (0.5,0.5) rectangle (1.5,1.5);
+\fill[areagrafico] (1,0)--plot[domain=1:3](\x,{1.5})--(3,0)--cycle;
+\draw [domain=0.5:3.5] plot (\x,{1.5});
+\draw (2,0.8) node {$R$};
+%\draw (1,0) node {$\shortmid$};
+\draw (1,-0.22) node{$a$};
+%\draw (3,0) node {$\shortmid$};
+\draw (3,-0.2) node{$b$};
+\draw (3.8,1.5) node {$h$};
+\draw [>=latex, ->] (0.5,0)--(3.5,0) node[right] {$x$};
+\draw [dashed] (1,-0.05)--(1,1.5);
+\draw [dashed] (3,-0.05)--(3,1.5);
+\draw [>=latex, ->] (0.7,-0.2)--(0.7,1.9) ; 
+%\draw[very thin, gray] (0,0) grid[step=1] (5,2);
+\draw (5,0.8) node[right] {$\Rightarrow \,\text{área}(R)=\text{base}\times 
+\text{altura}=(b-a)h$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Por outro lado, se o gráfico de $f$ for uma reta, por exemplo $f(x)=mx$ 
+com $m>0$, e se $0<a<b$, então $R$ é um trapézio, e a sua área pode ser
+ escrita como a diferença das áreas de dois triângulos (lembre o
+Exercício \ref{Exo:primeiraarea}):
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.9]
+%\clip (0.5,0.5) rectangle (1.5,1.5);
+\fill[areagrafico] (1,0)--plot[domain=1:3](\x,0.6*\x)--(3,0)--cycle;
+\draw [dotted, domain=-0.1:3.2] plot (\x,{0.6*\x});
+\draw [thick, domain=1:3] plot (\x,{0.6*\x});
+\draw (2,0.5) node {$R$};
+%\draw (1,0) node {$\shortmid$};
+\draw (1,-0.22) node{$a$};
+%\draw (3,0) node {$\shortmid$};
+\draw (3,-0.2) node{$b$};
+%\draw (3.8,1.5) node {$h$};
+\draw [>=latex, ->] (0,0)--(3.5,0) node[right] {$x$};
+\draw [dashed] (1,-0.05)--(1,0.6);
+\draw [dashed] (3,-0.05)--(3,1.8);
+\draw [>=latex, ->] (0,0)--(0,2) ; 
+%\draw[thick, gray] (0,0) grid[step=1] (5,2); \draw[very thin, gray] (0,0) 
+%grid[step=0.2] (5,2);
+\draw[dotted]  (1,0.6)--(0,0.6) node[left]{$ma$};
+\draw[dotted]  (3,1.8)--(0,1.8) node[left]{$mb$};
+\draw (4.2,0.8) node[right] {$\Rightarrow \,\text{área}(R)=\half b\times
+mb-\half
+ a\times ma=\half m(b^2-a^2)$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+O nosso último exemplo ``simples'' 
+será $f(x)=\sqrt{1-x^2}$, com $a=0$, $b=1$. Neste caso 
+reconhecemos a região $R$ como 
+a sendo o quarto do disco de raio $1$ centrado na origem, contido no primeiro
+quadrante:
+\index{disco}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+%\clip (0.5,0.5) rectangle (1.5,1.5);
+%\fill[color=gray!30] (1,0)--plot[domain=1:3](\x,0.6*\x)--(3,0)--cycle;
+%\draw [domain=-0.1:3.2] plot (\x,{0.6*\x});
+%\draw (1,0) node {$\shortmid$};
+\draw (0,-0.2) node{$0$};
+%\draw (3,0) node {$\shortmid$};
+\draw (2,-0.22) node{$1$};
+%\draw (0,-1)--(0,0)--(-1,0) ;
+\fill[areagrafico] (0,0)--(2,0) arc (0:90:2)--cycle;
+\draw[dotted] (2,0) arc (0:360:2);
+\draw (2,0) arc (0:90:2);
+\draw (0.8,0.8) node {$R$};
+%\draw (-0.7,-0.7) node {$\pi/2$};
+%\draw (0,0) node {$\bullet$};
+%\draw (3.8,1.5) node {$h$};
+\draw [>=latex, ->] (0,0)--(2.5,0) node[right] {$x$};
+%\draw [dashed] (1,-0.05)--(1,0.6);
+%\draw [dashed] (3,-0.05)--(3,1.8);
+\draw [>=latex, ->] (0,0)--(0,2.2) ; 
+%\draw[thick, gray] (0,0) grid[step=1] (5,2); \draw[very thin, gray] (0,0) grid[step=0.2] (5,2);
+%\draw[dotted]  (1,0.6)--(0,0.6) node[left]{$ma$};
+%\draw[dotted]  (3,1.8)--(0,1.8) node[left]{$mb$};
+\draw (3.2,1) node[right] {$\Rightarrow \,\text{área}(R)=\tfrac14 \times\pi
+1^2=\tfrac{\pi}{4}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Consideremos agora $f(x)=1-x^2$, 
+também com $a=0$, $b=1$:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.5]
+\fill[areagrafico] (0,1)--plot[domain=0:1](\x,{1-(\x)^2})--(0,0)--cycle;
+\draw [dotted, domain=-0.5:1.1] plot (\x,{1-(\x)^2});
+\draw [domain=0:1] plot (\x,{1-(\x)^2});
+\draw (0,0) node[below]{$0$};
+\draw (0,1) node[left]{$1$};
+\draw (1,0) node[below]{$1$};
+\draw (0.4,0.4) node {$R$};
+\draw [>=latex, ->] (-0.5,0)--(1.3,0) node[right] {$x$};
+\draw [>=latex, ->] (0,0)--(0,1.2); 
+%\draw[thick, gray] (0,0) grid[step=1] (2,2); \draw[very thin, gray] (0,0) grid[step=0.2] (2,2);
+%\draw[dotted]  (1,0.6)--(0,0.6) node[left]{$ma$};
+%\draw[dotted]  (3,1.8)--(0,1.8) node[left]{$mb$};
+\draw (1.7,0.5) node[right] {$\Rightarrow \,R=\,?$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Apesar da função $f(x)=1-x^2$ ser elementar, não vemos um jeito simples
+de decompor $R$ em um número finito de regiões simples do tipo
+retângulo, triângulo, ou disco.\\
+
+No entanto, o que pode ser feito 
+é \emph{aproximar $R$ por regiões mais
+simples}, a começar com retângulos~\footnote{Já encontramos esse tipo de
+construção, mas com triângulos, no Exercício
+\ref{Exo:DecomporCircemTriang}.}.
+Começemos aproximando $R$ de maneira grosseira, usando uma região $R_2$
+formada por dois retângulos, da seguinte maneira:
+\index{aproximação! por retângulos}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.8]
+\pgfmathsetmacro{\numretangulos}{2}
+\foreach \k in {1,...,\numretangulos} {
+\pgfmathsetmacro{\cantinho}{\k/\numretangulos}
+\pgfmathsetmacro{\altura}{1-((\k-1)/\numretangulos)^2}
+\fill[corretangulos] (\cantinho-1/\numretangulos,0) rectangle (\cantinho,\altura);
+\draw (\cantinho-1/\numretangulos,0) rectangle (\cantinho,\altura);
+\fill (\cantinho-1/\numretangulos,\altura) circle (0.15mm);
+}
+\draw [dotted, domain=0:1] plot (\x,{1-(\x)^2});
+\draw (0,0) node[below]{$0$};
+\draw (1,0) node[below]{$1$};
+\draw (0.5,0) node[below]{$\half$};
+\draw[dotted]  (0.5,0.75)--(0,0.75) node[left]{$1-(\half)^2=\tfrac34$};
+\draw [>=latex, ->] (0,0)--(1.3,0) node[right] {$x$};
+\draw [>=latex, ->] (0,0)--(0,1.2); 
+\draw (1.7,0.5) node[right] {$\Rightarrow \,
+\text{área}(R_2)=\bigl\{\half\times
+1\big\}+\bigl\{\half \times \tfrac34\big\}=\tfrac78$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+A área de $R_2$ é a soma das áreas dos dois retângulos de bases
+iguais $\tfrac12$ mas de alturas diferentes: 
+o canto esquerdo superior do primeiro retângulo está em $(0,1)$, e o do segundo
+foi escolhido \emph{no gráfico de $1-x^2$}, no ponto $(\tfrac12,\tfrac34)$.
+Logo, $\text{área}(R_2)=\tfrac78$.
+É claro que $\text{área}R_2$ somente dá uma \emph{estimativa}:
+$\text{área}(R)<\text{área}R_2$.\\
+
+Tentaremos agora melhorar 
+essa aproximação: fixemos um inteiro $n\in \bN$, e
+aproximemos
+$R$ pela região $R_n$ formada pela união de $n$ retângulos de larguras iguais a
+$1/n$, mas com alturas 
+escolhidas tais que o canto superior esquerdo esteja sempre \emph{na curva}
+$1-x^2$. Por exemplo, 
+se $n=5$, ${15}$ e ${25}$,
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.8]
+
+\newcommand{\parabole}[1]{
+\pgfmathsetmacro{\numretangulos}{#1}
+\foreach \k in {1,...,\numretangulos}
+{\pgfmathsetmacro{\cantinho}{\k/\numretangulos}
+\pgfmathsetmacro{\altura}{1-((\k-1)/\numretangulos)^2}
+\fill[corretangulos] (\cantinho-1/\numretangulos,0) rectangle
+(\cantinho,\altura);
+\draw (\cantinho-1/\numretangulos,0) rectangle (\cantinho,\altura);
+\fill (\cantinho-1/\numretangulos,\altura) circle (0.15mm);
+}
+\draw [dotted, domain=0:1] plot (\x,{1-(\x)^2});
+%\draw (0,1) node[left]{$1$};
+%\draw (0,0) node[below]{$0$};
+%\draw (1,0) node[below]{$1$};
+\draw [>=latex, ->] (0,0)--(1.1,0);
+\draw [>=latex, ->] (0,0)--(0,1.2);
+}
+
+\begin{scope}
+ \parabole{5}
+\end{scope}
+
+\begin{scope}[xshift=2cm]
+ \parabole{15}
+\end{scope}
+
+\begin{scope}[xshift=4cm]
+ \parabole{25}
+\end{scope}
+
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Vemos que quanto maior o número de retângulos $n$, melhor a aproximação da
+verdadeira área de $R$.
+Logo, tentaremos calcular $\text{área}(R)$ via um \emph{limite}:
+$$\text{área}(R)=\lim_{n\to \infty}\text{área}(R_n)\,.$$
+Olhemos os retângulos de mais perto. Por exemplo, para calcular
+$\text{área}(R_5)$, calculemos a soma das áreas de $5$ retângulos:
+\begin{align*}
+\text{área}(R_5)&=\tfrac15\big(1-(\tfrac{0}{5})^2)
++\tfrac15\big(1-(\tfrac{1}{5})^2)
++\tfrac15\big(1-(\tfrac{2}{5})^2)
++\tfrac15\big(1-(\tfrac{3}{5})^2)
++\tfrac15\big(1-(\tfrac{4}{5})^2)\\
+&=1-\tfrac{1^2+2^2+3^2+4^2}{5^3}(=0.76)\,.
+\end{align*}
+
+Para um $n$ qualquer,
+\begin{align}
+\text{área}(R_n)&=\tfrac1n\big(1-(\tfrac{0}{n})^2)
++\tfrac1n\big(1-(\tfrac{1}{n})^2)+\dots
++\tfrac1n\big(1-(\tfrac{n-2}{n})^2)
++\tfrac1n\big(1-(\tfrac{n-1}{n})^2)\nonumber\\
+&=1-\tfrac{1^2+2^2+\dots+(n-2)^2+(n-1)^2}{n^3}\,.\label{eq:somaquadrados}
+\end{align}
+
+Pode ser mostrado (ver Exercício \ref{exo:provaporinducao}) que para todo
+$k\geq 1$,
+\eq{\label{eq:inducnnn}1^2+2^2+\dots+k^2=\frac{k(k+1)(2k+1)}{6}\,.}
+Usando essa expressão em \eqref{eq:somaquadrados} com $k=n-1$, obtemos
+\begin{align*}
+\text{área}(R)=\lim_{n\to \infty}\text{área}(R_n)&=1-\lim_{n\to \infty}
+\frac{(n-1)((n-1)+1)(2(n-1)+1)}{6n^3}\\
+&=1-\lim_{n\to \infty}
+\frac{n(n-1)(2n-1)}{6n^3}\\
+&=1-\tfrac{1}{3}\\
+&=\tfrac{2}{3}\,.
+\end{align*}
+
+\begin{obs}
+É interessante observar que no limite $n\to\infty$, o número de retângulos que
+aproxima $R$ tende ao infinito,
+mas que a área de cada um tende a zero. Assim podemos dizer, informalmente, que
+depois do processo de limite, a área exata de $R$
+é obtida ``somando infinitos retângulos de largura zero''.
+\end{obs}
+
+
+\begin{exo}\label{exo:provaporinducao}
+Mostre por indução que para todo $n\geq 1$, 
+$$1+2+3+\dots+n=\frac{n(n+1)}{2}\,,\quad
+1^2+2^2+\dots+n^2=\frac{n(n+1)(2n+1)}{6}\,.$$
+\end{exo}
+
+\begin{exo}
+Considere a aproximação da área $R$ tratada acima, usando retângulos cujo canto
+superior \emph{direito} sempre fica na curva $y=1-x^2$, e mostre que quando 
+$n\to\infty$, o limite é o mesmo: $\tfrac23$.
+\end{exo}
+
+
+O método usado para calcular a área debaixo de $1-x^2$ 
+funcionou graças à fórmula \eqref{eq:inducnnn}, que
+permitiu transformar a soma dos $k$ primeiros quadrados em um
+polinômio de grau $3$ em $k$. Essa fórmula foi particularmente bem adaptada à
+função $1-x^2$, mas não será útil em outras situações. 
+Na verdade, são poucos casos em que a conta pode ser feita ne maneira
+explícita.
+
+\begin{ex}
+Considere $f(x)=\cos(x)$ entre $a=0$ e $b=\pi/2$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.5]
+\fill[areagrafico] (0,1)--plot[domain=0:1.57](\x,{cos(\x r)})--(0,0)--cycle;
+\draw [dotted, domain=0:1.57] plot (\x,{cos(\x r)});
+\draw [domain=-0.1:1.59] plot (\x,{cos(\x r)});
+\draw (0,0) node[below]{$0$};
+\draw (1.57,0) node[below]{$\tfrac{\pi}{2}$};
+\draw (0.6,0.4) node {$R$};
+\draw [>=latex, ->] (-0.1,0)--(1.7,0) node[right] {$x$};
+\draw [>=latex, ->] (0,0)--(0,1.2); 
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Neste caso, uma aproximação da área $R$ debaixo do gráfico por 
+retângulos de largura $\tfrac1n$ dá:
+\begin{align}
+\text{área}(R_n)&=\tfrac1n\cos(\tfrac{1}{n})
++\tfrac1n\cos(\tfrac{2}{n})+\dots
++\tfrac1n\cos(\tfrac{\frac{n\pi}{2}}{n})\,.
+\end{align}
+Para calcular o limite $n\to\infty$ desta soma, o leitor interessado 
+pode começar verificando por indução~\footnote{Fonte: Folhetim de
+Educação Matemática, Feira de Santana, Ano 18, Número 166, junho de
+2012.} que para todo $a>0$ e todo inteiro $k$,
+\[
+\tfrac12+\cos(a)+\cos(2a)+\cos(3a)+\dots+\cos(ka)=\frac{\sen(\frac{2k+1}{2}a)}{2\sen(\frac{a}{2})}\,.
+\]
+Usando esta fórmula com $a$ e $n$ bem escolhidos, pode 
+mostrar que  $\lim_{n\to \infty}\text{área}(R_n)=1$. Portanto,
+$\text{área}(R)=1$.
+\end{ex}
+
+\begin{exo}
+Considere $f(x)=e^x$ entre $a=0$ e $b=1$.
+Monte $\text{área}(R_n)$ usando retângulos de largura $\tfrac1n$.
+Usando
+\[
+1+r+r^2+\dots+r^n=\frac{1-r^n}{1-r}\,,
+\]
+calcule $\lim_{n\to\infty}\text{área}(R_n)$.
+\begin{sol}
+A soma associada dá, usando a fórmula sugerida,
+\[
+\text{área}(R_n)=\frac{e^0}{n}+\frac{e^{1/n}}{n}
++\frac{e^{2/n}}{n}+\dots+\frac{e^{(n-1)/n}}{n}
+=\frac{e-1}{\frac{e^{1/n}-1}{1/n}}\,.
+\]
+Mas $\lim_{n\to\infty}\frac{e^{1/n}-1}{1/n}=\lim_{t\to
+0^+}\frac{e^t-1}{t}=1$. Logo,
+$\text{área}(R)=e-1$.
+\end{sol}
+\end{exo}
+
+O que foi feito nesses últimos exemplos foi calcular uma área por um
+procedimento chamado \emph{integração}. 
+Mais tarde, desenvolveremos um método que permite calcular
+integrais usando um método completamente diferente. Mas
+antes disso precisamos definir o que significa \emph{integrar} de
+maneira mais geral.
+
+\section{A integral de Riemann}\label{Sec:IntRiemann}
+
+De modo geral, a área da região $R$ delimitada pelo gráfico de uma função
+$f:[a,b]\to \bR$ pode ser definida via um processo de limite,
+como visto acima no caso de $f(x)=1-x^2$.\\
+
+Primeiro, 
+escolhemos um inteiro $n$, e escolhemos pontos distintos em $(a,b)$:
+$x_0\equiv a<x_1<x_2<\dots<x_{n-1}<x_n\equiv b$. 
+Esses pontos formam uma \grasA{partição} de $[a,b]$.
+Em seguida, escolhemos um
+ponto $x_j^*$ em cada intervalo $[x_{j-1},x_{j}]$, e definimos a \grasA{soma
+de \index{Riemann (Georg Friedrich)} 
+Riemann~\footnote{Georg Friedrich Bernhard Riemann, 1826 – 1866.}} $I_n$ por:
+\begin{center}
+ \begin{bmlimage}\begin{tikzpicture}[scale=3]
+\newcommand{\funcao}[1]{( 0.5+ ((#1)^2-(#1)^3)/2 )}
+\pgfmathsetmacro{\numintervalos}{15}
+\pgfmathsetmacro{\a}{-0.6}
+\pgfmathsetmacro{\b}{1.2}
+\pgfmathsetmacro{\incr}{(\b-\a)/\numintervalos}
+\foreach \k in {1,...,\numintervalos}
+{\pgfmathsetmacro{\cantinho}{\a+(\k-1)*\incr}
+\pgfmathsetmacro{\pontoaleat}{\cantinho+(rnd*\incr)}
+\pgfmathsetmacro{\altura}{\funcao{\pontoaleat}}
+\fill[corretangulos] (\cantinho,0) rectangle (\cantinho+\incr,\altura);
+\draw (\cantinho,0) rectangle (\cantinho+\incr,\altura);
+\draw[dotted] (\pontoaleat,0)--(\pontoaleat,\altura);
+\fill (\pontoaleat,\altura) circle (0.15mm);
+}
+\draw (\a,0) node{$\shortmid$} node[below] {$a$};
+\draw (\b,0) node{$\shortmid$} node[below] {$b$};
+\draw (\a-0.2,0)--(\b+0.2,0) ;
+\draw [thick, domain=\a-0.1:\b+0.1] plot (\x,{\funcao{\x}}) node[right]{$f$};
+\draw (-1,0.3) node[left]{$\displaystyle{I_n\pardef
+\sum_{j=1}^nf(x_j^*)\Delta x_{j}}\,,$};
+ \end{tikzpicture}\end{bmlimage}
+\end{center}
+$I_n$ aproxima a área debaixo do gráfico pela soma das áreas dos retângulos, em
+que o $j$-ésimo retângulo tem como base $\Delta x_j\pardef x_{j}-x_{j-1}$, e
+como altura \emph{o valor da função no ponto $x_j^*$}: $f(x_j^*)$. (Na imagem
+acima os pontos $x_i$ foram escolhidos equidistantes,
+$\Delta x_{j}=\tfrac{b-a}{n}$.)\\
+
+A \emph{integral} de $f$ é obtida considerando $I_n$ para uma sequência de
+partições em que o tamanho dos intervalos $\Delta x_j$
+tendem a zero:
+\begin{defin}\index{função! integrável}
+A função $f:[a,b]\to \bR$ é \grasA{integrável} se o limite $\lim_{n\to
+\infty}I_n$ existir, qualquer que seja a 
+sequência de partições em que $\max_j\Delta x_j\to 0$, e
+qualquer que seja a escolha de $x_j^*\in [x_{j-1},x_{j}]$. Quando $f$ é
+integrável, o limite $\lim_{n\to \infty}I_n$
+é chamado de \grasA{integral (de Riemann) de $f$}, ou \grasA{integral definida
+de $f$}, e denotado\index{integral! de Riemann}
+\eq{\label{eq:DefinIntRiem}\lim_{n\to \infty}I_n\equiv \int_a^bf(x)dx\,.}
+Os números $a$ e $b$ são chamados de \grasA{limites de integração}.
+\end{defin}\index{limite! de integração}
+
+Inventada por Newton, 
+a notação  ``$\int_a^bf(x)dx$'' lembra que a integral é definida a partir de
+uma
+\emph{soma} (o ``$\int$'' é parecido com um ``s'') de retângulos
+contidos entre $a$ e $b$, de áreas $f(x^*_j)\Delta x_j$ (o
+``$f(x)dx$''). 
+
+\begin{obs}
+É importante lembrar que $\int_a^bf(x)dx$ \emph{é um número, não uma função}:
+a variável ``$x$'' que aparece em $\int_a^bf(x)dx$ é usada somente
+para indicar que $f$ está sendo integrada, com a sua variável
+varrendo o intervalo $[a,b]$. 
+Logo, seria equivalente escrever essa
+integral $\int_a^bf(t)dt$, $\int_a^bf(z)dz$, etc., ou simplesmente $\int_a^bf\,
+dx$. Por isso, a variável $x$ que aparece em \eqref{eq:DefinIntRiem} é
+\index{variável! muda}
+chamada de \emph{muda}.
+\end{obs}
+
+\begin{obs} A definição de integrabilidade faz sentido mesmo se $f$ não é
+positiva.
+Neste caso, o termo $f(x_j^*)\Delta x_{j}$ da soma de Riemann não pode ser mais
+interpretado
+como a área do $j$-ésimo retângulo, e $\int_a^bf\,dx$
+não possui necessariamente uma interpretação geométrica.
+O Exercício \ref{Exo:IntegraleNegative} abaixo esclarece esse ponto.
+\end{obs}
+
+Enunciemos algumas propriedades básicas da integral, que podem ser provadas a
+partir da definição.
+\index{integral! propriedades da}
+\begin{pro}\label{Prop:ProprIntegral} Seja $f:[a,b]\to \bR$ integrável.
+\begin{enumerate}
+ \item\label{itProprIntegr1} Se $\lambda\in \bR$ é uma
+ constante, então $\lambda f$ é
+integrável, e $\int_a^b\lambda f\, dx=\lambda\int_a^bf\,dx$.
+\item\label{itProprIntegr2} Se $g:[a,b]\to \bR$ também é integrável, então 
+$f+g$ é integrável e
+$\int_a^b(f+g)dx=\int_a^bf\,dx+\int_a^bg\,dx$.
+\item\label{itProprIntegr3} Se $a<c<b$, então
+$\int_a^cf\,dx+\int_c^bf\,dx=\int_a^bf\,dx$.
+\end{enumerate}
+\end{pro}
+
+Observe que se $f$ é uma constante, $f(x)=c$, então qualquer soma de Riemann
+pode ser calculada via um retângulo só, e
+\eq{\label{eq:integrconstante} \int_a^bf(x)\,dx=c(b-a)\,.}
+Mais tarde precisaremos da seguinte propriedade:
+
+\begin{pro} Se $f$ e $g:[a,b]\to \bR$ são integráveis,
+e se $f\leq g$, então 
+ \eq{\label{eq:comparacaointegrais}\int_a^bf\,dx\leq \int_a^bg\,dx\,.}
+Em particular, se $f$ é limitada,
+$M_-\leq f(x)\leq M_+$ para todo $x\in [a,b]$, então 
+\eq{\label{ineq_estim_int}M_-(b-a)\leq \int_a^bf\,dx\leq M_+(b-a)\,.}
+\end{pro}
+Para funções positivas, a interpretação de \eqref{eq:comparacaointegrais} em
+termos de áreas é imediata: se o gráfico de $f$ está sempre abaixo do gráfico
+de $g$, então a área debaixo de $f$ é menor do que a área abaixo de $g$.
+
+\begin{exo}
+Justifique as seguintes afirmações:
+\begin{enumerate}
+\item Se $f$ é par, $\int_{-a}^af(x)\,dx=2\int_0^af(x)\,dx$.
+\item Se $f$ é ímpar, $\int_{-a}^af(x)\,dx=0$.
+\end{enumerate}
+\end{exo}
+
+Em geral, verificar se uma função é integrável pode ser difícil. O seguinte
+resultado garante que
+as maioria das funções consideradas no restante do
+curso \emph{são} integráveis.
+
+\begin{teo}
+ Se $f:[a,b] \to \bR$ é contínua, então ela é integrável.
+\end{teo}
+
+Por exemplo, $f(x)=1-x^2$ é contínua, logo integrável, e vimos na
+introdução que
+$$\int_0^1(1-x^2)dx=\tfrac23\,.$$
+Sabendo que uma função contínua é integrável, queremos um jeito de 
+\emph{calcular} a sua integral.
+Mas como já foi dito, o procedimento de limite descrito acima (calcular a soma
+de Riemann, tomar o limite $n\to \infty$, etc.) é díficil de
+se implementar, mesmo se $f$ é simples.
+
+\section{O Teorema Fundamental do Cálculo}\label{Sec:TeoremaFundamental}
+
+Suponha que se queira calcular a integral de uma função
+contínua $f:[a,b]\to \bR$: 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.9]
+\newcommand{\funcao}[1]{( 2- (0.2*( ( (#1) -1.4))^2))}
+\fill[areagrafico]
+(0.5,0)--plot[domain=0.5:3.5](\x,{\funcao{\x}})--(3.5,0)--cycle;
+\draw [dotted, domain=0:4] plot (\x,{\funcao{\x}});
+\draw [thick, domain=0.5:3.5] plot (\x,{\funcao{\x}});
+\draw[dotted] (0.5,-0.1)--(0.5,{\funcao{0.5}});
+ \draw (0.5,0) node[below]{$a$};
+\draw[dotted] (3.5,-0.1)--(3.5,{\funcao{3.5}});
+ \draw (3.5,0) node[below]{$b$};
+\draw[>=latex, ->] (0,0)--(4.3,0);
+ \draw (0,1.7) node[left]{$f(x)$};
+\draw (6,1) node[right]{$\displaystyle{I= \int_a^bf(t)dt\,.}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Podemos supor sem perda de generalidade que $f\geq
+0$, o que deve ajudar a entender geometricamente alguns dos raciocínios a
+seguir. Para calcular $I$ passaremos pelo estudo de uma função auxiliar,
+chamada de \grasA{função área}, definida da seguinte maneira:
+\index{função área}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.9]
+\newcommand{\funcao}[1]{( 2- (0.2*( ( (#1) -1.4))^2))}
+%\fill[areagrafico]
+%(0.5,0)--plot[domain=0.5:3.5](\x,{\funcao{\x}})--(3.5,0)--cycle;
+\fill[areafuncaoarea]
+(0.5,0)--plot[domain=0.5:2.5](\x,{\funcao{\x}})--(2.5,
+0)--cycle;
+\draw [dotted, domain=0:4] plot (\x,{\funcao{\x}});
+\draw [thick, domain=0.5:3.5] plot (\x,{\funcao{\x}});
+\draw[dotted] (0.5,-0.1)--(0.5,{\funcao{0.5}});
+ \draw (0.5,0) node[below]{$a$};
+\draw[dotted] (3.5,-0.1)--(3.5,{\funcao{3.5}});
+ \draw (3.5,0) node[below]{$b$};
+\draw (2.5,-0.1)--(2.5,{\funcao{2.5}});
+ \draw (2.5,0) node[below]{$x$};
+\draw[>=latex, ->] (0,0)--(4.3,0);
+ \draw (0,1.7) node[left]{$f(x)$};
+ \draw (1.5,1) node{$I(x)$};
+\draw (6,1) node[right]{$\displaystyle{I(x)\pardef \int_a^xf(t)dt\,.}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Isto é, $I(x)$ representa a área debaixo do gráfico de $f$,
+entre as retas verticais em $a$ (fixa) e em $x$ (móvel).
+Como $f$ é positiva, $x\mapsto I(x)$ é crescente.
+Além disso, $I(a)=0$, e a integral original procurada é
+$I(b)\equiv I$.
+
+\begin{ex}
+Se $f(x)=mx$, a função área pode ser calculada explicitamente:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1]
+\pgfmathsetmacro{\m}{0.6};
+\fill[areafuncaoarea] (1,0)--plot[domain=1:2.5](\x,\m*\x)--(2.5,0)--cycle;
+\draw [dashed, domain=-0.1:3.2] plot (\x,{\m*\x});
+\draw [thick, domain=1:2.5] plot (\x,{\m*\x});
+\draw (1.8,0.5) node {$I(x)$};
+%\draw (1,0) node {$\shortmid$};
+\draw (1,-0.22) node{$a$};
+%\draw (3,0) node {$\shortmid$};
+\draw (3,-0.2) node{$b$};
+\draw (2.5,\m*2.5)--(2.5,0) node[below]{$x$};
+\draw [>=latex, ->] (-0.5,0)--(3.5,0);
+\draw [>=latex, ->] (0,-0.5,0)--(0,2);
+\draw [dotted] (1,-0.05)--(1,0.6);
+\draw [dotted] (3,-0.05)--(3,1.8);
+\draw (4.2,0.8) node[right] {$I(x)=\half m(x^2-a^2)$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Podemos observar que 
+$$I'(x)=\bigl(\tfrac12 m(x^2-a^2)\bigr)'=mx\equiv f(x)\,!$$
+\end{ex}
+
+\begin{exo} Calcule as funções área associadas às 
+funções $f:[0,1]\to \bR$ abaixo.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itExFuncArea1} $\displaystyle{f(x)=
+\begin{cases}
+ 0&\text{ se }x\leq \frac12\,,\\
+ 1&\text{ se }x> \frac12\,.
+\end{cases}
+}$
+%$f(x)=0$ se $x\leq \frac12$, $1$ se $x>\frac12$
+\item\label{itExFuncArea2} $f(x)=-x+1$
+\item\label{itExFuncArea3} $f(x)=2x-1$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itExFuncArea1} $I(x)=0$ se $x\leq \frac12$, $I(x)=(x-\frac12)$ se
+$x>\frac12$
+\eqref{itExFuncArea2} $I(x)=-\frac{x^2}{2}+x$
+\eqref{itExFuncArea3} $I(x)=x^2-x$.
+\end{sol}
+\end{exo}
+
+A relação entre $I$ e $f$ é surpreendentemente simples:
+\index{Teorema Fundamental do Cálculo|textbf}
+\index{função!contínua}
+\begin{teo}[Teorema Fundamental do Cálculo]\label{Teo:TFC}
+ Seja $f:[a,b]\to \bR$ contínua. Então a função área $I:[a,b]\to \bR$,
+definida por $I(x)\pardef \int_a^xf(t)dt$
+é derivável em todo $x\in (a,b)$, e a sua derivada é igual a $f$:
+\eq{I'(x)=f(x)\,.}
+\end{teo}
+O seguinte desenho deve ajudar a entender a prova:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\newcommand{\funcao}[1]{ 2- (0.2*( ( (#1) -1.4))^2)}
+\pgfmathsetmacro{\e}{1.5};
+\pgfmathsetmacro{\c}{2.5};
+\pgfmathsetmacro{\a}{2.9};
+\fill[areafuncaoarea]
+(\e-0.2,0)--plot[domain=\e-0.2:\a](\x,{\funcao{\x}})--(\a,
+0)--cycle;
+\draw[dotted] (\c,0) rectangle (\a,{\funcao{\c}});
+\draw [thick, domain=\e-0.4:\a+0.2] plot (\x,{\funcao{\x}});
+\draw[dashed] (\c,0)--(\c,{\funcao{\c}});
+\draw[decorate, decoration=brace] (\c,0)--(\c,{\funcao{\c}})
+node[midway, left]{$f(x)$};
+\draw[dashed] (\a,0)--(\a,{\funcao{\a}});
+\draw (\c,0) node[below]{$\scriptstyle{x}$};
+\draw (\a,0) node[below]{$\scriptstyle{x+h}$};
+\draw[decorate, decoration=brace]
+(\c,{\funcao{\c}})--(\a,{\funcao{\c}})node[above, midway]{$h$};
+\draw[>=latex, ->] ({\e-0.4},0)--({\a+0.5},0);
+\draw (4,1) node[right]{$\displaystyle{\Rightarrow\, I(x+h)\simeq I(x)+f(x)\cdot
+h}$};
+\draw (4,0.3) node[right]{$\displaystyle{\Rightarrow\,
+\frac{I(x+h)-I(x)}{h}\simeq f(x)}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+De fato, entre $x$ e $x+h$, a função área $I$ cresce de uma
+quantidade que pode ser aproximada, quando $h>0$ é pequeno, 
+pela área do retângulo pontilhado, cuja base é $h$ e altura $f(x)$.
+Isso sugere 
+\eq{\label{eq:letrucmuch}\lim_{h\to 0^+}\frac{I(x+h)-I(x)}{h}=f(x)\,.}
+\begin{proof}
+Seja $x\in (a,b)$. Provemos \eqref{eq:letrucmuch} 
+(o limite $h\to 0^-$ se trata da mesma maneira).
+Pela propriedade \eqref{itProprIntegr3} da Proposição \ref{Prop:ProprIntegral},
+$$I(x+h)=\int_a^{x+h}f(t)\,dt=\int_a^xf(t)\,dt+\int_{x}^{x+h}f(t)\,dt=
+I(x)+\int_{x}^{x+h}f(t)\,dt\,.$$
+Observe também que por \eqref{eq:integrconstante}, $f(x)$ pode
+ser escrito como a diferença
+$f(x)=\frac{1}{h}f(x)\int_x^{x+h}\,dt=\frac{1}{h}\int_x^{x+h}f(x)\,dt$.
+Logo, \eqref{eq:letrucmuch} é equivalente a mostrar que
+\eq{\label{eq:maaachin}
+\frac{I(x+h)-I(x)}{h}-f(x)=\tfrac{1}{h}\int_x^{x+h}(f(t)-f(x))dt}
+tende a zero quando $h\to 0$.
+Como $f$ é contínua em $x$, sabemos que para todo $\epsilon>0$,
+$-\epsilon\leq f(t)-f(x)\leq +\epsilon$, desde que $t$ seja suficientemente
+perto de $x$.
+Logo, para $h>0$ suficientemente pequeno, a integral em
+\eqref{eq:maaachin} pode ser limitada por 
+$$
+-\epsilon =\tfrac1h\int_x^{x+h}(-\epsilon)\,dt
+\leq \tfrac{1}{h}\int_x^{x+h}(f(t)-f(x))dt\leq 
+\tfrac1h\int_x^{x+h}(+\epsilon)\,dt=+\epsilon\,.
+$$
+(Usamos \eqref{ineq_estim_int}.)
+Isso mostra que \eqref{eq:maaachin} fica arbitrariamente pequeno  quando $h\to
+0^+$, o que prova \eqref{eq:letrucmuch}.
+\end{proof}
+
+Assim, provamos que integral e derivada são duas noções intimamente ligadas, já
+que a função área é \emph{uma função derivável cuja
+derivada é igual a $f$}. 
+
+\begin{defin}
+Seja $f$ uma função. Se $F$ é uma função derivável tal que $$F'(x)=f(x)$$ 
+para todo $x$, então $F$ é chamada \grasA{primitiva de} $f$.
+\index{primitiva|textbf}
+\end{defin}
+
+\begin{ex} Se $f(x)=x$, então
+$F(x)=\frac{x^2}{2}$ é primitiva de $f$, já que
+$$F'(x)=\bigl(\frac{x^2}{2}\bigr)'=\tfrac12(x^2)'=\tfrac12 2x=x\,.$$
+Observe que como $(\frac{x^2}{2}+1)'=x$,
+$G(x)=\frac{x^2}{2}+1$ é \emph{também} primitiva de $f$.
+\end{ex}
+
+\begin{ex}
+Se $f(x)=\cos x$, então $F(x)=\sen x$ é primitiva de $f$. Observe que
+$G(x)=\sen x+14$ e $H(x)=\sen x-7$ também são primitivas de $f$.
+\end{ex}
+
+Os dois exemplos acima mostram que \emph{uma função admite infinitas
+primitivas}, e que aparentemente duas primitivas de uma mesma função somente
+diferem por uma constante:
+
+\begin{lem}
+ Se $F$ e $G$ são duas primitivas de uma mesma função $f$, então existe uma
+constante $C$ tal que $F(x)-G(x)=C$ para todo $x$.
+\end{lem}
+\begin{proof}
+Defina $m(x)\pardef F(x)-G(x)$. Como $F'(x)=f(x)$ e $G'(x)=f(x)$, temos 
+$m'(x)=0$ para todo
+$x$. Considere dois pontos $x_1<x_2$ quaisquer. Aplicando o Corólário
+\eqref{Corol:ValorIntermDeriv} a $m$ no intervalo $[x_1,x_2]$: existe $c\in
+[x_1,x_2]$ tal que $\frac{m(x_2)-m(x_1)}{x_2-x_1}=m'(c)$. Como $m'(c)=0$, temos
+$m(x_2)=m(x_1)$. Como isso pode ser feito para qualquer ponto $x_2<x_1$, temos
+que $m$ toma o mesmo valor em qualquer ponto, o que implica que é uma função
+constante.
+\end{proof}
+
+Em geral, escreveremos uma primitiva genérica de $f(x)$ como
+$$F(x)=\text{primitiva}+C\,,$$ 
+para indicar que é sempre possível adicionar uma constante $C$ arbitrária.
+
+\begin{exo}\label{Exo:PrimitivasBasicas}
+Ache as primitivas das funções abaixo.
+\begin{multicols}{4}
+\begin{enumerate}
+\item\label{itExoPrimitTriv0} $-2$
+\item\label{itExoPrimitTriv1} $x$
+\item\label{itExoPrimitTriv2} $x^2$
+\item\label{itExoPrimitTriv3} $x^n$ ($n\neq -1$)
+\item\label{itExoPrimitTriv35} $\sqrt{1+x}$
+\item\label{itExoPrimitTriv5} $\cos x$
+\item\label{itExoPrimitTriv6} $\sen x$
+\item\label{itExoPrimitTriv7} $\cos (2x)$
+\item\label{itExoPrimitTriv9} $e^x$
+\item\label{itExoPrimitTriv95} $1-e^{-x}$
+\item\label{itExoPrimitTriv10} $e^{2x}$
+\item\label{itExoPrimitTriv105} $3xe^{-x^2}$
+\item\label{itExoPrimitTriv8} $\frac{1}{\sqrt{x}}$
+\item\label{itExoPrimitTriv4} $\frac1x$, $x>0$
+\item\label{itExoPrimitTriv11} $\frac{1}{1+x^2}$
+\item\label{itExoPrimitTriv12} $\frac{1}{\sqrt{1-x^2}}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itExoPrimitTriv0} $-2x+C$
+\eqref{itExoPrimitTriv1} $\frac{x^2}{2}+C$
+\eqref{itExoPrimitTriv2} $\frac{x^3}{3}+C$
+\eqref{itExoPrimitTriv3} $\frac{x^{n+1}}{n+1}+C$
+\eqref{itExoPrimitTriv35} $\tfrac{2}{3}(1+x)^{3/2}+C$
+\eqref{itExoPrimitTriv5} $\sen x+C$
+\eqref{itExoPrimitTriv6} $-\cos x+C$
+\eqref{itExoPrimitTriv7} $\frac{1}{2}\sen (2x)+C$
+\eqref{itExoPrimitTriv9} $e^x+C$
+\eqref{itExoPrimitTriv95} $x+e^{-x}+C$
+\eqref{itExoPrimitTriv10} $\tfrac12 e^{2x}+C$
+\eqref{itExoPrimitTriv105} $-\tfrac32e^{-x^2}+C$
+\eqref{itExoPrimitTriv8} $2\sqrt{x}+C$
+\eqref{itExoPrimitTriv4} $\ln x+C$
+\eqref{itExoPrimitTriv11} $\arctan x+C$
+\eqref{itExoPrimitTriv12} Com $-1<x<1$, $\arcsen x+C$
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Mostre que $(2x^2-2x+1)e^{2x}$ é primitiva da função $4x^2e^{2x}$.
+\end{exo}
+
+
+Mais tarde olharemos de mais perto o problema de calcular primitivas.
+Voltemos agora ao nosso problema:
+\index{Teorema Fundamental do Cálculo}
+\begin{teo}[Teorema Fundamental do Cálculo]\label{Teo:TFC2}
+Seja $f:[a,b]\to \bR$ uma função contínua, e $F$ uma primitiva de $f$.
+Então
+\eq{\label{eq:TFUNDAM}\int_a^bf(t)\,dt=F(b)-F(a)\equiv F(x)\big|_{a}^b\,.}
+\end{teo}
+
+\begin{proof} Lembre que $\int_a^bf(t)\,dt=I(b)$, onde $I(x)$ é a função
+área. Ora, sabemos pelo Teorema \ref{Teo:TFC} que $I(x)$ é primitiva
+de $f$. Assim, $I(x)=F(x)+C$, onde $F(x)$ é uma primitiva qualquer de $f$, e
+onde se trata de achar o valor de $C$.
+Mas $I(a)=0$ implica $F(a)+C=0$, logo $C=-F(a)$, e $I(x)=F(x)-F(a)$. Em
+particular, $I(b)=F(b)-F(a)$.
+\end{proof}
+
+\begin{ex}
+Considere $I=\int_0^1x^2dx$, que representa
+a área debaixo do gráfico da parábola $y=f(x)=x^2$, entre $x=0$ e $x=1$. 
+Como $F(x)=\frac{x^3}{3}$ é primitiva de $f$, temos 
+$$\int_0^1x^2\,dx=\frac{x^3}{3}\Big|_{0}^1=\frac{1^3}{3}-\frac{0^3}{3}=\frac{1}{
+3} \,.$$
+Podemos também calcular a integral da introdução, dessa vez usando o Teorema
+Fundamental:
+$$\int_0^1(1-x^2)\,dx=\int_0^11\,dx-\int_0^1x^2\,dx=1-\tfrac13=\tfrac23\,.$$
+\end{ex}
+
+
+\begin{exo}\label{Exo:IntegraleNegative}
+Mostre que $\int_0^2(x-1)\,dx=0$. Como interpretar esse resultado
+geometricamente?
+\begin{sol}
+Como $\tfrac{x^2}{2}-x$ é primitiva de $f(x)=x-1$, temos
+$\int_0^2(x-1)\,dx=(\tfrac{x^2}{2}-x)|_0^2=0$.  
+Esse resultado pode ser interpretando decompondo a integral em duas partes: 
+$\int_0^2f(x)\,dx=\int_0^1f(x)\,dx+\int_1^2f(x)\,dx$.
+Esboçando o gráfico de $f(x)$ entre $0$ e $2$,
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\fill[areagrafico] (1,0)--(2,1)--(2,0)--cycle;
+\fill[areafuncaoarea] (1,0)--(0,-1)--(0,0)--cycle;
+\draw (1.65,0.25) node{$+$};
+\draw (0.35,-0.3) node{$-$};
+\draw (1,0) node{$\shortmid$} node[above]{$1$};
+\draw[dashed] (2,0)node[below]{$2$}--(2,1);
+\draw[dashed] (0,0)--(0,-1);
+\draw[>=latex, ->] (-0.3,0)--(2.4,0);
+\draw[>=latex, ->] (0,-1.2)--(0,1.3);
+\draw[thick] (0,-1)--(2,1);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Vemos que a primeira parte 
+$\int_0^1f(x)\,dx=-\tfrac12$ é a contribuição do intervalo em
+que $f$ é \emph{negativa}, e é exatamente
+compensada pela contribuição da parte \emph{positiva}
+$\int_1^2f(x)\,dx=+\tfrac12$.
+\end{sol} 
+\end{exo}
+
+\begin{exo}\label{exo_TFCnaoseaplica}
+A seguinte conta está certa? Justifique.
+\[
+\int_{-1}^2\frac{1}{x^2}\,dx=\bigl(-\frac{1}{x}\bigr)\Big|_{-1}^2=-\tfrac32\,.
+\]
+\begin{sol}
+Não, a conta não está certa. É porqué a função $\frac{1}{x^2}$ não é
+contínua (nem definida) em $0$, ora $0$ pertence ao intervalo de
+integração. Logo, o Teorema Fundamental não se aplica.
+No entanto, será possível dar um sentido a
+$\int_{-1}^2\frac{1}{x^2}\,dx$, usando \emph{integrais impróprias}.
+\end{sol}
+\end{exo}
+
+O Teorema Fundamental mostra que se uma primitiva de $f$ é
+conhecida, então a integral de $f$ em qualquer intervalo $[c,d]$ pode ser
+obtida, calculando simplesmente $F(d)-F(c)$. 
+Isto é, o problema de calcular integral é reduzido ao de achar uma primitiva de
+$f$. 
+Ora, \emph{calcular uma primitiva} é uma operação mais complexa do que calcular
+uma derivada. De fato, calcular
+uma derivada significa simplesmente aplicar mecanicamente as regras de
+derivação descritas no Capítulo \ref{Cap:Derivacao}, enquanto uma certa
+ingeniosidade pode ser necessária para achar uma primitiva, mesmo de uma
+função simples como $\sqrt{1+x^2}$ ou $\ln x$.\\
+
+Portanto, estudaremos \emph{técnicas} para calcular primitivas, ao longo
+do capítulo. Por enquanto, vejamos primeiro como usar integrais para calcular
+áreas mais gerais do plano.
+
+\section{Áreas de regiões do plano}
+\index{área! de região do plano}
+
+
+Sejam $f$ e $g$ duas funções definidas no mesmo intervalo $[a,b]$, tais que
+$g(x)\leq f(x)$ para todo $x\in [a,b]$. Como calcular a área da região $R$
+contida entre os gráficos das duas funções, delimitada lateralmente pelas
+retas verticais $x=a$ e $x=b$?
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\newcommand{\funcaof}[1]{ 4+sin(((#1)-1) r) }
+\newcommand{\funcaog}[1]{ 1+0.2*(#1) }
+\draw[>=latex, ->] (0,0)--(5,0);
+\pgfmathsetmacro{\a}{1};
+\pgfmathsetmacro{\b}{4};
+\coordinate (A) at (\a,{\funcaof{\a}});
+\coordinate (B) at (\b,{\funcaof{\b}});
+\coordinate (C) at (\a,{\funcaog{\a}});
+\coordinate (D) at (\b,{\funcaog{\b}});
+\coordinate (P) at ({\a+0.4*(\a+\b)/2},{\funcaof{\a+0.4*(\a+\b)/2}});
+\draw (P) node[above]{$f$}; 
+\coordinate (Q) at ({\a+0.7*(\a+\b)/2},{\funcaog{\a+0.7*(\a+\b)/2}});
+\draw (Q) node[below]{$g$}; 
+\draw[thick, domain=\a:\b] plot (\x,{\funcaof{\x}});
+\draw[thick, domain=\a:\b] plot (\x,{\funcaog{\x}});
+\fill[areagrafico, opacity=0.8]
+(C)--(A)--plot[domain=\a:\b] (\x,{\funcaof{\x}})--(B)--
+(D)--plot[domain=\b:\a] (\x,{\funcaog{\x}})--cycle;
+\draw[dashed] (A)--(C); \draw[dashed] (B)--(D);
+\draw[>=latex, ->] (0,0)--(5,0);
+\draw (\a,0) node{$\shortmid$} node[below]{$a$};
+\draw (\b,0) node{$\shortmid$} node[below]{$b$};
+\draw[dotted] (\a,0)--(A);
+\draw[dotted] (\b,0)--(B);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Por uma translação vertical, sempre podemos supor que 
+$0\leq g\leq f$. Logo, a área de
+$R$ pode ser obtida calculando primeiro a área debaixo do gráfico de $f$, que
+vale $\int_a^bf\,dx$, da qual se subtrai a área debaixo do gráfico de $g$,
+que vale $\int_a^bg\,dx$. 
+\eq{\label{eq:areaentregraficos}\text{área}(R)=\int_a^bf\,dx-\int_a^b
+g\,dx\equiv \int_a^b(f-g)\,dx\,.}
+
+\begin{ex}
+Considere a região finita $R$ delimitada pela parábola $y=2-x^2$ e pela
+reta $y=-x$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\newcommand{\funcaof}[1]{ 2-(#1)^2 }
+\newcommand{\funcaog}[1]{ -1*(#1) }
+\draw[>=latex, ->] (-2,0)--(3,0);
+\draw[>=latex, ->] (0,-2)--(0,2.5);
+\pgfmathsetmacro{\a}{-1};
+\pgfmathsetmacro{\b}{2};
+\coordinate (A) at (\a,{\funcaof{\a}});
+\coordinate (B) at (\b,{\funcaof{\b}});
+\coordinate (C) at (\a,{\funcaog{\a}});
+\coordinate (D) at (\b,{\funcaog{\b}});
+\coordinate (P) at ({\a+0.7*(\b-\a)},{\funcaof{\a+0.7*(\b-\a)}});
+\draw (P) node[above right]{$y=2-x^2$}; 
+\coordinate (Q) at ({\a+0.7*(\b-\a)},{\funcaog{\a+0.7*(\b-\a)}});
+%\draw (Q) node[below]{$g$};
+\fill[areagrafico, opacity=0.8]
+(C)--(A)--plot[domain=\a:\b] (\x,{\funcaof{\x}})--(B)--
+(D)--plot[domain=\b:\a] (\x,{\funcaog{\x}})--cycle;
+\draw[thick, domain=-1.5:2.2] plot (\x,{\funcaof{\x}});
+\draw[thick, domain=2.3:-1.5] plot (\x,{\funcaog{\x}}) node[left]{$y=-x$};
+% \draw (C) node[left]{$C$};
+% \draw (B) node[right]{$B$};
+% \draw (D) node[right]{$D$};
+\draw[dashed] (A)--(C); \draw[dashed] (B)--(D);
+\draw[>=latex, ->] (0,0)--(5,0);
+\draw (\a,0) node{$\shortmid$} node[below]{$-1$};
+\draw (\b,0) node{$\shortmid$} node[above]{$2$};
+\draw[dotted] (\a,0)--(A);
+\draw[dotted] (\b,0)--(B);
+ \draw (0.5,0.5) node{$R$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Pode ser verificado que os pontos de interseção entre as duas
+curvas são $x=-1$ e $x=2$. Observe também que no intervalo $[-1,2]$, a parábola
+está sempre \emph{acima} da reta.
+Logo, por \eqref{eq:areaentregraficos}, a área de
+$R$ é dada pela integral 
+$$
+\int_{-1}^2\bigl((2-x^2)-(-x)\bigr)\,dx=
+\int_{-1}^2\bigl(-x^2+x+2\bigr)\,dx=\Bigl(
+-\frac{x^3}{3}+\frac{x^2}{2}+2x
+\Bigr)\Big|_{-1}^2=\tfrac92\,.
+$$
+\end{ex}
+
+\begin{exo}
+Esboce e calcule a área da região delimitada pelas curvas abaixo.
+\begin{multicols}{2}
+\begin{enumerate}
+\item\label{itareaRbas1}  $y=-2$, $x=2$, $x=4$, $y=\half x-1$.
+\item\label{itareaRbas2} $y=-2$, $x=2$, $x=4$, $y=\half (x-2)^2$.
+\item\label{itareaRbas3} $y=x^2$, $y=-(x+1)^2+1$.
+\item \label{itareaRbas4} $y=0$, $x=1$, $x=e$, $y=\tfrac1x$.
+\item \label{itareaRbas5} $y=-2$,  $y=4+x-x^2$.
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itareaRbas1} $5$, 
+\eqref{itareaRbas2} $\frac{16}{3}$,
+\eqref{itareaRbas3} $\frac{1}{3}$,
+\eqref{itareaRbas4} $1$.
+\eqref{itareaRbas5} $\tfrac{125}{6}$.
+\end{sol}
+\end{exo}
+
+
+
+\begin{ex} Considere a área da região finita delimitada pelas curvas $x=1-y^2$
+e $x=5-5y^2$. 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcaof}[1]{ 1-(#1)^2 }
+\newcommand{\funcaog}[1]{ 5-5*(#1)^2 }
+\draw[>=latex, ->] (-1,0)--(6,0);
+\draw[>=latex, ->] (0,-1.5)--(0,1.5);
+\pgfmathsetmacro{\a}{-1};
+\pgfmathsetmacro{\b}{1};
+\coordinate (A) at ({\funcaof{\a}},\a);
+\coordinate (B) at ({\funcaof{\b}},\b);
+\coordinate (C) at ({\funcaog{\a}},\a);
+\coordinate (D) at ({\funcaog{\b}},\b);
+\coordinate (P) at ({\funcaof{\a+0.7*(\b-\a)}},{\a+0.7*(\b-\a)});
+\coordinate (Q) at ({\funcaog{\a+0.7*(\b-\a)}},{\a+0.7*(\b-\a)});
+%\draw (Q) node[below]{$g$};
+\fill[areagrafico, opacity=0.8]
+(C)--(A)--plot[domain=\a:\b] ({\funcaof{\x}},\x)--(B)--
+(D)--plot[domain=\b:\a] ({\funcaog{\x}},\x)--cycle;
+\draw[thick, domain=-1.3:1.3] plot ({\funcaof{\x}},\x);
+\draw[thick, domain=-1.1:1.1] plot ({\funcaog{\x}},\x);
+\draw[dashed] (A)--(C); \draw[dashed] (B)--(D);
+\draw[>=latex, ->] (0,0)--(5,0);
+\draw (0,\a) node{-} node[above left]{$-1$};
+\draw (0, \b) node{-} node[below left]{$1$};
+\draw[dotted] (0,\a)--(A);
+\draw[dotted] (0,\b)--(B);
+\draw (P) node[right]{$\scriptstyle{x=1-y^2}$}; 
+\draw (Q) node[above right]{$\scriptstyle{x=5-5y^2}$};
+% \draw (0.5,0.5) node{$R$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+%\begin{sol}
+Neste caso, é mais natural expressar a área procurada como um
+integral \emph{com respeito a $y$}. Como função de $y$, as curvas são parábolas:
+$x=f(y)$ com $f(y)=5-5y^2$ e $x=g(y)$ com $f(y)=1-y^2$, e o gráfico de $f(y)$
+está sempre acima do gráfico de $g(y)$. Logo, 
+a área procurada é dada por 
+ $\int_a^b[f(y)-g(y)]dy$, que vale 
+$$\int_{-1}^{1}\big\{(5-5y^2)-(1-y^2)\big\}dy=\int_{-1}^{1}\big\{4-4y^2\big\}
+dy=\big\{4y-\tfrac43y^3\big\}\Big|_{-1}^1=\tfrac{16}{3}\,.$$
+%\end{sol}
+\end{ex}
+
+
+\begin{exo}(3a prova, primeiro semestre de 2011)
+Calcule a área da região finita delimitada pelo gráfico da função $y=\ln x$ e
+pelas retas $y=-1$, $y=2$, $x=0$.
+\begin{sol}\mbox{}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.6]
+\fill[areagrafico]
+(0,-1)--(0.368,-1)--plot[domain=0.368:7.38](\x,{ln(\x)})--(0,2)--cycle;
+\draw [thick, domain=0.3:8, samples=80] plot (\x,{ln(\x)}) node[right] {$\ln
+x$};
+\draw [>=latex, ->] (-0.5,0)--(4,0) node[right] {$x$};
+\draw [>=latex, ->] (0,-1.2)--(0,2.5);
+\draw [dotted] (0,-1)--(0.368,-1);
+\draw [dotted] (0,2)--(7.38,2);
+\draw (0,-1) node[left]{$-1$};
+\draw (0,2) node[left]{$2$};
+\draw (8,0) node[right]{$A=\int_{-1}^2e^ydy=e^2-e^{-1}\,.$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Observe que expressando a área com uma integral com respeito a $x$, 
+$$A=\int_0^{e^{-1}}(2-(-1))dx+\int_{e^{-1}}^{e^2}(2-\ln x)
+dx\,.$$
+Essa integral requer a primitiva de $\ln x$, o que não
+sabemos (ainda) fazer.
+\end{sol}
+\end{exo}
+
+%\newpage
+\begin{exo} Fixe $\alpha>0$.
+Considere $f_\alpha(x)\pardef \alpha^{-2}e^{-\alpha}(\alpha^2-x^2)$. Esboce
+$x\mapsto f_\alpha(x)$ para diferentes valores de $\alpha$ (em particular para
+$\alpha$
+pequeno e grande). Determine o valor de $\alpha$ que maximize a área delimitada
+pelo gráfico de $f_\alpha$ e pelo eixo $x$.
+\begin{sol}
+Consideremos $f_\alpha$ para diferentes valores de $\alpha$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.3]
+\newcommand{\funcao}[2]{ ( exp(-1*(#1))/((#1)^2) )*( (#1)^2 - (#2)^2)}
+
+\foreach \a in {0.3, 0.6,1,2} {
+\fill[areagrafico, opacity=0.8] (-\a,0)--
+plot[domain=-\a:\a] (\x,{\funcao{\a}{\x}})--(\a,0)--cycle;
+}
+
+\foreach \a in {0.3, 0.6,1,2} {
+\draw[thick, domain=-\a:\a, samples=50] plot (\x,{\funcao{\a}{\x}});
+}
+
+\draw[>=latex,->] (-2.3,0)--(2.3,0);
+\draw[>=latex,->] (0,-0.1)--(0,1.3);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+A área debaixo do gráfico de $f_\alpha$ é dada pela integral 
+$$
+I_\alpha=\int_{-\alpha}^\alpha f_\alpha(x)\,dx=\frac{e^{-\alpha}}{\alpha^2}
+\int_{-\alpha}^\alpha(\alpha^2-x^2)\,dx=(\cdots)=\tfrac43 \alpha
+e^{-\alpha}\,.$$
+Um simples estudo de $\alpha\mapsto I_\alpha$ mostra que o seu máximo é
+atingido em $\alpha=1$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Se $a>0$, calcule $I_n=\int_0^ax^{1/n}dx$. Calcule $\lim_{n\to \infty}I_n$, e dê
+a interpretação geométrica da solução. (Dica: lembre dos esboços das funções
+$x\mapsto x^{1/p}$, no Capítulo \ref{CAP:Funcoes}.)
+\begin{sol}
+Como $I_n=\frac{n}{n+1}a^{\frac{n+1}{n}}$, temos $\lim_{n\to \infty}I_n=a$.
+Quando $n\to \infty$, o gráfico de $x\mapsto x^{1/n}$ em $\bR_+$ tende
+ao gráfico da função constante $f(x)\equiv 1$. Ora, $\int_0^a f(x)\,dx=a$!
+\end{sol}
+\end{exo}
+
+\section{Primitivas}
+\index{primitiva}
+O Teorema Fundamental mostra a importância de saber calcular
+primitivas. Por isso, será útil desenvolver \emph{técnicas de
+integração}.
+Mas antes de apresentarmos essas técnicas, 
+faremos alguns comentários sobre as notações usadas para denotar
+primitivas.\\
+
+Para uma dada função $f$, queremos \emph{achar uma primitiva} $F$, isto é 
+uma função cuja derivada $F'$ é igual a $f$. Essa operação, \emph{inversa da
+derivada}~\footnote{Às vezes, essa operação é naturalmente chamada de
+\emph{antiderivada}.}, será chamada de \grasA{integrar $f$}.
+Por isso, é útil introduzir uma notação que mostra que
+$F$ é o resultado de uma transformação aplicada a $f$:
+$$F(x)=\int f(x)dx+C\,,$$
+em que $C$ é uma constante arbitrária.
+Ao invés da integral definida $\int_a^bf(x)\,dx$, a integral \emph{indefinida}
+$\int f(x)\,dx$ \emph{é uma função de $x$}, que por definição satisfaz 
+$$\Bigl(\int f(x)\,dx\Bigr)'=f(x)\,.$$
+Como a operação ``integrar com respeito a $x$'' é a operação
+inversa da derivada, temos 
+\eq{\label{eq:integrderivegalf}\int f'(x)\,dx=f(x)+C\,.}
+Além disso, as seguintes propriedades são satisfeitas ($\lambda\in \bR$ é uma
+constante):
+$$\int\lambda f(x)\, dx=\lambda\int f(x)\,dx\,,\quad
+\int(f(x)+g(x))dx=\int f(x)\,dx+\int g(x)\,dx\,.$$
+
+As seguintes primitivas fundamentais foram calculadas no Exercício
+\ref{Exo:PrimitivasBasicas}:
+\begin{multicols}{2}
+\begin{enumerate}
+\item $\int k\,dx=kx+C$
+\item $\int x\,dx=\frac{x^2}{2}+C$
+\item\label{itPrimitFund3} $\int x^p\,dx=\frac{x^{p+1}}{p+1}+C$ ($p\neq -1$)
+\item $\int \cos x\,dx=\sen x+C$
+\item $\int \sen x\,dx=-\cos x+C$
+\item $\int e^x\,dx=e^x+C$
+\item $\int \frac{dx}{1+x^2}=\arctan x+C$
+\item $\int \frac{dx}{\sqrt{1-x^2}}=\arcsen x+C$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+
+O caso $p=-1$ em \eqref{itPrimitFund3} corresponde a $\int \frac1x\,dx$, que
+obviamente é definida somente para $x\neq 0$. Ora, se $x>0$, temos $(\ln
+(x))'=\tfrac1x$, e se $x<0$, temos $(\ln (-x))'=\tfrac{-1}{-x}=\tfrac1x$. Logo,
+%\framebox[1.1\width]
+$$\boxed{\int \frac1x \,dx=\ln|x|+C\,\quad (x\neq 0).}$$
+
+\begin{exo}
+Calcule as primitivas das seguintes funções.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itprimitsubst1} $(1-x)(1+x)^2$
+\item\label{itprimitsubst2} $\frac{1}{x^3}-\cos(2x)$
+\item\label{itprimitsubst3} $\frac{x+5x^7}{x^9}$
+%\item\label{itprimitsubst4} $x\sen(x^2)$
+%\item\label{itprimitsubst5} $\cos^2(t)$
+\item\label{itprimitsubst6} $2+2\tan^2(x)$
+%\item\label{itprimitsubst7} $\frac{x}{1+x^2}$
+%\item\label{itprimitsubst8} $\tan x$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itprimitsubst1}
+$-\frac{x^4}{4}-\frac{x^3}{3}+\frac{x^2}{2}+x+C$, 
+\eqref{itprimitsubst2} $\frac{-1}{2x^2}-\frac{\sen (2x)}{2}+C$,
+\eqref{itprimitsubst3} $-\frac{1}{7x^7}-\frac{5}{x}+C$, 
+%\eqref{itprimitsubst4} $-\frac{1}{2}\cos(x^2)+C$,
+%\eqref{itprimitsubst5} $\frac{x}{2}+\frac{\sen x \cos x}{2}+C$,
+\eqref{itprimitsubst6} $2\tan x+C$.
+%\eqref{itprimitsubst7} $\tfrac12\ln(1+x^2)+C$
+%\eqref{itprimitsubst8} $-\ln(\cos x)+C$
+\end{sol}
+\end{exo}
+
+Vamos agora apresentar os métodos clássicos usados para 
+calcular primitivas.
+O leitor interessado em \emph{usar} a integral de Riemann para
+resolver problemas concretos pode pular para o
+Capítulo~\ref{CAP:Applicacoes}, e voltar depois para as Seçoes 
+\ref{Sec:MetodoSubstit} até \ref{Sec:MetodoSubstitTrig} abaixo para
+exercitar a sua habilidade a calcular primitivas.
+
+\subsection{Integração por Substituição}\label{Sec:MetodoSubstit}
+\index{integração!por substituição}
+\begin{ex}
+Suponha que se queira calcular $$\int x\cos (x^2)\,dx\,.$$
+Apesar da função $x\cos (x^2)$ não ser a derivada de uma função elementar,
+ela possui uma estrutura particular: o ``$x$'' que multiplica o cosseno é um
+polinômio cujo grau é um a menos do que o polinômio ``$x^2$'' contido dentro do
+cosseno. Ora, sabemos que a derivada diminui o grau de um polinômio. No nosso
+caso: $(x^2)'=2x$. 
+Logo, ao multiplicar e dividir a primitiva por $2$, podemos escrever
+$$\int x\cos (x^2)\,dx=\tfrac12\int (2x)\cos (x^2)\,dx
+=\tfrac12\int (x^2)'\cos (x^2)\,dx\,.$$
+Agora, reconhecemos em $(x^2)'\cos (x^2)$ uma derivada. De fato, pela regra da
+cadeia, $(\sen (x^2))'=\cos(x^2)\cdot (x^2)'$. Logo, usando
+\eqref{eq:integrderivegalf},
+$$
+\int (x^2)'\cos (x^2)\,dx=\int (\sen (x^2))'\,dx=
+\sen(x^2)+C\,.
+$$
+Portanto,
+$$\int x\cos (x^2)\,dx=\tfrac12\sen(x^2)+C\,.$$
+Do mesmo jeito, 
+$$\int x^2 \cos (x^3)\,dx=\tfrac13\int 3x^2 \cos (x^3)\,dx=
+\tfrac13\int (x^3)' \cos (x^3)\,dx= \tfrac13\sen (x^3)+C\,.$$
+\end{ex}
+
+A ideia apresentada nesse último exemplo consiste em conseguir 
+escrever a função integrada na forma da derivada 
+de uma função composta; é a base do método de integração chamado
+\emph{integração por substituição}.
+Lembremos a regra da cadeia:
+\index{regra!da cadeia}
+$$\bigl(f(g(x))\bigr)'=f'(g(x))g'(x)\,.$$
+Integrando ambos lados dessa identidade com respeito a $x$ e usando de
+novo \eqref{eq:integrderivegalf} obtemos
+$f(g(x))=\int f'(g(x))g'(x)\,dx+\text{constante}$, que é equivalente à
+\grasA{fórmula de integração por substituição}:
+\eq{\boxed{\int f'(g(x))g'(x)\,dx=f(g(x))+C\,.}}
+Existem vários jeitos de escrever a mesma fórmula. Por exemplo, se $H$ é
+primitiva de $h$,
+\eq{\int h(g(x))g'(x)\,dx=H(g(x))+C\,.}
+Senão, a função $g(x)$ pode ser considerada como
+\emph{uma nova váriavel}: $u\pardef g(x)$. 
+Derivando com respeito a $x$,
+$\frac{du}{dx}=g'(x)$, que pode ser simbolicamente escrita como $du=g'(x)dx$.
+Assim, a primitiva inicial pode ser escrita
+somente em termos da variável $u$, \emph{substituindo $g(x)$ por $u$}:
+\eq{\label{eq:substitporu}\int h(g(x))g'(x)\,dx=\int h(u)\,du\,.}
+Em seguida, se trata de calcular uma primitiva de $h$, e no final voltar para a
+variável $x$. O objetivo é sempre tornar $\int h(u)\,du$ o mais próximo possível
+de uma primitiva elementar como as descritas no início da seção.
+
+\begin{ex}
+Considere $\int \frac{\cos x}{\sen^2x}\,dx$. Aqui queremos usar o fato do
+$\cos x$ ser a derivada da função $\sen x$. Façamos então a {substituição}
+$u=\sen x$, que implica $du=(\sen x)'dx=\cos x\,dx$, o que implica
+$$\int \frac{\cos x}{\sen^2x}\,dx=\int \frac{1}{u^2}\,du\equiv \int
+h(u)\,du\,.$$ 
+Mas $h(u)=\tfrac{1}{u^2}$, é a derivada (com respeito a $u$!) de 
+$H(u)=-\frac{1}{u}$. Logo, 
+$$\int \frac{\cos x}{\sen^2x}\,dx=\int h(u)\,du=
+H(u)+C=-\frac{1}{\sen x}+C\,.$$
+\end{ex}
+
+\begin{ex}
+Para calcular $\int \frac{x}{1+x}\,dx$, definemos $u\pardef 1+x$. Logo, $du=dx$
+e $x=u-1$. Assim,
+\begin{align*}
+\int\frac{x}{1+x}\,dx=\frac{u-1}{u}\,du=\int\bigl\{1-\tfrac{1}{u}\bigr\}\,du
+&=\int du-\int\tfrac{1}{u}\,du\\
+&=u-\ln u+C=1+x-\ln(1+x)+C\,.
+\end{align*}
+\end{ex}
+
+\begin{ex}
+Calculemos agora $\int\frac{x+1}{\sqrt{1-x^2}}dx$.
+Para começar, separemos a primitiva em dois termos:
+$$
+\int\frac{x+1}{\sqrt{1-x^2}}\,dx=\int\frac{x}{\sqrt{1-x^2}}\,dx+\int\frac{1}{
+\sqrt {1-x^2}}\,dx\,.
+$$
+Para o primeiro termo, vemos que com $u=g(x)\pardef 1-x^2$, cuja derivada é
+$g'(x)=-2x$, temos $du=-2x\,dx$, e
+$$
+\int\frac{x}{\sqrt{1-x^2}}\,dx=
+%-\int\frac{-2x}{2\sqrt{1-x^2}}\,dx=
+-\int \frac{1}{2\sqrt{u}}du=-\sqrt{u}+C=-\sqrt{1-x^2}+C\,.$$
+No segundo termo reconhecemos a derivada da função arcseno. Logo, somando,
+\eq{\label{eq:rienderien}\int\frac{x+1}{\sqrt{1-x^2}}dx
+=-\sqrt{1-x^2}+{\mathrm{arcsen}}\,x+C\,.}
+\end{ex}
+
+\begin{obs}
+Lembra que um cálculo de primitiva pode sempre
+ser \emph{verificado}, derivando o resultado obtido! Por exemplo, não
+perca a oportunidade de verificar que derivando o lado direito de
+\eqref{eq:rienderien}, obtém-se $\frac{x+1}{\sqrt{1-x^2}}$!
+\end{obs}
+
+Às vezes, é preciso transformar a função integrada antes de fazer
+uma substituição útil, como visto nos três próximos exemplos.
+
+\begin{ex}
+Para calcular $\int \frac{1}{9+x^2}\,dx$
+podemos colocar $9$ em evidência no denominador, e em seguida fazer a
+substituição $u=\tfrac{x}{3}$:
+\begin{align*}\int \frac{1}{9+x^2}\,dx=
+\tfrac19\int \frac{1}{1+(\tfrac{x}{3})^2}\,dx&=\tfrac19
+\int\frac{3}{1+u^2}\,dx\\
+&=\tfrac13\int \frac{1}{1+u^2}\,du =\tfrac13\arctan u+C
+=\tfrac13\arctan(\tfrac{x}{3})+C\,.
+\end{align*}
+\end{ex}
+
+\begin{ex} Para calcular $\int\frac{1}{x^2+2x+2}\,dx$ comecemos 
+completando o quadrado: $x^2+2x+2=\{(x+1)^2-1\}+2=1+(x+1)^2$. Logo,
+usando $u\pardef x+1$,
+\begin{align*}
+\int\frac{1}{x^2+2x+2}\,dx&=\int\frac{1}{1+(x+1)^2}\,dx\\
+&=\int\frac{1}{1+u^2}\,du=\arctan u+C=
+\arctan(x+1)+C\,.
+\end{align*}
+\end{ex}
+
+\begin{ex}\label{Ex:sencarre}
+Considere $\int \sen^2x\,dx$. Lembrando a identidade trigonométrica
+$\sen^2x=\frac{1-\cos(2x)}{2}$, 
+$$
+\int\sen^2x\,dx=\tfrac12 \int \,dx-\tfrac12 \int \cos(2x)\,dx=
+\tfrac{x}{2}-\tfrac12 \int \cos(2x)\,dx\,.
+$$ 
+Agora com $u=2x$ obtemos $\int \cos(2x)\,dx=\tfrac{1}{2}\int
+\cos(u)\,du=\tfrac12 \sen u+\text{constante}$. Logo,
+$$
+\int \sen^2x\,dx=\tfrac{x}{2}-\tfrac14\sen(2x)+C\,.
+$$
+\end{ex}
+
+
+
+
+\begin{exo}
+Calcule as primitivas das seguintes funções.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itprimitsubst40} $(x+1)^7$
+\item\label{itprimitsubst400} $\frac{1}{(2x+1)^2}$
+\item\label{itprimitsubst401} $\frac{1}{(1-4x)^3}$
+\item\label{itprimitsubst4} $x\sen(x^2)$
+\item \label{itprimitsubst4000} $\sen x \cos x$
+\item\label{itprimitsubst45} $\tfrac{1}{\sqrt{x}}\cos (\sqrt{x})$
+\item\label{itprimitsubst5} $\cos^2(t)$
+\item\label{itprimitsubst7} $\frac{x}{1+x^2}$
+\item\label{itprimitsubst71} $\cos x\sqrt{1+\sen x}$
+\item\label{itprimitsubst8} $\tan x$
+\item\label{itprimitsubst9} $\frac{3x+5}{1+x^2}$
+\item\label{itprimitsubst10} $\frac{1}{x^2+2x+3}$
+\item\label{itprimitsubst12} $e^x\tan(e^x)$
+%\item\label{itprimitsubst121} $\frac{x}{1+x}$
+\item\label{itprimitsubst13} $\frac{y}{(1+y)^3}$
+\item\label{itprimitsubst14} $x\sqrt{1+x^2}$
+\item\label{itprimitsubst15} $\frac{x}{(1+x^2)^2}$
+\item\label{itprimitsubst11} $\frac{\cos^3t}{\sen^4t}$
+\item\label{itprimitsubst16} $\sen^3x\cos^3x$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itprimitsubst40} $\frac{1}{8}(x+1)^8+C$ (Obs: aqui, basta fazer a
+substituição $u=x+1$. Pode também fazer sem, mas implica desenvolver um
+polinômio de grau $7$!)
+\eqref{itprimitsubst400} $\frac{-1}{2(2x+1)}+C$
+\eqref{itprimitsubst401} $\frac{1}{8(1-4x)^2}+C$
+\eqref{itprimitsubst4} $-\frac{1}{2}\cos(x^2)+C$,
+\eqref{itprimitsubst4000} $\frac{1}{2}\sen^2(x)+C$, ou $-\frac{1}{2}\cos^2(x)+C$
+\eqref{itprimitsubst45} $2\sen(\sqrt{x})+C$,
+\eqref{itprimitsubst5} $\frac{x}{2}+\tfrac14\sen (2x)+C$,
+\eqref{itprimitsubst7} $\tfrac12\ln(1+x^2)+C$,
+\eqref{itprimitsubst71} $\frac{2}{3}(1+\sen x)^{\frac{3}{2}}+C$
+\eqref{itprimitsubst8} $\int \tan x\,dx=\int\frac{\sen x}{\cos
+x}\,dx=-\int\frac{(\cos x)'}{\cos
+x}\,dx -\ln|\cos x|+C$.
+\eqref{itprimitsubst9} $\tfrac32 \ln(1+x^2)+5\arctan x+C$
+\eqref{itprimitsubst10} $\frac{1}{\sqrt{2}}\arctan(\frac{x+1}{\sqrt{2}})+C$
+\eqref{itprimitsubst12} 
+Com a substituição $u:=e^x$, $du=e^x dx$, 
+$\int e^x\tan(e^x)dx=\int \tan u du=-\ln|\cos u|+C=-\ln|\cos(e^x)|+C$.
+\eqref{itprimitsubst13} $\frac{1}{2(1+y)^2}-\frac{1}{1+y}+C$
+\eqref{itprimitsubst14} $\frac{1}{3}(1+x^2)^{\frac{3}{2}}+C$
+\eqref{itprimitsubst15} $\frac{-1}{2(1+x^2)}+C$
+\eqref{itprimitsubst11} $-\frac{1}{3\sen^3t}+\frac{1}{\sen t}+C$ (a ideia aqui
+é escrever $\frac{\cos^3t}{\sen^4t}=\frac{\cos^2t}{\sen^4t}\cos
+t=\frac{1-\sen^2t}{\sen^4t}\cos t$)
+\eqref{itprimitsubst16} $\frac{(\sen x)^4}{4}-\frac{(\sen x)^6}{6}$
+\end{sol}
+\end{exo}
+
+A fórmula \eqref{eq:substitporu} mostra que a primitiva (ou integral 
+indefinida) de uma função 
+da forma $h(g(x))g'(x)$ se reduz a achar uma primitiva de $h$.
+Aquela fórmula pode também ser usada para integrais definidas: se
+$h(g(x))g'(x)$ é integrada com $x$ percorrendo o intervalo $[a,b]$, então
+$u=g(x)$ percorre o intervalo $[g(a),g(b)]$, logo
+\eq{\label{eq:substitporudefin}
+\int_a^bh(g(x))g'(x)\,dx=\int_{g(a)}^{g(b)}h(u)\,du\,.}
+
+
+\begin{exo}
+%(Gilcione, 13/11/2009) 
+Calcule as primitivas
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itttit1} $\int \frac{2x^3dx}{\sqrt{1-x^2}}\,dx$
+\item\label{itttit2} $\int \frac{dx}{\sqrt{x-x^2}}$
+\item\label{itttit3} $\int \frac{\ln x}{x}\,dx$
+\item\label{itttit4} $\int e^{e^x}e^x\,dx$
+\item\label{itttit5} $\int \frac{\sqrt{x}}{1+\sqrt{x}}\,dx$
+\item\label{itttit6} $\int \tan^2x\,dx$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+
+\begin{sol}
+\eqref{itttit1}
+Com $u=1-x^2$, $du=-2x\,dx$, temos
+\begin{align*}
+\int \frac{2x^3dx}{\sqrt{1-x^2}}\,dx=-\int
+\frac{x^2}{\sqrt{1-x^2}}(-2x)\,dx
+&=-\int \frac{1-u}{\sqrt{u}}\,du\\
+&=-2\sqrt{u}+\tfrac23 u^{3/2}+C\\
+&=-2\sqrt{1-x^2}+\tfrac23 (1-x^2)^{3/2}+C\,.
+\end{align*}
+\eqref{itttit2}
+Completando o quadrado, e fazendo a substituição $u=2x-1$,
+\begin{align*}
+\int \frac{dx}{\sqrt{x-x^2}}=\int 
+\frac{dx}{\sqrt{\tfrac14-(x-\tfrac12)^2}}&=
+\int \frac{2 dx}{\sqrt{1-(2x-1)^2}}\\
+&=\int \frac{du}{\sqrt{1-u^2}}=\arcsen u+C=\arcsen (2x-1)+C\,.
+\end{align*}
+\eqref{itttit3} Com $u=\ln t$, $\int \frac{\ln x}{x}\,dx=\int
+u\,du=\tfrac{u^2}{2}+C=\tfrac12(\ln x)^2+C$
+\eqref{itttit4} Com $u=e^x$, $\int e^{e^x}e^x\,dx=\int e^u\,du=e^u+C=e^{e^x}+C$.
+\eqref{itttit5} $\int \frac{\sqrt{x}}{1+\sqrt{x}}\,dx=x-2\sqrt{x}+2\ln
+(1+\sqrt{x})+C$.
+\eqref{itttit6} $\int \tan^2x\,dx=\int(1+\tan^2x-1)\,dx=\tan x-x+C$.
+\end{sol}
+\end{exo}
+
+\subsection{Integração por Partes}\label{Sec:MetodoPartes}
+\index{integração!por partes}
+Vimos que o método de integração por substituição decorreu da regra da cadeia.
+Vejamos agora qual método pode ser obtido a partir da regra de derivação de um
+produto.
+
+\begin{ex}
+Suponha que se queira calcular a primitiva
+$$\int x\cos x\,dx\,.$$
+Aqui não vemos (e na verdade: não há) uma substituição que seja útil para
+transformar essa primitiva.
+O que pode ser útil é escrever $x\cos x=x(\sen x)'$, e de interpretar
+$x(\sen x)'$ como o segundo termo da derivada
+$$(x\sen x)'=(x)'\sen x+x(\sen x)'=\sen x+x(\sen x)'\,.$$
+Assim,
+\begin{align*}
+\int x\cos x\,dx=\int\bigl\{(x\sen x)'-\sen x\bigr\}\,dx&=
+x\sen x-\int\sen x\,dx\\
+&=x\sen x+\cos x+C
+\end{align*}
+\end{ex}
+A ideia usada no último exemplo pode ser generalizada da seguinte maneira. Pela
+regra de Leibniz,
+$$(f(x)g(x))'=f'(x)g(x)+f(x)g'(x)\,.$$
+Integrando com respeito a $x$ em ambos lados,
+$$
+f(x)g(x)=\int f'(x)g(x)\,dx+\int f(x)g'(x)\,dx\,.
+$$
+Essa última expressão pode ser reescrita como
+\eq{\label{eq:integrporpartes}
+\boxed{\int f'(x)g(x)\,dx=f(x)g(x)-\int f(x)g'(x)\,dx\,,}
+}
+(ou a mesma trocando os papéis de $f$ e $g$)
+% correcao de "papeis":  Hugo Reis <hugofreitasreis@gmail.com>
+chamada \grasA{fórmula de integração por partes}. Ela possui uma forma definida
+também:
+\eq{\label{eq:integrporpartesdefin}
+\boxed{\int_a^b f'(x)g(x)\,dx=f(x)g(x)\big|_a^b-\int_a^b
+f(x)g'(x)\,dx\,.}}
+
+A fórmula \eqref{eq:integrporpartes} acima será usada com o intuito de
+transformar a integral $\int f'(x)g(x)\,dx$ numa integral (mais simples,
+espera-se) $\int f(x)g'(x)\,dx$.
+
+\begin{ex}
+Considere $\int x\ln x\,dx$. Aqui definamos $f$ e $g$ da seguinte maneira:
+$f'(x)=x$, $g(x)=\ln x$. Assim, $f(x)=\tfrac{x^2}{2}$, $g'(x)=(\ln
+x)'=\tfrac{1}{x}$. Usando \eqref{eq:integrporpartes},
+\begin{align*}
+\int x\ln x\,dx&\equiv \int f'(x)g(x)\,dx\\
+&=f(x)g(x)-\int f(x)g'(x)\,dx\\
+&\equiv (\tfrac{x^2}{2})(\ln x)-\int (\tfrac{x^2}{2})(\tfrac1x)\,dx=
+\tfrac{x^2}{2}\ln x-\tfrac12\int x\,dx=\tfrac{x^2}{2}\ln x-\tfrac{x^2}{4}+C\,
+\end{align*}
+\end{ex}
+
+
+
+\begin{exo} Calcule as primitivas das funções abaixo. 
+(Obs: às vezes, pode precisar integrar por partes duas vezes.)
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itintpartes1} $x\sen x$
+\item\label{itintpartes2} $x\cos(5x)$
+\item\label{itintpartes3} $x^2\cos x$
+\item\label{itintpartes4} $xe^x$
+\item\label{itintpartes5} $x^2e^{-3x}$
+\item\label{itintpartes6} $x^3\cos (x^2)$
+%\item\label{itintpartes7} $x\ln x$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itintpartes1} $\sen x-x\cos x+C$,
+\eqref{itintpartes2} $\frac{1}{5}x\sen(5x)+\frac{1}{25}\cos(5x)+C$
+\eqref{itintpartes3} Integrando duas vezes por partes:
+$$
+\int x^2\cos x\,dx=x^2\sen x-\int (2x)\sen x\,dx=x^2\sen x-2\Bigl\{
+x(-\cos x)-\int (-\cos x)\,dx\,.
+\Bigr\}$$
+Portanto $\int x^2\cos x\,dx=x^2\sen x-2(\sen x-x\cos x)+C$.
+\eqref{itintpartes4} $(x-1)e^x+C$
+\eqref{itintpartes5} $-\tfrac13 e^{-3x}(x^2-\tfrac23 x-\tfrac29)+C$
+\eqref{itintpartes6} 
+\begin{align*}
+\int x^3\cos (x^2)\,dx=\int x^2 (x\cos(x^2))\,dx&=x^2(\tfrac12
+\sen(x^2))-\int(2x)(\tfrac12 \sen (x^2))\,dx\,\\
+&=\tfrac12 x^2 \sen(x^2)+\tfrac12 \cos (x^2)+C\,.
+\end{align*}
+%\eqref{itintpartes7} $x^2(\ln x-\tfrac12)+C$ 
+\end{sol}
+\end{exo}
+
+Às vezes, escrevendo ``$1$'' como $1=(x)'$, integração por partes pode ser usada mesmo quando não tem duas partes:
+\begin{ex}
+Considere $\int \ln x\, dx$. Escrevendo $\ln x=1\cdot \ln x=(x)'\ln x$, 
+$$
+\int \ln x\,dx=\int (x)'\ln x\,dx=x\ln x-\int x(\ln x)'\,dx=x\ln x-\int x\cdot
+\tfrac1x\,dx=x\ln x-x+C\,.
+$$
+\end{ex}
+
+\begin{exo} Calcule 
+\begin{multicols}{2}
+\begin{enumerate}
+\item\label{ititnpartmntriv1} $\int \arctan x \,dx$
+\item\label{ititnpartmntriv2} $\int (\ln x)^2\,dx$
+\item\label{ititnpartmntriv3} $\int \arcsen x\,dx$
+\item\label{ititnpartmntriv4} $\int x\arctan x\,dx$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol} \eqref{ititnpartmntriv1}
+$\int \arctan x dx=x\arctan
+x-\int\frac{x}{1+x^2}\,dx=x\arctan x-\tfrac12 \ln (1+x^2)+C$.
+\eqref{ititnpartmntriv2} $x(\ln x)^2-2x(\ln x-1)+C$
+\eqref{ititnpartmntriv3} $x\arcsen x+\sqrt{1-x^2}+C$
+\eqref{ititnpartmntriv4} $\int x\arctan x\,dx=\frac12(x^2\arctan x-x+\arctan x)+C$
+\end{sol}
+\end{exo}
+
+
+
+Consideremos agora um mecanismo particular que pode aparecer quando se aplica
+integração por partes:
+\begin{ex}
+Considere $\int\sen(x)\cos (3x)\,dx$. Integrando duas vezes por partes:
+\begin{align*}
+\int \sen(x)\cos (3x)dx&=(-\cos x) \cos 3x-\int (-\cos x)(-3\sen 3x)dx\\
+&=-\cos x\cos 3x-3\int \cos x\sen 3x\,dx\\
+&=-\cos x\cos 3x-3\Big\{
+\sen x\sen 3x-\int \sen x(3\cos 3x)\,dx
+\Big\}\\
+&=-\cos x\cos 3x-3
+\sen x\sen 3x+9\int \sen x\cos 3x\,dx\,.
+\end{align*}
+Assim, a primitiva procurada $I(x)=\int\sen(x)\cos (3x)\,dx$
+é solução da equação
+$$
+I(x)=-\cos x\cos 3x-3\sen x\sen 3x+9 I(x)\,.
+$$
+Isolando $I(x)$ obtemos
+$I(x)=\frac{1}{8}\big\{\cos x\cos 3x+3\sen x\sen 3x \big\}$. Isto é,
+$$\int \sen(x)\cos (3x)\,dx=\frac{1}{8}\big\{
+\cos x\cos 3x+3\sen x\sen 3x \big\}+C\,.$$
+\end{ex}
+
+\begin{exo}\label{Exo:porpartesmach}
+Calcule 
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itintpartestruc1} $\int e^{-x}\sen x\,dx$
+\item\label{itintpartestruc2} $\int e^{-st}\cos t\,dt$
+\item\label{itintpartestruc3} $\int \sen (\ln x)\,dx$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itintpartestruc1} $-\frac{e^{-x}}{2}(\sen x+\cos x)+C$
+\eqref{itintpartestruc2} $\frac{e^{-st}}{1+s^2}(\sen t- s\cos t)+C$
+\eqref{itintpartestruc3} $\frac{x}{2}(\sen (\ln x)-\cos (ln x))+C$
+\end{sol}
+\end{exo}
+
+Integração por partes pode ser combinada com substituição:
+
+\begin{ex}
+Considere $\int x\ln(1+x)\,dx$. Integrando primeiro por partes,
+$$
+\int x\ln(1+x)\,dx=\tfrac{x^2}{2}\ln(1+x)-\tfrac{1}{2}\int \frac{x^2}{1+x}\,dx\,.
+$$
+Essa segunda pode ser calculada substituindo $1+x$ por $u$:
+\begin{align*}
+\int\frac{x^2}{1+x}\,dx=\int\frac{(u-1)^2}{u}\,du&=
+\int\{u-2+\tfrac1u\}\,du\\
+&=\tfrac{u^2}{2}-2u+\ln|u|+C\\
+&=\tfrac12(1+x)^2-2x+\ln|1+x|+C'\,.
+\end{align*}
+Logo,
+$$
+\int x\ln (1+x)\,dx=\tfrac{x^2}{2}\ln(1+x)-\tfrac14(1+x)^2
++x-\tfrac12\ln |x|+C'\,.
+$$
+\end{ex}
+
+\begin{exo}\label{Exo:Bonnardpartessubsit}
+Calcule $\int_0^3e^{\sqrt{x+1}}\,dx$, $\int x(\ln x)^2\,dx$.
+\begin{sol}
+Chamando $u=\sqrt{x+1}$, temos 
+$$
+\int_0^3e^{\sqrt{x+1}}\,dx=\int_1^2
+2ue^u\,du=2\bigl\{ue^u-e^u\bigr\}\big|_1^2=2e^2\,.
+$$
+Chamando $u=\ln x$, temos $e^u\,du=dx$, e
+$$
+\int x(\ln x)^2\,dx=\int
+u^2e^{2u}\,du=\tfrac{u^2}{2}e^{2u}-\tfrac{u}{2}e^{2u}+\tfrac14 e^{2u}+C\,.
+$$
+Logo, $\int x(\ln x)^2\,dx=\tfrac12 x^2(\ln x)^2-\tfrac12 x^2\ln
+x+\tfrac14x^2+C$. 
+\end{sol}
+\end{exo}
+
+
+
+\subsection{Integração de funções racionais}\label{Sec:FracParciais}
+\index{integração!de funções racionais}
+Nesta seção estudaremos métodos para calcular primitivas da forma 
+$$
+\int \frac{dx}{1-x^2}\,,\quad \int \frac{dx}{(1-x)(x+1)^2}\,,
+\quad \int\frac{x^2}{x^2+1}\,dx\,,\quad
+\int\frac{x^4}{x^3+1}\,dx\,.
+$$
+Essas primitivas são todas da forma
+\eq{\label{eq:primitPQ}
+\int\frac{ P(x)}{Q(x)}\,dx\,,}
+em que $P(x)$ e $Q(x)$ são polinômios em $x$. Lembramos que um \emph{polinômio em $x$} 
+é uma soma finita de potências inteiras e não negativas de $x$: $a_0+a_1x+a_2x^2+\dots+ a_nx^n$, em que
+os $a_i$ são constantes. Por exemplo, $x^3-x+1$ é um polinômio, mas
+$x^{2/3}+\sqrt{x}$ não é. Lembramos que o \emph{grau} de um polinômio $a_0+a_1x+a_2x^2+\dots+ a_nx^n$ é
+o maior índice $i$ tal que $a_i\neq 0$.\\
+
+Existe uma teoria geral que descreve os
+métodos que permitem calcular primitivas da forma \eqref{eq:primitPQ}. 
+Aqui ilustraremos somente as
+ideias principais em casos simples.\\
+
+A primeira etapa tem como objetivo simplificar a expressão para ser
+integrada:
+\begin{itemize}
+ \item \emph{Se o grau de $P$ for maior ou igual ao grau de $Q$, divide
+$P$ por $Q$.}
+\end{itemize}
+
+
+\begin{ex}
+Considere $\int \frac{x^2}{x^2+1}\,dx$. Aqui, $P(x)=x^2$ é de grau
+$2$, que é igual ao grau de $Q(x)=x^2+1$. Logo, como a divisão de $P(x)$ por
+$Q(x)$ dá $1$ com um resto de $-1$, temos
+$\frac{x^2}{x^2+1}=1-\frac{1}{x^2+1}$. Logo,
+$$
+\int \frac{x^2}{x^2+1}\,dx=\int\Big\{
+1-\frac{1}{x^2+1}\Big\}\,dx=
+x-\arctan x+C\,.
+$$
+(Observe que em vez de fazer uma divisão, podia ter observado que 
+$\frac{x^2}{x^2+1}=\frac{x^2+1-1}{x^2+1}=\frac{x^2+1}{x^2+1}-\frac{1}{x^2+1}
+=1-\frac{1}{x^2+1}$.)
+\end{ex}
+
+\begin{ex}
+Considere $\int \frac{x^3}{x^2+1}\,dx$. Aqui, $P(x)=x^3$ é de grau
+$3$, que é maior do que o grau de $Q(x)=x^2+1$. Logo, como a divisão de $P(x)$
+por
+$Q(x)$ dá $x$ com um resto de $-x$, temos
+$\frac{x^3}{x^2+1}=x-\frac{x}{x^2+1}$. Logo,
+\begin{align*}
+\int \frac{x^3}{x^2+1}\,dx=\int\Big\{
+x-\frac{x}{x^2+1}\Big\}\,dx&=
+\tfrac{x^2}{2}-\tfrac12\int\frac{2x}{x^2+1}\,dx\\
+&=\tfrac{x^2}{2}- \tfrac{1}{2}\ln (x^2+1)+C\,.
+\end{align*}
+\end{ex}
+
+Em geral, quando $\mathrm{grau}(P)\geq \mathrm{grau}(Q)$, 
+a divisão de $P$ por $Q$ dá
+$$\frac{P(x)}{Q(x)}=\text{polinômio em $x$ }+\frac{\widetilde{P}(x)}{Q(x)}\,,
+$$
+em 
+que $\mathrm{grau}(\widetilde{P})<\mathrm{grau}(Q)$. A primitiva do primeiro 
+polimômio é imediata, e o próximo passo é de estudar a primitiva da razão
+$\frac{\widetilde{P}(x)}{Q(x)}$.\\
+
+Portanto, é preciso agora desenvolver técnicas para calcular primitivas de
+frações de polinômios, em que o grau do numerador é \emph{estritamente menor}
+que o grau do denominador. Já sabemos tratar casos do tipo:
+$$\int\frac{dx}{x^3}=-\frac{1}{2x^2}+C\,,\quad \int\frac{dx}{x^2+1}=\arctan
+x+C\,,\quad \int\frac{x}{x^2+1}dx=\tfrac12 \ln (x^2+1)+C\,.$$
+
+O objetivo será de sempre \emph{decompor} a fração
+$\frac{\widetilde{P}(x)}{Q(x)}$ numa soma de frações elementares desse tipo.
+O método geral, descrito abaixo em exemplos simples, pode
+ser resumido da seguinte maneira:
+\begin{itemize}
+\item \emph{Fatore completamente o polinômio $Q$, o escrevendo como um produto
+de fatores de grau $2$, possivelmente repetidos.} Em seguida,
+\item \emph{Procure uma decomposição de $\frac{\widetilde{P}(x)}{Q(x)}$ em
+frações parciais.}
+\end{itemize}
+
+\begin{ex}\label{Ex:unsurxdeuxmun}
+Considere $\int \frac{dx}{x^2-1}$. Aqui, $x^2-1$ tem discriminante $\Delta>0$,
+logo ele pode ser \emph{fatorado}: $x^2-1=(x-1)(x+1)$. Procuremos agora um
+jeito de escrever a função integrada na forma de uma
+soma de frações elementares:
+\eq{\label{eq:decompelem}\frac{1}{x^2-1}=\frac{1}{(x-1)(x+1)}=\frac{A}{x-1}
++\frac{B}{x+1}\,.}
+Observe que \emph{se} tiver um jeito de achar duas
+constantes (isto é: \emph{números que não dependem de $x$}) $A$ e $B$ tais
+que a expressão acima seja verificada para todo $x$, então a primitiva será
+fácil de se calcular:
+$$
+\int\frac{dx}{x^2-1}=A\int\frac{dx}{x-1}+B\int\frac{dx}{x+1}=A\ln
+|x-1|+B\ln|x+1|+C\,.
+$$
+Verifiquemos então que as constantes $A$ e $B$ existem. Colocando no mesmo
+denominador no lado direito de \eqref{eq:decompelem} e igualando os
+numeradores, vemos que $A$ e $B$ devem ser escolhidos tais que
+\eq{\label{eq:machiiii}1=A(x+1)+B(x-1)\,.} 
+Rearranjando os coeficientes, 
+\eq{(A+B)x+A-B-1=0\,.}
+Para essa expressão valer para todo $x$, é necessário ter 
+$$
+A+B=0\,,\quad A-B-1=0\,.
+$$
+Essas expressões representam um \emph{sistema} de duas equações nas
+incógnitas $A$ e $B$, cuja solução pode ser calculada facilmente:
+$A=\tfrac12$, $B=-\tfrac12$.
+Verifiquemos que os valores calculados para $A$ e $B$ são
+corretos:
+$$
+\frac{\tfrac12}{x-1}
++\frac{-\tfrac12}{x+1}=\frac{\tfrac12 (x+1)-\tfrac12(x-1)}{(x-1)(x+1)}
+\equiv \frac{1}{(x-1)(x+1)}\,.
+$$
+Portanto, 
+$$\int\frac{dx}{x^2-1}=\tfrac12\ln
+|x-1|-\tfrac12\ln|x+1|+C=\tfrac12\ln \Bigl|\frac{x-1}{x+1}\Bigr|+C\,.$$
+\end{ex}
+
+\begin{obs}
+Às vezes, os 
+valores de $A$ e $B$ podem ser achados de um outro jeito. Por exemplo,
+tomando o limite $x\to -1$ em \eqref{eq:machiiii} obtemos
+$$1=-2B\,,$$
+isto é $B=-\frac12$. Tomando agora $x\to +1$ em \eqref{eq:machiiii} obtemos 
+$$1=2A\,,$$ isto é $A=\tfrac12$. 
+\end{obs}
+
+A decomposição \eqref{eq:decompelem} é chamada de \grasA{decomposição em
+frações parciais}. \index{decomposição em frações parciais}
+Esta decomposição pode ser feita a cada vez que o
+denominador se encontra na forma de um produto de fatores irredutíveis de
+grau $2$. A decomposição deve às vezes ser adaptada. 
+
+\begin{ex}\label{Ex:decomppp}
+Considere $\int\frac{dx}{x(x^2+1)}$. 
+Vendo o que foi feito acima, uma 
+decomposição natural seria de decompor a fração da seguinte maneira:
+\eq{\label{eq:decomposp22}
+\frac{1}{x(x^2+1)}=\frac{A}{x}+\frac{B}{x^2+1}\,.}
+Infelizmente, pode ser verificado (veja o Exercício \ref{Exo:naopode} abaixo) que \emph{não existem} constantes $A$
+e $B$ tais que a relação acima valha para todo $x$. O problema é que o denominador da fração original
+contém $x^2+1$, que é \emph{irredutível} (isto é: possui um discriminante
+negativo), de grau $2$. Assim, procuremos uma decomposição da forma
+\eq{\label{eq:decomposp}
+\frac{1}{x(x^2+1)}=\frac{A}{x}+\frac{Bx+C}{x^2+1}\,.}
+Igualando os numeradores,
+$1=A(x^2+1)+(Bx+C)x$, o que equivale a dizer que o polinômio $(A+B)x^2+Cx+A-1=0$
+é nulo para todo $x$. Isto é: todos os seus coeficientes são nulos:
+$$
+A+B=0\,,\quad C=0 \,,\quad A-1=0\,.$$
+Assim vemos que $A=1$, $B=-1$, $C=0$.
+Verificando:
+$$
+\frac{1}{x}+\frac{-x}{x^2+1}=\frac{1(x^2+1)+(-x)x}{x(x^2+1)}
+\equiv \frac{1}{x(x^2+1)}\,.
+$$
+Logo,
+$$\int\frac{dx}{x(x^2+1)}=\int\frac{dx}{x}-\int \frac{x}{x^2+1}\,dx
+=\ln |x|-\tfrac12\ln(x^2+1)+c\,.
+$$
+\end{ex}
+
+
+\begin{exo}\label{Exo:naopode}
+No Exemplo \ref{Ex:decomppp}, verifique que \emph{não tem}
+decomposição da forma 
+$\frac{1}{x(x^2+1)}=\frac{A}{x}+\frac{B}{x^2+1}$.
+\begin{sol}
+Para ter $\frac{1}{x(x^2+1)}=\frac{A}{x}+\frac{B}{x^2+1}$, isto é
+$1=A(x^2+1)+Bx$, $A$ e $B$
+devem satisfazer às três condições $A=0$, $B=0$, $A=1$, que obviamente é
+impossível.
+\end{sol}
+
+\end{exo}
+
+\begin{obs}
+O esquema de decomposição usado em 
+\eqref{eq:decomposp} pode ser generalizado:
+$$
+\frac{1}{(\alpha_1x^2+\beta_1)(\alpha_2x^2+\beta_2)\cdots
+(\alpha_nx^2+\beta_n)}=\frac{A_1x+C_1}{\alpha_1x^2+\beta_1}+
+\frac{A_2x+C_2}{\alpha_2 x^2+\beta_2}+\dots
++\frac{A_nx+C_n}{\alpha_n x^2+\beta_n}\,.
+$$
+Na expressão acima, todos os $\alpha_k>0$ e $\beta_k>0$.
+\end{obs}
+
+\begin{ex}\label{Ex:decompppp}
+Considere $\int\frac{dx}{x(x+1)^2}$. Aqui o denominador contém o polinômio
+irredutível $x+1$ elevado à potência $2$. Assim procuremos uma decomposição da
+forma 
+\eq{\label{eq:decompospp}
+\frac{1}{x(x+1)^2}=\frac{A}{x}+\frac{B}{x+1}+\frac{C}{(x+1)^2}\,.
+}
+Igualando os numeradores, $1=A(x+1)^2+Bx(x+1)+Cx$, isto é
+$(A+B)x^2+(2A+B+C)x+A-1=0$. Para isso valer para todo $x$, é preciso que sejam
+satisfeitas as seguintes relações:
+$$
+A+B=0\,,\quad 2A+B+C=0\,,\quad A-1=0
+$$
+Assim vemos que $A=1$, $B=-1$, $C=-1$. Deixemos o leitor verificar a
+decomposição.
+Logo,
+\begin{align*}
+ \int\frac{dx}{x(x+1)^2}&=\int\Big\{\frac1x-\frac{1}{x+1}-\frac{1}{(x+1)^2}\}\,
+dx\\
+&=\ln|x|-\ln|x+1|+\frac{1}{x+1}+c\,.
+\end{align*}
+\end{ex}
+\begin{obs}
+A decomposição \eqref{eq:decompospp} pode ser usada a cada vez que aparece uma
+potência de um fator irredutível. Por exemplo,
+$$
+\frac{1}{x(x+1)^4}=\frac{A}{x}+\frac{B}{x+1}+\frac{C}{(x+1)^2}+\frac{D}{(x+1)^3}
++\frac{E}{(x+1)^4}\,.
+$$
+\end{obs}
+
+\begin{exo}
+No Exemplo \ref{Ex:decompppp}, verifique que \emph{não tem} decomposição da
+forma 
+$\frac{1}{x(x+1)^2}=\frac{A}{x}+\frac{B}{(x+1)^2}$.
+\begin{sol}
+Para ter $\frac{1}{x(x+1)^2}=\frac{A}{x}+\frac{B}{(x+1)^2}$, isto é
+$1=A(x+1)^2+Bx$, $A$ e $B$ precisariam satisfazer às três condições $A=0$,
+$2A+B=0$, $A=1$, que obviamente é impossível.
+\end{sol}
+\end{exo}
+
+Os métodos acima podem ser combinados:
+
+\begin{ex}
+Para $\int \frac{dx}{x^2(x^2+4)}$, procuremos uma decomposição da
+forma
+$$
+\frac{1}{x^2(x^2+4)}=\frac{A}{x}+\frac{B}{x^2}+\frac{Cx+D}{x^2+4}\,.
+$$
+Igualando os numeradores e expressando os coeficientes do polinômio em função
+de $A,B,C,D$ obtemos o seguinte sistema:
+$$
+A+C=0\,,\quad B+D=0\,,\quad 4A=0\,,\quad 4B=1\,.
+$$
+A solução é obtida facilmente: $A=0$, $B=\frac14$, $C=0$, $D=-\frac14$.
+Logo,
+$$\int \frac{dx}{x^2(x^2+4)}=
+\tfrac14\int\frac{dx}{x^2}-\tfrac14\int\frac{dx}{x^2+4}=-\tfrac{1}{4x}
+-\tfrac18\arctan(\tfrac{x}{2})+c\,.
+$$
+\end{ex}
+
+\begin{exo}\label{Exo:PrimitivasDecomposicao}
+Calcule as primitivas.
+\begin{multicols}{4}
+\begin{enumerate}
+\item\label{itfracparciais1} $\int \frac{dx}{2x^2+1}$
+\item\label{itfracparciais2} $\int\frac{x^5}{x^2+1}\,dx$
+\item\label{itfracparciais3} $\int\frac{dx}{(x+2)^2}$ 
+\item\label{itfracparciais30} $\int\frac{1}{x^2+x}\,dx$
+\item\label{itfracparciais31} $\int\frac{1}{x^3+x}\,dx$
+\item\label{itfracparciais4} $\int\frac{dx}{x^2+2x-3}$
+\item\label{itfracparciais5} $\int\frac{dx}{x^2+2x+3}$
+\item\label{itfracparciais50} $\int\frac{dx}{x(x-2)^2}$ 
+\item\label{itfracparciais51} $\int\frac{dx}{x^2(x+1)}$
+\item\label{itfracparciais7} $\int\frac{1}{t^4+t^3}dt$
+\item\label{itfracparciais52} $\int\frac{dx}{x(x+1)^3}$
+\item\label{itfracparciais9} $\int \frac{x^2+1}{x^3+x}\,dx$
+\item\label{itfracparciais10} $\int \frac{x^3}{x^4-1}\,dx$
+\item\label{itfracparciais104} $\int \frac{x\ln x}{(x^2+1)^2}\,dx$
+\item\label{itfracparciais6} $\int\frac{dx}{x^3+1}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itfracparciais1} $\tfrac{1}{\sqrt{2}}\arctan(\sqrt{2}x)+C$
+\eqref{itfracparciais2} Como $\frac{x^5}{x^2+1}=x^3-x+\frac{x}{x^2+1}$, temos
+$\int\frac{x^5}{x^2+1}\,dx=\tfrac{x^4}{4}-\tfrac{x^2}{2}+\tfrac12\ln (x^2+1)+C$.
+\eqref{itfracparciais3} $\frac{-1}{x+2}+C$
+
+\eqref{itfracparciais30}
+A decomposição em frações parciais é da forma
+$\frac{1}{x(x+1)}=\frac{A}{x}+\frac{B}{x+1}$.
+Colocando no mesmo denominador, $A$ e $B$
+tem que satisfazer $1=(A+B)x+A$ para todo $x$. Logo, $A=1$ e $B=-1$. Isto é,
+$\frac{1}{x^2+x}=\frac{1}{x}-\frac{1}{x+1}$. Logo,
+\begin{align*}
+\int \frac{1}{x^2+x}\,dx&=\int \frac{1}{x}\,dx-\int\frac{1}{x+1}\,dx\\
+&=\ln |x|-\ln |x+1|+C\,,\quad\quad 
+\end{align*}
+\eqref{itfracparciais31} 
+O integrante é da forma $\frac{P(x)}{Q(x)}$, em que o grau 
+de $P$ é menor do que o de $Q$. Além disso, podemos fatorar $x^3+x=x(x^2+1)$. O
+polimômio de ordem $2$ tem discriminante negativo. Logo, é irredutível,
+e podemos tentar uma decomposição da forma
+$$
+\frac{1}{x(x^2+1)}=\frac{A}{x}+\frac{Bx+C}{x^2+1}\quad \forall x\,.
+$$
+Colocando no mesmo denominador, $A$ $B$ e $C$ 
+tem que satisfazer $1=(A+B)x^2+Cx+A$ para todo $x$. Logo, $A=1$, $C=0$, e
+$B=-A=-1$. Isto é,
+\begin{align*}
+\int \frac{1}{x^3+x}\,dx=\int \frac{1}{x}\,dx-\int\frac{x}{x^2+1}\,dx
+&=\ln |x|-\int\frac{x}{x^2+1}\,dx\\
+&=\ln |x|-\tfrac{1}{2}\ln (x^2+1)+C\,,\quad\quad 
+\end{align*}
+Nesta última integral, fizemos $u=x^2+1$, $du=2x\,dx$.
+\eqref{itfracparciais4} Como $\Delta=16>0$, podemos procurar fatorar e fazer uma
+separação em frações parciais, 
+$$\int\frac{dx}{x^2+2x-3}=\int\frac{dx}{(x+3)(x-1)}=-\tfrac14\int\frac{dx}{x+3}
++\tfrac14\int\frac{dx}{x-1}=\tfrac14\ln \Bigl|\frac{x-1}{x+3}\Bigr|+C\,.
+$$
+\eqref{itfracparciais5} Como $\Delta=-8<0$, o denominador não se fatora.
+Completando o quadrado,
+$$
+\int\frac{dx}{x^2+2x+3}=\int\frac{dx}{(x+1)^2+2}=\tfrac12\int\frac{dx}{(\frac{x+
+1}{\sqrt{2}})^2+1}=\tfrac{1}{\sqrt{2}}\arctan\bigl(\frac{x+
+1}{\sqrt{2}}\bigr)+C\,.
+$$
+\eqref{itfracparciais50} Como
+$\frac{1}{x(x-2)^2}=\frac{1}{4x}-\frac{1}{4(x-2)}+\frac{1}{2(x-2)^2}$, temos
+$$
+\int\frac{dx}{x(x-2)^2}=\tfrac14\ln|x|-\tfrac14\ln|x-2|-\frac{1}{2(x-2)}+C\,.
+$$
+\eqref{itfracparciais51}
+$\frac{1}{x^2(x+1)}=\frac{A}{x}+\frac{B}{x^2}+\frac{C}{x+1}$, com $A=-1$,
+$B=1$, $C=1$. Logo,
+$$
+\int\frac{dx}{x^2(x+1)}=-\ln |x|-\tfrac1x+\ln|x+1|+C'\,.
+$$ 
+
+\eqref{itfracparciais7} 
+Como $t^4+t^3=t^3(t+1)$, procuramos uma separação da forma 
+$$
+\frac{1}{t^4+t^3}=\frac{A}{t}+\frac{B}{t^2}+\frac{C}{t^3}+\frac{D}{t+1}\,\quad
+\forall t.
+$$
+Colocando no mesmo denominador e juntando os termos vemos que $A,B,C,D$ têm que
+satisfazer 
+$$
+1=(A+D)t^3+(A+B)t^2+(B+C)t+C\quad\forall t\,.
+$$
+Identificando os coeficientes obtemos $C=1$, $B=-C=-1$, $A=-B=+1$, e
+$D=-A=-1$. Isso implica
+\begin{align*}
+\int \frac{1}{t^4+t^3}dt&=\int\frac{dt}{t}-\int \frac{dt}{t^2}+\int
+\frac{dt}{t^3}-\int \frac{dt}{t+1}\\
+&=\ln|t|+\frac{1}{t}-\frac{1}{2t^2}-\ln|t+1|+C\,.
+\end{align*}
+\eqref{itfracparciais52} 
+\begin{align*}
+\int\frac{dx}{x(x+1)^3}
+&=\int
+\frac{dx}{x}-\int\frac{dx}{x+1}-\int\frac{dx}{(x+1)^2}-\int\frac{dx}{(x+1)^3}\\
+&=\ln|x|-\ln|x+1|+\frac{1}{x+1}+\frac{1}{2(x+1)^2}+C\,.
+\end{align*}
+\eqref{itfracparciais9} $\int\frac{x^2+1}{x^3+x}\,dx=\int \frac{dx}{x}=\ln|x|+C$
+\eqref{itfracparciais10} Com
+$u=x^4-1$, $\int\frac{x^3}{x^4-1}\,dx=\tfrac14\ln|x^4-1|+C$ (é bem mais simples do que começar uma
+decomposição em frações parciais...)
+\eqref{itfracparciais104} Começando com uma integração por partes, 
+\[ 
+\int \frac{x\ln x}{(x^2+1)^2}\,dx=\frac{-1}{2(x^2+1)}\ln x+\frac12\int
+\frac{1}{(x^2+1)x}\,dx\,,
+\]
+e essa última integral se calcula como no Exemplo \ref{Ex:decomppp}.
+\eqref{itfracparciais6} Primeiro, observe que $x^3+1$ possui $x=-1$ como raiz.
+Logo, ele pode ser fatorado como $x^3+1=(x+1)(x^2-x+1)$. 
+Como $x^2-x+1$ tem um discriminante negativo,
+procuremos uma decomposição da forma
+$$
+\frac{1}{x^3+1}=\frac{A}{x+1}+\frac{Bx+C}{x^2-x+1}\,.
+$$
+É fácil ver que $A$, $B$ e $C$ satisfazem às três condições $A+B=0$,
+$-A+B+C=0$, $A+C=1$. Logo, $A=\frac13$, $B=-\frac13$, $C=\frac23$. Escrevendo
+\begin{align*}
+ \int\frac{dx}{x^3+1}&=\tfrac{1}{3}\int\frac{dx}{x+1}-\tfrac13\int
+\frac{x-2}{x^2-x+1}\,dx\\
+&=\tfrac{1}{3}\ln|x+1|-\tfrac13\int
+\frac{x-2}{x^2-x+1}\,dx\\
+\end{align*}
+Agora, 
+\begin{align*}
+\int \frac{x-2}{x^2-x+1}\,dx&=\tfrac12\int \frac{2x-1}{x^2-x+1}\,dx-\tfrac{3}{2}
+\int\frac{dx}{x^2-x+1}\\
+&=\tfrac12 \ln|x^2-x+1|-\tfrac{3}{2}
+\int\frac{dx}{x^2-x+1}\\
+&=\tfrac12 \ln|x^2-x+1|-\tfrac{4}{\sqrt{3}}\arctan\bigl(\tfrac{2}{\sqrt{3}}
+(x-\tfrac12) \bigr)+C\,.
+\end{align*}
+Juntando,
+$$
+\int\frac{dx}{x^3+1}=\tfrac{1}{3}\ln|x+1|-\tfrac16\ln|x^2-x+1|+\tfrac{4}{3\sqrt{
+3}}\arctan\bigl(\tfrac{2}{\sqrt{3}}(x-\tfrac12) \bigr)+C\,.
+$$ 
+\end{sol}
+\end{exo}
+
+
+\begin{exo}\label{exo:primunsurseno}
+Calcule $\int \frac{1}{\cos x}\,dx$. (Dica: multiplique e divida por $\cos x$.)
+\begin{sol}
+Com a dica, e a substituição $u=\sen x$,
+\begin{align*}
+\int \frac{dx}{\cos x}=\int\frac{\cos x}{1-\sen^2
+x}dx=\int\frac{du}{1-u^2}&=-\int\frac{du}{u^2-1}\\
+&=-\tfrac{1}{2}\ln\Bigl|\frac{u-1}{u+1}\Bigr|+C\\
+&=\tfrac{1}{2}\ln\Bigl|\frac{1+\sen x}{1-\sen x}\Bigr|+C
+\end{align*}
+Observe que essa última expressão pode ser transformada da seguinte maneira:
+\begin{align*}
+\tfrac{1}{2}\ln\Bigl|\frac{\sen x+1}{\sen x-1}\Bigr|=
+\tfrac{1}{2}\ln\Bigl|\frac{(1+\sen x)^2}{\cos^2x}\Bigr|=
+\ln\Bigl|\frac{1+\sen x}{\cos x}\Bigr|=
+\ln\Bigl|\frac{1}{\cos x}+\tan x\Bigr|\,.
+\end{align*}
+\end{sol}
+\end{exo}
+
+\begin{exo} (3a Prova 2010, Turmas N) Calcule  $\int\frac{x}{x^2+4x+13}dx$.
+\begin{sol}
+Como $\Delta=4^2-4\cdot 13<0$, o polinômio $x^2+4x+13$ tem discriminante
+negativo. Logo, completando o quadrado:\index{completar um
+quadrado}
+$x^2+4x+13=(x+2)^2-4+13=(x+2)^2+9$, e
+\begin{align*}
+\int \frac{x}{x^2+4x+13}dx=\int
+\frac{x}{(x+2)^2+9}dx=\tfrac19\int\frac{x}{(\tfrac13(x+2))^2+1}dx
+\end{align*}
+Com $u=\frac{1}{3}(x+2)$, $x=3u-2$, $3du=dx$,
+\begin{align*}
+ \tfrac19\int\frac{x}{(\tfrac13(x+2))^2+1}dx&=\tfrac13\int\frac{3u-2}{u^2+1}du\\
+&=\tfrac12\int\frac{2u}{u^2+1}du-\tfrac23\int\frac{du}{u^2+1}\\
+&=\tfrac12\ln (u^2+1)-\tfrac23 \arctan(u)+C\\
+&=\tfrac12\ln (x^2+4x+13)-\tfrac23\arctan(\frac{1}{3}(x+2))+C
+\end{align*}
+\end{sol}
+\end{exo}
+
+%\fi
+%\newpage
+
+\subsection{Integrar potências de funções trigonométricas}
+\index{integração!de funções trigonométricas}
+Nesta seção estudaremos primitivas de funções que envolvem 
+funções trigonométricas. Essas
+aparecem em geral após ter feito uma \emph{substituição
+trigonométrica}, que é o nosso último método de integração, e que será
+apresentado na próxima seção.
+
+\subsubsection{Primitivas das funções $\sen^mx\cos^nx$}\label{Sec:primsincos}
+Aqui estudaremos primitivas da forma
+$$\int \sen^mx\cos^nx\,dx\,.$$
+Consideremos primeiro integrais contendo somente potências de $\sen x$, ou de
+$\cos x$. Além dos casos triviais $\int \sen x\,dx=-\cos x+C$ e $\int \cos
+x\,dx=\sen x+C$ já encontramos, no Exemplo \ref{Ex:sencarre},
+$$\int\sen^2x\,dx=\int \tfrac{1-\cos(2x)}{2}\,dx=
+\tfrac{x}{2}-\tfrac14 \sen(2x)+C\,.$$ 
+Consequentemente,
+\eq{\label{eq:intcoscarre}\int\cos^2x\,dx=\int\{1-\sen^2x\}\,dx=x-\int
+\sen^2x\,dx=
+\tfrac{x}{2}+\tfrac14 \sen(2x)+C\,.}
+Potências \emph{ímpares} podem ser tratadas da seguinte maneira:
+$$
+\int \cos^3x\,dx=\int (\cos x)^2 \cos x\,dx=\int (1-\sen^2x)\cos x\,dx\,.
+$$
+Chamando $u\pardef \sen x$, obtemos
+$$
+\int \cos^3x\,dx=\int (1-u^2)\,du=u-\tfrac13 u^3+C=\sen x-\tfrac13\sen^3x+C\,.
+$$
+A mesma ideia pode ser usada para integrar
+$\int \sen^mx\cos^nx\,dx$ quando \emph{pelo menos um dos expoentes, $m$ ou $n$,
+é ímpar}. Por exemplo, 
+\begin{align*}
+\int \sen^2x\cos^3x\,dx&= \int \sen^2x\cos^2x\cos x\,dx\\
+&=\int \sen^2x(1-\sen^2x)\cos x\,dx=\int u^2(1-u^2)\,du\,,
+\end{align*}
+onde $u=\sen x$. Logo,
+$$
+\int \sen^2x\cos^3x\,dx=\tfrac13u^3-\tfrac15 u^5+C=
+\tfrac13\sen^3x-\tfrac15 \sen^5x+C\,.
+$$
+Para tratar potências \emph{pares}, comecemos usando uma
+integração por partes. Por exemplo,
+\begin{align*}
+\int \cos^4x\,dx=\int \cos x\cos^3x\,dx&=\sen x\cos^3x-\int \sen x
+(-3\cos^2x\sen x)\,dx \\
+&=\sen x\cos^3x+3\int \sen^2 x
+\cos^2x\,dx \\
+&=\sen x\cos^3x+3\int (1-\cos^2x)
+\cos^2x\,dx \\
+&=\sen x\cos^3x+3\int\cos^2x\,dx
+-3\int \cos^4x\,dx \\
+\end{align*}
+Isolando $\int \cos^4x\,dx$ nessa última expressão e usando
+\eqref{eq:intcoscarre},
+\eq{\label{eq:intcosquatre}
+\int \cos^4x\,dx=\tfrac14\sen x\cos^3x+\tfrac{3x}{8}+\tfrac{3}{16}
+\sen(2x)+C\,.
+}
+
+
+\begin{exo} Calcule as primitivas.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itPotTrig0} $\int \sen^3x\,dx$
+\item\label{itPotTrig01} $\int \cos^5x\,dx$
+\item\label{itPotTrig1} $\int (\cos x\sen x)^5\,dx$
+\item\label{itPotTrig10} $\int \cos^{1000} x\sen x\,dx$
+\item\label{itPotTrig2} $\int (\sen^2t\cos t) e^{\sen t}\,dt$
+\item\label{itPotTrig3} $\int \sen^3x \sqrt{\cos x}\,dx$
+\item\label{itPotTrig4} $\int \sen^2x\cos^2x\,dx$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itPotTrig0} $-\cos x+\tfrac13\cos^3x+C$
+\eqref{itPotTrig01} Com $u=\sen x$, $\int \cos^5x\,dx=\int
+(1-u^2)^2\,du=\cdots=\sen x-\tfrac23\sen^3x+\tfrac15\sen^5x+C$
+\eqref{itPotTrig1} Escrevemos
+$\int (\cos x\sen x)^5dx=\int
+\sen^5x(1-\sen^2x)^2\cos xdx$. 
+Com $u=\sen x$ dá 
+\begin{align*}
+ \int \sen^5x(1-\sen^2x)^2\cos xdx&=
+\int u^5(1-u^2)^2du\\
+&=\int (u^5-2u^7+u^9)du\\
+&=\frac{u^6}{6}-2\frac{u^8}{8}+\frac{u^{10}}{10}+C\\
+&=\frac{\sen^6x}{6}-\frac{\sen^8x}{4}+\frac{\sen^{10}x}{10}+C\,.
+\end{align*}
+\eqref{itPotTrig10} $-\frac{\cos^{1001}x}{1001}+C$
+\eqref{itPotTrig2}
+Com $u=\sen t$,
+$\int (\sen^2t\cos t) e^{\sen t}dt=\int u^2e^udu$.
+Integrando duas vezes por partes e voltando para a variável $t$,
+\begin{align*}
+ \int u^2e^udu&=u^2e^u-\int (2u)e^udu\\
+&=u^2e^u-2\big\{ue^u-\int e^udu\big\}\\
+&=u^2e^u-2\{ue^u-e^u\}+C\\
+&=e^u(u^2-2u+2)+C\\
+&=e^{\sen t}(\sen^2 t-2\sen t+2)+C\,.
+\end{align*}
+\eqref{itPotTrig3} Com $u=\cos x$, 
+$\int \sen^3x \sqrt{\cos x}\,dx=-\int(1-u^2)\sqrt{u}\,du=-\int
+(u^{1/2}-u^{5/2})\,du=-\tfrac23 u^{3/2}+\tfrac27 u^{7/2}+C=-\tfrac23
+(\cos x)^{3/2}+\tfrac27 (\cos x)^{7/2}+C$.
+\eqref{itPotTrig4} $\int
+\sen^2x\cos^2x\,dx=\int(1-\cos^2x)\cos^2x\,dx=\int\cos^2x\,dx-\int\cos^4x\,dx$,
+e essas duas primitivas já foram calculadas anteriormente. 
+\end{sol}
+\end{exo}
+
+
+\subsubsection{Primitivas das funções $\tan^mx\sec^nx$}
+Nesta seção estudaremos primitivas da forma
+$$\int \tan^mx\sec^nx\,dx\,,$$
+onde lembramos que a função \grasA{secante} é definida como 
+$$
+\sec x\pardef \frac{1}{\cos x}\,.$$
+Como $1+\tan^2x=1+\frac{\sen^2x}{\cos^2x}=\frac{1}{\cos^2x}$,
+a seguinte relação vale: 
+$$1+\tan^2x=\sec^2x\,.$$
+Lembramos que
+$(\tan x)' =1+\tan^2x=\sec^2x$.
+Então, para calcular por exemplo 
+\eq{\label{eq:primtances}\int\tan x\sec^2x\,dx\,,}
+podemos chamar $u=\tan x$, $du=\sec^2x \,dx$, e escrever
+$$
+\int\tan x\sec^2x\,dx=
+\int u\,du=\tfrac{1}{2}u^2+C=\tfrac12 \tan^2x+C\,.
+$$
+Na verdade, é facil ver que a mesma substituição pode ser usada \emph{a cada
+vez que a potência da secante é par}. Por exemplo,
+\begin{align*}
+\int\tan x\sec^4x\,dx=\int \tan x\sec^2 x(\sec^2x)\,dx&=
+\int \tan x(1+\tan^2x)(\sec^2x)\,dx\\
+&=\int u(1+u^2)\,du\\
+&=\tfrac12 u^2+\tfrac14 u^4+C\\
+&=\tfrac12 (\tan x)^2+\tfrac14(\tan x)^4+C\,.
+\end{align*}
+
+Por outro lado, a relação
+$$(\sec
+x)'=\frac{\sen x}{\cos^2x}\equiv \tan x\sec x\,$$
+permite um outro tipo de substituição. 
+Por exemplo, \eqref{eq:primtances} pode ser calculada também via a
+mudança de variável $w=\sec x$, $dw=\tan x\sec x\,dx$:
+$$
+\int\tan x\sec^2x\,dx=\int \sec x(\tan x\sec x)\,dx=\int w\,dw=\tfrac12 w^2+C
+=\tfrac12 \sec^2x+C\,.
+$$
+A mesma mudança de variável $w=\sec x$ se aplica \emph{a cada vez que a potência
+da tangente é ímpar (e que a potência da secante é pelo menos $1$)}. Por
+exemplo,
+\begin{align*}
+\int  \tan^3x\sec x\,dx&=\int \tan^2 x(\tan x\sec x)\,dx\\
+&=\int (\sec^2x-1) (\tan x\sec x)\,dx\\
+&=\int(w^2-1)\,dw\\
+&=\tfrac13 w^3-w+C\\
+&=\tfrac13 \sec^3x-\sec x+C\,.
+\end{align*}
+Os casos em que a potência da tangente é ímpar e que não tem secante
+são tratados separadamente. 
+Por exemplo, lembramos que 
+$$
+\int \tan x\,dx=\int\frac{\sen x}{\cos x}\,dx=-\ln|\cos x|+C\,.
+$$
+Ou, 
+\begin{align*}
+\int \tan^3 x\,dx&=\int \tan x(\tan^2 x)\,dx\\
+&=\int\tan x(\sec^2x-1)\,dx=\int \tan x \sec^2x\,dx-\int \tan x\,dx\,,
+\end{align*}
+e essas duas primitivas já foram calculadas acima.
+Finalmente, deixemos o leitor fazer o Exercício
+\ref{exo:primunsurseno} para mostrar que
+$$
+\int \sec x\,dx=\ln\bigl|\sec x+\tan x\bigr|+C\,.
+$$
+\begin{exo}\label{Exo:PrimitTangSec}
+Calcule as primitivas.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itInttansec3} $\int \sec^2x\,dx$
+\item\label{itInttansec1} $\int\tan^2x \,dx$
+\item\label{itInttansec1a} $\int\tan^3x \,dx$
+\item\label{itInttansec6} $\int \tan x\sec x\,dx$
+\item\label{itInttansec2} $\int\tan^4 x\sec^4x\,dx$
+\item\label{itInttansec4} $\int \cos^5x\tan^5x\,dx$
+%\item\label{itInttansec5} $\int \sec^4x\tan^4x\,dx$
+\item\label{itInttansec7} $\int \sec^5x\tan^3x\,dx$
+\item\label{itInttansec8} $\int \sec^3x\,dx$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itInttansec3} $\int \sec^2x\,dx=\tan x+C$.
+\eqref{itInttansec1} $\int\tan^2x \,dx=\int(\tan^2x+1-1)\,dx=\tan x-x+C$.
+\eqref{itInttansec1a} $\int\tan^3x \,dx=\int\tan x(1+\tan^2x)\,dx-\int \tan x\,dx=\tfrac12\tan^2 x-\ln
+|\cos x|+C$.
+\eqref{itInttansec6} $\int \tan x\sec x\,dx=\sec x+C$.
+\eqref{itInttansec2} $\int\tan^4 x\sec^4x\,dx=\int
+\tan^4x(\tan^2x+1)\sec^2x\,dx=\int u^4(u^2+1)\,du=
+\tfrac17u^7+\tfrac15u^5+C=\tfrac17\tan^7x+\tfrac15\tan^5x+C$.
+\eqref{itInttansec4} $\int\cos^5x\tan^5x\,dx=\int
+\sen^5x\,dx=\int(1-\cos^2x)^2\sen x\,dx=
+-\int(1-u^2)^2\,du=-u+\tfrac23u^3-\tfrac15 u^5+C=
+-\cos x+\tfrac23\cos^3x-\tfrac15 \cos^5x+C$.
+\eqref{itInttansec7} $\int \sec^5x\tan^3x\,dx=\int \sec^4x(\sec^2x-1)(\tan x\sec
+x)\,dx=\int w^4(w^2-1)\,dw=\tfrac17 w^7-\tfrac15 w^5+C=\tfrac17 \sec^7x-\tfrac15
+\sec^5x+C$.
+\eqref{itInttansec8} Por partes (lembra que
+$(\sec\theta)'=\tan\theta\sec\theta$):
+\begin{align*}
+ \int\sec^2\theta\sec\theta\,d\theta
+&=\tan \theta\sec\theta-\int\tan^2\theta\sec\theta\,d\theta\\
+&=\tan \theta\sec\theta-\int(\sec^2\theta-1)\sec\theta\,d\theta\,.
+\end{align*}
+Logo,
+$$
+\int\sec^3\theta\,d\theta=
+\tfrac12\tan\theta\sec\theta+\tfrac12\int\sec\theta\,d\theta\,.
+$$
+Já calculamos a primitiva de $\sec \theta$ no Exercício
+\ref{exo:primunsurseno}: 
+$\int\sec\theta\,d\theta=\ln\bigl|\sec\theta+\tan \theta\bigr|+C$. Logo,
+$$
+\int\sec^3\theta\,d\theta=
+\tfrac12\tan\theta\sec\theta+\tfrac12\ln\bigl|\sec\theta+\tan \theta\bigr|+C\,.
+$$
+\end{sol}
+\end{exo}
+
+\subsection{Substituições trigonométricas}\label{Sec:MetodoSubstitTrig}
+\index{substituição! trigonométrica}
+Nesta seção final apresentaremos métodos para calcular primitivas de funções
+particulares onde aparecem raizes de polinômio do segundo grau:
+$$
+\int \sqrt{1-x^2}\,dx\,,\quad
+\int x^3{\sqrt{1-x^2}}\,dx\,,\quad
+\int \frac{dx}{\sqrt{x^2+2x+2}}\,,\quad
+\int x^3\sqrt{x^2-3}dx\,,\dots
+$$
+
+O nosso objetivo é fazer uma substituição \emph{que transforme o
+polinômio que está dentro da raiz em um quadrado perfeito}. 
+Essas substituições serão baseadas nas seguintes idenditades trigonométricas:
+
+\eq{\label{eq:relatsinusss}1-\sen^2\theta=\cos^2\theta\,,}
+\eq{\label{eq:relattangente} 1+\tan^2\theta=\sec^2\theta\,.}
+
+Ilustraremos os métodos em três exemplos elementares, integrando
+$\sqrt{1-x^2}$, $\sqrt{1+x^2}$ e $\sqrt{x^2-1}$. Em seguida aplicaremos as
+mesmas ideias em casos mais gerais.
+
+\subsubsection{A primitiva $\int \sqrt{1-x^2}\,dx$}
+
+Observe primeiro que $\sqrt{1-x^2}$ é bem definido se $x\in [-1,1]$.
+Para calcular $\int \sqrt{1-x^2}\,dx$
+usaremos \eqref{eq:relatsinusss} para
+transformar $1-x^2$ em um quadrado perfeito.
+Portanto, consideremos a substituição 
+$$x=\sen \theta\,,\quad dx=\cos \theta\,d\theta\,.$$
+Como $x\in [-1,1]$, 
+essa substituição é bem definida, e implica que $\theta$ pode ser
+escolhido $\theta\in [-\pisobredois,\pisobredois]$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1]
+\pgfmathsetmacro{\a}{2.3};
+\draw[->] (0,-\a) -- (0,\a);
+\draw[->] (0,0)-- (\a,0);
+\draw (0,0)--(1.1,1.665);
+\draw [thick] (1.1,1.665)--(1.1,0) node[midway, above, sloped]{$x$};
+%\draw [color=\coultang, thick] (2,3)--(2,0) node[midway, above, sloped]{$\tan \alpha$};
+%\draw [color=\coulcoseno, thick] (1.1,0)--(0,0) node[midway, below]{$\cos \alpha$};
+%\draw (1.1,1.665) node[above]{$B$};
+\draw[dotted] (0,-2) arc (-90:90:2);
+%\draw(0,0)--(2,3);
+%\draw (0,0)--(2,0);
+\draw (0.5,1.1) node{$1$};
+\draw[ ->] (0.5,0) arc (0:1 r:0.5);
+\draw (0.4,0.3) node[right]{$\theta$};
+\fill (1.1,1.665) circle (0.45mm);
+\draw (0,-2) node[left]{$-1$};
+\draw (0,2) node[left]{$+1$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Expressemos agora a primitiva somente em termos de $\theta$:
+$$
+\int \sqrt{1-x^2}\,dx=\int \sqrt{1-\sen^2\theta}\cos \theta\,d\theta=
+\int \sqrt{\cos^2\theta}\cos \theta\,d\theta=\int \cos^2\theta\,d\theta\,.
+$$
+De fato, como $\theta\in [-\pisobredois,\pisobredois]$, 
+$\cos \theta\geq 0$, o que
+significa $\sqrt{\cos^2\theta}=\cos \theta$. Mas a primitiva de $\cos^2\theta$ é
+
+$$
+\int\cos^2\theta\,d\theta=\tfrac{1}{2}\theta+\tfrac{1}{4}\sen (2\theta)+C\,.
+$$
+Agora precisamos voltar para a variável $x$. Primeiro,
+$x=\sen \theta$ implica $\theta=\arcsen x$. Por outro lado, $\sen
+(2\theta)=2\sen \theta\cos\theta=2x\sqrt{1-x^2}$. Logo, 
+$$
+\boxed{\int \sqrt{1-x^2}\,dx=\tfrac12\arcsen
+x+\tfrac12x\sqrt{1-x^2}+C\,.}
+$$
+
+\begin{exo}
+Verifique esse último resultado, derivando com respeito a $x$.
+\begin{sol}
+De fato,
+\begin{align*}
+\bigl(\tfrac12\arcsen x+\tfrac12x\sqrt{1-x^2}\bigr)'&=
+\tfrac12\frac{1}{\sqrt{1-x^2}}+\tfrac12
+\sqrt{1-x^2}+\tfrac12 x\frac{-2x}{2\sqrt{1-x^2}} \\
+&=\tfrac12\frac{1-x^2}{\sqrt{1-x^2}}+\tfrac12
+\sqrt{1-x^2}\\
+&=\tfrac12 \sqrt{1-x^2}+\tfrac12 \sqrt{1-x^2}=\sqrt{1-x^2}\,.
+\end{align*}
+\end{sol}
+\end{exo}
+
+O método descrito acima costuma ser eficiente
+a cada vez que se quer integrar uma função 
+que contém uma raiz da forma $\sqrt{a^2-b^2x^2}$, com $a,b>0$.
+Para transformar o polinómio $a^2-b^2x^2$ em um quadrado perfeito, podemos
+tentar as seguintes subsituições: 
+$$x\pardef \tfrac{a}{b}\sen \theta\,,\text{  ou  }\quad x\pardef
+\tfrac{a}{b}\cos \theta\,.$$
+De fato, uma substituição desse tipo permite cancelar a raiz:
+$$
+\sqrt{a^2-b^2(\tfrac{a}{b}\sen \theta)^2}=
+\sqrt{a^2-a^2\sen^2\theta}=a\sqrt{1-\sen^2\theta}=a\cos \theta\,.
+$$
+Depois de ter feito a substituição, aparece em geral uma primitiva 
+de potências de funções trigonométricas, parecidas com aquelas encontradas na
+Seção \ref{Sec:primsincos}.
+
+\begin{ex} Neste exemplo verificaremos que a área de um disco de raio $R$ é
+igual a $\pi R^2$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\R}{2};
+\pgfmathsetmacro{\alf}{-40};
+\pgfmathsetmacro{\bet}{50};
+\filldraw[areagrafico] (0,0)--(\R,0) arc (0:90:\R)--cycle;
+\draw[>=latex, ->] ({-\R-0.3},0)--({\R+0.3},0);
+\draw[>=latex, ->] (0,{-\R-0.3})--(0,{\R+0.3});
+\draw (\R,0) arc (0:360:\R);
+\draw[thick] (\R,0) arc (0:90:\R);
+\draw[->] (0,0)--({\R*cos(\alf)},{\R*sin(\alf)}) node[midway, above]{$R$};
+\draw[<-]
+({\R*cos(\bet)},{\R*sin(\bet)})--(\R,{\R})node[right]{$y=f(x)=\sqrt{R^2-x^
+2}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+A área do disco completo é dada pela integral
+$$
+A=4\int_{0}^R\sqrt{R^2-x^2}\,dx.
+$$
+Usemos a substituição trigonométrica $x=R\sen \theta$, $dx=R\cos
+\theta\,d\theta$. Se $x=0$, então $\theta=0$, e se $x=R$
+então $\theta=\pisobredois$. Logo,
+\begin{align*}
+ \int_{0}^R\sqrt{R^2-x^2}\,dx&=\int_0^{\pisobredois}\sqrt{R^2-(R\sen
+\theta)^2}R\cos \theta\,d\theta\\
+&=R^2\int_0^{\pisobredois} \cos^2\theta\,d\theta\\
+&=R^2\bigl\{\tfrac12\theta+\tfrac14\sen(2\theta)\bigr\}_0^{\pisobredois}\\
+&=R^2\frac{\pi}{4}\,.
+\end{align*}
+Logo, $A=4 R^2\frac{\pi}{4}=\pi R^2$.
+\end{ex}
+
+\begin{ex}
+Calculemos a primitiva $\int x^3{\sqrt{4-x^2}}\,dx$. 
+Usemos a substituição $x=2\sen \theta$, $dx=2\cos \theta\,d\theta$.
+Como $x\in [-2,2]$, temos $\theta\in [-\pisobredois, \pisobredois]$.
+$$
+\int x^3{\sqrt{4-x^2}}\,dx=\int(2\sen \theta)^3\sqrt{4-(2\sen \theta)^2}2\cos
+\theta\,d\theta=32\int\sen^3\theta\cos^2\theta\,d\theta\,.
+$$
+A última primitiva se calcula feito na seção anterior: com $u=\cos \theta$,
+\begin{align*}
+\int\sen^3\theta\cos^2\theta\,d\theta&=\int
+(1-\cos^2\theta)\cos^2\theta\sen\theta\,d\theta\\
+&=-\int (1-u^2)u^2\,du=-\tfrac13 u^3+\tfrac15u^5+C
+=-\tfrac13 \cos^3\theta+\tfrac15\cos^5\theta+C\,.
+\end{align*}
+Para voltar para a variável $x$, observe que $x=2\sen \theta$ implica $\cos
+\theta=\sqrt{1-\sen^2\theta}=\sqrt{1-(\tfrac{x}{2})^2}=\sqrt{1-\tfrac{x^2}{4}}$.
+Logo,
+$$
+\int
+x^3{\sqrt{4-x^2}}\,dx=-\tfrac{32}{3}\sqrt{1-\tfrac{x^2}{4}}^3+\tfrac{32}{5}\sqrt{1-\tfrac{
+x^2}{4}}^5+C\,.
+$$
+\end{ex}
+
+\begin{exo}
+Calcule a área da região delimitada pela elipse cuja equação é
+dada por
+$$
+\frac{x^2}{\alpha^2}+\frac{y^2}{\beta^2}=1\,,
+$$
+Em seguida, verifique que quando a elipse é um círculo, $\alpha=\beta=R$, a sua área é
+$\pi R^2$.  
+\begin{sol}
+A área é dada por $A=4\int_0^{\alpha}\beta\sqrt{1-\frac{x^2}{\alpha^2}}\,dx$.
+Com $x=\alpha\sen \theta$, 
+$$A=4\beta\int_0^{\alpha}\sqrt{1-\frac{x^2}{\alpha^2}}\,dx=
+4\alpha\beta \int_0^{\pisobredois}\cos^2\theta\,d\theta=\pi \alpha\beta\,.
+$$
+Quando $\alpha=\beta=R$, a elipse é um disco de raio $R$, de área $\pi 
+R\cdot R=\pi R^2$.
+\end{sol}
+\end{exo}
+
+
+\begin{ex}
+Considere $\int \frac{dx}{x\sqrt{5-x^2}}$.
+Com $x=\sqrt{5}\sen \theta$, obtemos
+$$\int \frac{dx}{x\sqrt{5-x^2}}=
+\int\frac{\sqrt{5}\cos \theta}{(\sqrt{5}\sen \theta)\sqrt{5-(\sqrt{5}\sen
+\theta)^2}}\,d\theta
+=\tfrac{1}{\sqrt{5}}\int\frac{d\theta}{\sen \theta}\,.
+$$
+Essa última primitiva pode ser tratada como no Exercício
+\ref{exo:primunsurseno}:
+$$
+\int\frac{d\theta}{\sen \theta}=\tfrac12\ln \Bigl|\frac{1-\cos
+\theta}{1+\cos\theta}\Bigr|+C=\tfrac{1}{2}\ln\Bigl|\frac{1-\sqrt{1-\frac{x^2}{5}
+} } { 1+\sqrt{1-\frac{x^2}{5}
+} } \Bigr|+C\,.
+$$
+Logo,
+$$
+\int
+\frac{dx}{x\sqrt{5-x^2}}=\tfrac{1}{2\sqrt{5}}
+\ln\Bigl|\frac{\sqrt{5}-\sqrt{5-{x^2}
+} } { \sqrt{5}+\sqrt{5-{x^2}
+} } \Bigr|+C\,.
+$$
+%\ref{Ex:unsurxdeuxmun}
+\end{ex}
+
+\begin{exo} Calcule as primitivas
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itPrimSubSinus1} $\int \frac{dx}{\sqrt{1-x^2}}$
+%\item\label{itSubstitTrig0} $\int\frac{dx}{\sqrt{3-x^2}}$
+%\item\label{itSubstitTrig00} $\int\frac{x}{\sqrt{3-x^2}}\,dx$
+%\item\label{itSubstitTrig4} $\int x^3\sqrt{3-x^2}\,dx$.
+\item\label{itSubstitTrig2} $\int\frac{x^7}{\sqrt{10-x^2}}\,dx$.
+\item\label{itPrimSubSinus3} $\int \frac{x^2}{\sqrt{1-x^3}}\,dx$
+\item\label{itPrimSubSinus2} $\int x\sqrt{1-x^2}\,dx$
+\item\label{itSubstitTrig6} $\int \frac{x}{\sqrt{3-2x-x^2}}\,dx$.
+\item\label{itSubstitTrig000} $\int x^2{\sqrt{9-x^2}}\,dx$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itPrimSubSinus1}
+Sabemos que $\int \frac{dx}{\sqrt{1-x^2}}=\arcsen x+C$, mas isso pode ser
+verificado de novo fazendo a substituição $x=\sen \theta$:
+$\frac{dx}{\sqrt{1-x^2}}=\int\frac{1}{\sqrt{1-\sen^2\theta}}\cos\theta\,
+d\theta\int d\theta=\theta+C=\arcsen x+C$.
+%\eqref{itSubstitTrig00} $\int\frac{x}{\sqrt{3-x^2}}\,dx=...$
+\eqref{itSubstitTrig2} Com $x=\sqrt{10}\sen t$ dá
+\begin{align*}
+\int\frac{x^7}{\sqrt{10-x^2}}dx=\int\frac{\sqrt{10}^7\sen^7t}{\sqrt{10}\cos
+t}\sqrt{10}\cos tdt
+&=\sqrt{10}^7\int \sen^7tdt
+\end{align*}
+Uma segunda substituição $u=\cos t$ dá
+\begin{align*}
+\int \sen^7tdt&=\int (1-\cos^2t)^3\sen tdt\\
+\quad&=-\int(1-u^2)^3du\\
+&=-\int(1-3u^2+3u^4-u^6)du \\
+&=-\Big\{u-u^3+\frac{3}{5}u^5-\frac{1}{7}u^7\Big\}+C
+\end{align*}
+Para voltar para $x$, observe que $u=\cos
+t=\sqrt{1-\sen^2t}=\sqrt{1-(x/\sqrt{10})^2}$.
+Logo,
+$$
+\int\frac{x^7}{\sqrt{10-x^2}}dx=\sqrt{10}^7\Bigl\{-\sqrt{1-\frac{x^2}{10}}
++\sqrt{1-\frac{x^2}{10}}^3-\frac{3}{5}\sqrt{1-\frac{x^2}{10}}^5
++\frac{1}{7}\sqrt{1-\frac{x^2}{10}}^7\Bigr\}+C
+$$
+\eqref{itPrimSubSinus3} Observe que $\sqrt{1-x^3}$ \emph{não é da forma
+$\sqrt{a^2-b^2x^2}$!} Mas com a substituição $u=1-x^3$, 
+$\int \frac{x^2}{\sqrt{1-x^3}}\,dx=-\tfrac13\int
+\frac{du}{\sqrt{u}}=-\tfrac23\sqrt{u}+C=-\tfrac23\sqrt{1-x^3}+C$.
+\eqref{itPrimSubSinus2} Aqui uma simples substituição $u=1-x^2$ dá
+$\int x\sqrt{1-x^2}\,dx=-\tfrac13(1-x^2)^{3/2}+C$. (Pode também fazer $x=\sen
+\theta$, é um pouco mais longo.)
+\eqref{itSubstitTrig6} Completando o quadrado, 
+$3-2x-x^2=4-(x+1)^2$. Chamando $x+1=2\sen \theta$,
+\begin{align*}
+\int\frac{x}{\sqrt{3-2x-x^2}}\,dx=\int\frac{2\sen
+\theta-1}{\sqrt{4-4\sen^2\theta}}2\cos \theta\,d\theta&=
+2\int \sen \theta\,d\theta-\int \,d\theta\\
+&=-2\cos\theta-\theta+C\,.
+\end{align*}
+Voltando para $x$, temos
+$$
+\int\frac{x}{\sqrt{3-2x-x^2}}\,dx=-2\sqrt{1-(\tfrac{x+1}{2})^2}
+-\arcsen(\tfrac{x+1}{2})+C\,.$$
+\eqref{itSubstitTrig000} Com $x=3\sen \theta$ obtemos 
+$\int x^2{\sqrt{9-x^2}}\,dx=3^4\int \sen^2\theta\cos^2\theta\,d\theta$.
+\end{sol}
+\end{exo}
+
+
+\subsubsection{A primitiva $\int \sqrt{1+x^2}\,dx$}
+
+Para calcular $\int \sqrt{1+x^2}\,dx$
+usaremos \eqref{eq:relattangente} para
+transformar $1+x^2$ em um quadrado perfeito.
+Portanto, consideremos a substituição 
+$$x=\tan \theta\,,\quad dx=\sec^2 \theta\,d\theta\,.$$
+Expressemos agora a primitiva somente em termos de $\theta$:
+$$
+\int \sqrt{1+x^2}\,dx=\int \sqrt{1+\tan^2\theta}\sec^2 \theta\,d\theta=
+\int \sqrt{\sec^2\theta}\sec^2\theta\,d\theta=\int \sec^3\theta\,d\theta\,.
+$$
+Vimos no Exercício \ref{Exo:PrimitTangSec} que
+$$
+\int\sec^3\theta\,d\theta=
+\tfrac12\tan\theta\sec\theta+\tfrac12\ln\bigl|\sec\theta+\tan
+\theta\bigr|+C\,.
+$$
+Para voltar à variável $x$: $\sec\theta=x$,
+$\tan\theta=\sqrt{1+\sec^2\theta}=\sqrt{1+x^2}$.
+Logo,
+$$\boxed{\int \sqrt{1+x^2}dx=\tfrac12
+x\sqrt{1+x^2}+\tfrac12 \ln |x+\sqrt{1+x^2}|
++C\,.}$$
+
+O método descrito acima se aplica a cada vez que se quer integrar uma função 
+que contém uma raiz da forma $\sqrt{a^2+b^2x^2}$, com $a,b>0$.
+Para transformar o polinómio $a^2+b^2x^2$ em um quadrado perfeito, podemos
+tentar as seguintes subsituições: 
+$$x\pardef \tfrac{a}{b}\tan \theta \,.$$
+De fato, uma substituição desse tipo permite cancelar a raiz:
+$$
+\sqrt{a^2+b^2(\tfrac{a}{b}\tan \theta)^2}=
+\sqrt{a^2+a^2\tan^2\theta}=a\sqrt{1+\tan^2\theta}=a\sec \theta\,.
+$$
+
+\begin{exo}
+Calcule as primitivas
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itSubstitTrig3} $\int\frac{x^3}{\sqrt{4x^2+1}}\,dx$.
+\item\label{itSubstitTrig31} $\int x^3\sqrt{x^2+1}\,dx$
+\item\label{itSubstitTrig32} $\int x\sqrt{x^2+a^2}\,dx$
+\item\label{itSubstitTrig33} $\int \frac{dx}{\sqrt{x^2+2x+2}}$ 
+\item\label{itSubstitTrig10} $\int\frac{dx}{(x^2+1)^3}$
+\item\label{itSubstitTrig100} $\int\frac{dx}{x^2\sqrt{x^2+4}}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itSubstitTrig3}
+fazendo $x=\tfrac12\tan \theta$ dá
+\begin{align*}
+ \int \frac{x^3}{\sqrt{4x^2+1}}dx&=\int \frac{(\tfrac12 \tan
+\theta)^3}{\sqrt{\sec^2\theta}}
+\half\sec^2\theta d\theta\\
+&=\tfrac{1}{16} \int\tan^3\theta \sec\theta d\theta\\
+&=\tfrac{1}{16} \int (\sec^2\theta-1)\sec\theta \tan\theta d\theta
+\end{align*}
+Com $w=\sec \theta$, obtemos 
+$\int (\sec^2\theta-1)\sec\theta \tan\theta
+d\theta=\frac{\sec^3\theta}{3}-{\sec\theta}+C$. 
+Mas $\tan \theta=2x$ implica $\sec \theta=\sqrt{\tan^2\theta+1}=\sqrt{1+4x^2}$.
+Logo,
+$$
+\int \frac{x^3}{\sqrt{4x^2+1}}dx=\frac{(1+4x^2)^{\frac{3}{2}}}{48}
+-\frac{\sqrt{1+4x^2}}{16}+C\,.
+$$
+Observe que pode também rearranjar um pouco a função e fazer por partes:
+\begin{align*}
+ \int \frac{x^3}{\sqrt{4x^2+1}}dx&=
+ \tfrac14\int x^2\frac{8x}{2\sqrt{4x^2+1}}dx\\
+&=\tfrac14\Bigl\{x^2\sqrt{4x^2+1}-\int (2x)\sqrt{4x^2+1}dx\Bigr\}\\
+&=\tfrac14\Bigl\{x^2\sqrt{4x^2+1}-\tfrac14\frac{(4x^2+1)^{3/2}}{3/2}\Bigr\}+C\,,
+\end{align*}
+dá na mesma!
+\eqref{itSubstitTrig31} Com $x=\tan \theta$, temos
+\begin{align*}
+\int x^3\sqrt{x^2+1}\,dx&=\int \tan^3\theta\sec^3\theta\,d\theta\\
+&=\int (\sec^2\theta-1)\sec^2\theta(\tan\theta\sec\theta)\,d\theta\\
+(\text{via }w=\sec\theta)\,
+&=\tfrac15\sec^5\theta-\tfrac13\sec^3\theta+C\\
+&=\tfrac15(x^2+1)^{5/2}-\tfrac13(x^2+1)^{3/2}+C\,.
+\end{align*}
+\eqref{itSubstitTrig32} Aqui não precisa fazer substituição trigonométrica:
+$u=x^2+a^2$ dá $\int
+x\sqrt{x^2+a^2}\,dx=\tfrac12\int\sqrt{u}\,du=\tfrac13u^{3/2}+C=
+\tfrac13(x^2+a^2)^{3/2}+C$.
+\eqref{itSubstitTrig33} Como $x^2+2x+2=(x+1)^2+1$, a substituição
+$x+1=\tan\theta$ dá 
+$\int
+\frac{dx}{\sqrt{x^2+2x+2}}=\int\frac{\sec^2\theta}{\sec\theta}\,
+d\theta=\int\sec\theta\,d\theta=\ln|\sec\theta+\tan\theta|+C=\ln\bigl|x+1+\sqrt{
+x^2+2x+2}\bigr|+C$.
+\eqref{itSubstitTrig10} Apesar da função $\frac{1}{(x^2+1)^3}$ não possuir
+raizes, façamos a substituição $x=\tan\theta$:
+\begin{align*}
+\int\frac{dx}{(x^2+1)^3}&=\int\frac{\sec^2\theta}{(\tan^2\theta+1)^3}\,
+d\theta=\int\frac{d\theta}{\sec^4\theta}=\int\cos^4\theta\,d\theta\,.
+\end{align*}
+Essa última primitiva já foi calculada em \eqref{eq:intcosquatre}:
+$\int \cos^4\theta\,d \theta=\tfrac14\sen
+\theta\cos^3\theta+\tfrac{3\theta}{8}+\tfrac{3}{16}
+\sen(2\theta)+C$. Ora, se $\tan\theta=x$, então
+$\sen\theta=\frac{x}{\sqrt{1+x^2}}$ e $\cos\theta=\frac{1}{\sqrt{1+x^2}}$.
+Logo,
+$$
+\int\frac{dx}{(x^2+1)^3}=\frac{x}{4(1+x^2)^2}+\frac38\Bigl\{\arctan
+x+\frac{x}{1+x^2}\Bigr\}+C\,.
+$$
+\eqref{itSubstitTrig100} Com $x=2\tan \theta$, 
+$\int\frac{dx}{x^2\sqrt{x^2+4}}=\tfrac14\int
+\frac{\cos\theta}{\sen^2\theta}\,d\theta=-\frac{1}{4\sen\theta}+C$.
+Agora observe que $2\tan \theta=x$ implica $\sen\theta=\frac{x}{\sqrt{x^2+4}}$.
+Logo,
+$\int\frac{dx}{x^2\sqrt{x^2+4}}=-\frac{\sqrt{x^2+4}}{4x}+C$.
+\end{sol}
+\end{exo}
+
+\begin{exo}\label{exo:comprparabola}
+Calcule o comprimento do arco da parábola $y=x^2$, contido 
+entre as retas $x=-1$ e  $x=1$.
+\begin{sol}
+Já montamos a integral no Exemplo \ref{ex:comprparabdifiss}, e esta pode ser
+calculada com os métodos dessa seção: 
+$L=2\int_0^1\sqrt{1+4x^2}\,dx=\frac{\sqrt{5}}{4}+\frac12\ln(\frac12+\frac{\sqrt{5}}{2})$.
+\end{sol}
+\end{exo}
+
+\subsubsection{A primitiva $\int \sqrt{x^2-1}\,dx$}
+Finalmente, consideremos a primitiva $\int \sqrt{x^2-1}\,dx$. Para transformar
+$x^2-1$ num quadrado perfeito, usaremos a relação \eqref{eq:relattangente}:
+$\sec^2\theta-1=\tan^2\theta$. Assim, chamando $x=\sec\theta$, temos
+$dx=\tan\theta\sec\theta\,d\theta$, portanto
+
+$$\int
+\sqrt{x^2-1}\,dx=\int\sqrt{\sec^2\theta-1}\tan\theta\sec\theta\,d\theta
+=\int \tan^2\theta\sec\theta\,d\theta\,.$$
+Integrando por partes,
+\begin{align*}
+\int
+(\tan\theta\sec\theta)\tan\theta\,
+d\theta&=\sec\theta\tan\theta-\int\sec^3\theta\, d\theta\\
+&=\sec\theta\tan\theta-\Bigl\{
+\tfrac12\tan\theta\sec\theta+\tfrac12\ln\bigl|\sec\theta+\tan
+\theta\bigr|
+\Bigr\}+C\\
+&=\tfrac12\sec\theta\tan\theta-\tfrac12\ln\bigl|\sec\theta+\tan
+\theta\bigr|+C\,.
+\end{align*}
+Como $\sec\theta=x$ implica
+$\tan\theta=\sqrt{\sec^2\theta-1}=\sqrt{x^2-1}$, obtemos
+$$\boxed{
+\int\sqrt{x^2-1}\,dx=\tfrac12
+x\sqrt{x^2-1}-\tfrac12 \ln\bigl|x+\sqrt{x^2-1}\bigr|+C\,.}
+$$
+O método apresentado acima sugere que para integrar uma função que contém um
+polinômio do segundo grau da forma $\sqrt{a^2x^2-b^2}$, pode-se tentar fazer a
+substituição $$x\pardef \frac{b}{a}\sec \theta\,.$$
+
+\begin{ex}
+Consideremos a primitiva $\int\frac{dx}{x^2\sqrt{x^2-9}}$, fazendo a
+substituição $x=3\sec\theta$, $dx=3\tan\theta\sec\theta\,d\theta$:
+$$
+\int\frac{dx}{x^2\sqrt{x^2-9}}=\int\frac{3\tan\theta\sec\theta}{(3\sec\theta)^2
+\sqrt{(3\sec\theta)^2-9}}\,d\theta
+=\tfrac{1}{9}\int\frac{d\theta}{\sec\theta}=
+\tfrac19\int\cos\theta\,d\theta
+=\tfrac19\sen\theta+C\,.
+$$
+Para voltar à variável $x$, façamos uma interpretação geométrica da nossa
+substituição. A relação $x=3\sec\theta$, isto é $\cos\theta =\frac{3}{x}$, se
+concretiza no seguinte triângulo:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.5]
+\draw (0,0)--(2,1) node[midway, above, sloped]{$x$}--(2,0) 
+node[midway, right]{$\sqrt{x^2-9}$} --(0,0) node[midway,
+below]{$3$};
+\draw (0.4,0) arc (0:26.56:0.4);
+\draw (0.56,0.13) node{$\theta$};
+\draw (4.8,0.5) node{$\Rightarrow\,\,\sen\theta=\frac{\sqrt{x^2-9}}{x}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Assim, 
+$$
+\int\frac{dx}{x^2\sqrt{x^2-9}}=\frac{\sqrt{x^2-9}}{9x}+C\,.
+$$
+\end{ex}
+
+\begin{exo} Calcule as primitivas.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itPrimSubSecante1} $\int x^3\sqrt{x^2-3}dx$
+\item\label{itSubstitTrig8} $\int \frac{dx}{\sqrt{x^2-a^2}}\,dx$.
+\item\label{itSubstitTrig1} $\int\frac{x^3}{\sqrt{x^2-1}}\,dx$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itPrimSubSecante1}
+Seja $x=\sqrt{3}\sec \theta$. Então $dx=\sqrt{3}\sec \theta\tan \theta$, e
+\begin{align*}
+ \int x^3\sqrt{x^2-3}dx&=\int (\sqrt{3}\sec \theta)^3 \sqrt{3}  \tan \theta
+\sqrt{3}\sec \theta\tan \theta d\theta\\
+&=\sqrt{3}^5\int \{\sec^2\theta \tan^2 \theta\}\sec^2 \theta d\theta\\
+(\text{ com }u=\tan \theta)&=\sqrt{3}^5\int (u^2+1)u^2du\\
+&=\sqrt{3}^5(u^5/5+u^3/3)+C
+\end{align*}
+Mas como $\cos \theta=\sqrt{3}/x$, temos (fazer um desenho) $u=\tan
+\theta=\sqrt{x^2-3}/\sqrt{3}$. Logo,
+$$
+\int x^3\sqrt{x^2-3}dx=\tfrac15\sqrt{x^2-3}^5+\sqrt{x^2-3}^3+C
+$$
+Um outro jeito de calcular essa primitiva é de começar com uma integração por
+partes:
+\begin{align*}
+\int x^3\sqrt{x^2-3}dx=
+ \tfrac12\int x^2\,
+\big\{2x\sqrt{x^2-3}\big\}dx&=\tfrac12\Big\{x^2\frac{(x^2-3)^{3/2}}{3/2}-\int
+2x\frac{(x^2-3)^{3/2}}{3/2}dx\Big\}\\
+&=\tfrac12\Big\{x^2\frac{(x^2-3)^{3/2}}{3/2}-\tfrac23\int
+2x{(x^2-3)^{3/2}}dx\Big\}\\
+&=\tfrac12\Big\{x^2\frac{(x^2-3)^{3/2}}{3/2}-\tfrac23\frac{(x^2-3)^{5/2}}{5/2}
+\Big\}+C\\
+&=\tfrac13x^2{(x^2-3)^{3/2}}-\tfrac{2}{15}{(x^2-3)^{5/2}}+C\,\,)
+\end{align*}
+\eqref{itSubstitTrig8} Com $x=a\sec\theta$, 
+$\int
+\frac{dx}{\sqrt{x^2-a^2}}\,dx=\int\sec\theta\,
+d\theta=\ln|\sec\theta+\tan\theta|+C$. Como $\cos\theta=\frac{a}{x}$,
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.5]
+\draw (0,0)--(2,1) node[midway, above, sloped]{$x$}--(2,0) 
+node[midway, right]{$\sqrt{x^2-a^2}$} --(0,0) node[midway,
+below]{$a$};
+\draw (0.4,0) arc (0:26.56:0.4);
+\draw (0.56,0.13) node{$\theta$};
+\draw (4.8,0.5) node{$\Rightarrow\,\,\tan\theta=\frac{\sqrt{x^2-a^2}}{a}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Logo,
+$\int
+\frac{dx}{\sqrt{x^2-a^2}}\,dx=\ln|\tfrac{x}{a}+\tfrac{\sqrt{x^2-a^2}}{a}|+C$.
+\eqref{itSubstitTrig1}
+Com $x=\sec \theta$, $dx=\sec \theta\tan \theta
+d\theta$:
+\begin{align*}
+\int\frac{x^3}{\sqrt{x^2-1}}dx&=\int 
+\frac{\sec^3\theta}{\tan \theta}\sec \theta\tan \theta d\theta\\
+&=\int \sec^2\theta \sec^2\theta d\theta\\
+&=\int (\tan^2\theta+1)\sec^2\theta d\theta\\
+(u\pardef \tan \theta)\quad&=\int (u^2+1)du\\
+&=\frac{u^3}{3}+u+C\\
+&=\frac{\tan^3\theta}{3}+\tan\theta+C\,.
+\end{align*}
+Mas $\sec \theta=x$ implica $\tan\theta=\sqrt{x^2-1}$.
+Logo,
+$$
+\int\frac{x^3}{\sqrt{x^2-1}}dx=
+\frac{1}{3}(x^2-1)^{\tfrac32}+\sqrt{x^2-1}+C\,.
+$$
+
+\end{sol}
+\end{exo}
+
+
+
+%\fi
+
+

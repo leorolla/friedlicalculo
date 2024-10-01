@@ -1,0 +1,1900 @@
+
+% !TeX spellcheck = pt_BR
+% !TEX encoding = UTF-8 Unicode
+
+\chapter{Estudos de funções}\label{Cap:Estudos}
+
+\ifdefined\updateans
+% Only need to run once in a lifetime, when the file ans.tex needs to be updated.
+\Writetofile{ans}{\protect\section*{Capítulo \ref{Cap:Estudos}}}
+\fi
+
+Neste capítulo juntaremos as técnicas desenvolvidas anteriormente
+para estudar \emph{funções}.
+Já estudamos algumas funções em bastante detalhes no último capítulo, 
+ao resolver problemas de otimização.\\
+
+Antes de estudar casos particulares, faremos mais dois comentários
+sobre o comportamento
+de uma função quando $x\to \pm \infty$.
+
+
+\section{Sobre o crescimento das funções no $\infty$}
+\index{crescimento no $\infty$}
+
+É importante se lembrar, ao estudar funções, de quais são os
+comportamentos das funções fundamentais  
+(polinômios, exponenciais e logaritmos) que tendem ao infinito
+quando $x\to \infty$.\\
+%Nesta pequena seção usaremos 
+%a regra de Bernoulli-l'Hôpital para estabelecer uma
+%\emph{hierarquia} entre essas funções no infinito.\\
+
+Para começar, 
+já vimos na Seção~\ref{sec_Lim_parenteseAldo}
+(ou no item~\eqref{itexBH12ab} do Exercício~\ref{Exo:BHbasic})
+que 
+$$\lim_{x\to \infty}\frac{x}{e^{x}}=0\,.$$
+Pode também ser mostrado que para qualquer $p>0$,
+\eq{\label{eq:expcrescemaisrapidoquepolin}
+\lim_{x\to \infty}\frac{x^p}{e^x}=0\,.}
+Podemos resumir esse fato da seguinte maneira: seja
+$P(x)$ um polinômio cujo coeficiente de grau maior é positivo.
+Então $P(x)\nearrow \infty$ e $e^x\nearrow \infty$, mas 
+$$\boxed{P(x)\ll e^x\,,\quad\text{ quando
+}x\to \infty\,.}$$
+O símbolo ``$\ll$'' é usado para significar: ``é muito menor que''.
+Em palavras: \emph{no infinito, o crescimento exponencial é
+muito mais rápido que qualquer crescimento polinomial}.\\
+
+Vimos também que
+$$
+\lim_{x\to \infty}\frac{\ln x}{x}=0\,,\quad\quad 
+\lim_{x\to \infty}\frac{(\ln x)^2}{x}=0\,,
+$$
+e pode ser mostrado (veja exercício abaixo) que para qualquer
+$p>0$ e qualquer $q>0$,
+\eq{\label{eq:polincrescemaisrapidoquelog}\lim_{x\to \infty}\frac{(\ln
+x)^p}{x^q}=0\,.}
+Como $x^q$ pode também ser trocado
+por qualquer polinômio $P(x)$ (supondo que o coeficiente do
+seu termo de grau maior é positivo), esse fato costuma ser
+resumido da seguinte
+maneira:
+$$\boxed{(\ln x)^p\ll P(x)\,,\quad\text{ quando }x\to \infty\,.}$$
+Isto é: $(\ln x)^p\nearrow \infty$, e 
+$P(x)\nearrow \infty$ quando $x\to \infty$,
+mas \emph{o crescimento polinomial é muito mais rápido que
+qualquer crescimento logaritmico.}
+
+\begin{exo}
+Mostre que para qualquer $p>0$, e $q>0$, $\lim_{x\to \infty}\frac{(\ln
+x)^p}{x^q}=0$.
+\begin{sol}
+(Já vimos no Exemplo \ref{Ex:logsurx} que a afirmação vale para $p=1$, $q=1$.)
+Observe que 
+$\frac{(\ln
+x)^p}{x^q}=(\frac{(\ln
+x)^{p/q}}{x})^q$. Logo, basta provar a afirmação para $q=1$ e $p>0$ qualquer:
+$\lim_{x\to \infty}\frac{(\ln
+x)^p}{x}=0$.
+Mostremos por indução que se a afirmação vale para $p>0$ 
+($\lim_{x\to \infty}\frac{(\ln
+x)^{p}}{x}=0$), então ela vale para $p+1$. De fato, pela regra de B.H., 
+$$
+\lim_{x\to \infty}\frac{(\ln x)^{p+1}}{x}=\lim_{x\to \infty}\frac{(p+1)(\ln
+x)^{p}\tfrac{1}{x}}{1}=
+(p+1)\lim_{x\to \infty}\frac{(\ln
+x)^{p}}{x}=0\,.
+$$
+Então, a afirmação estará provada para qualquer $p>0$ se ela for provada para
+$0<p\leq 1$. Mas para tais $p$, $(\ln x)^p\leq \ln x$ para todo $x>1$, logo, 
+$$
+\lim_{x\to \infty}\frac{(\ln x)^p}{x}\leq \lim_{x\to \infty}\frac{\ln x}{x}=0\,,
+$$ 
+pelo Exemplo \ref{Ex:logsurx}.
+\end{sol}
+\end{exo}
+
+Assim, \emph{quando $x\to \infty$}, a hierarquia entre logaritmo, polinômio e
+exponencial é
+\eq{\boxed{(\ln x)^p\ll P(x)\ll e^x\,.}}
+\begin{exo}
+Mostre que para qualquer $p>0$, $\lim_{x\to \infty}\frac{x^p}{e^{x}}=0$.
+\end{exo}
+
+\begin{exo}
+Estude os seguintes limites
+\begin{multicols}{2}
+\begin{enumerate}
+\item\label{itexBHlast1} $\lim_{x\to \infty}\frac{x^{1000}+e^{-x}}{x^{100}+e^x}$
+\item\label{itexBHlast2} $\lim_{x\to \infty}\frac{e^{(\ln x)^2}}{2^{x}}$
+\item\label{itexBHlast3} $\lim_{x\to \infty}(x^3-(\ln x)^5-\frac{e^x}{x^7})$
+\item\label{itexBHlast4} $\lim_{x\to \infty}x^{\ln x}e^{-x/2}$
+\item\label{itexBHlast5_a} $\lim_{x\to \infty}\frac{x}{e^{(\ln x)^2}}$
+\item\label{itexBHlast5_b} $\lim_{x\to \infty}\frac{\sqrt{x}}{e^{\sqrt{\ln x}}}$
+\item\label{itexBHlast6} $\lim_{x\to
+\infty}\frac{\ln(\ln(\ln(x)))}{\ln(\ln(x))}$
+\item\label{itexBHlast24}
+$\lim_{x\to\infty}\{e^{\sqrt{(\ln x)^2+1}}-x\}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itexBHlast1} $0$
+\eqref{itexBHlast2} $0$
+\eqref{itexBHlast3} $-\infty$
+\eqref{itexBHlast4} $0$
+\eqref{itexBHlast5_a} $0$ 
+\eqref{itexBHlast5_b} $\infty$ 
+\eqref{itexBHlast6} $0$
+\eqref{itexBHlast24} $\infty$
+\end{sol}
+\end{exo}
+
+
+\section{Assíntotas oblíquas}\label{Sec:Obliquas}
+\index{assíntota! oblíqua}
+A noção de \emph{assíntota} permitiu obter informações a respeito do comportamento
+qualitativo de uma função \emph{longe da origem}, em direções paralelas aos eixos de
+coordenadas: ou horizontal, ou vertical.\\
+
+Veremos nesta seção que existem funções cujo gráfico, longe da origem, 
+se aproxima de uma reta que não é nem vertical, nem horizontal, mas \emph{oblíqua},
+isto é de inclinação finita  e não nula. Comecemos com um exemplo.
+
+\begin{ex}\label{ex:assolbbb}
+Considere a função $f(x)=\frac{x^3+1}{2 x^2}$. 
+É claro que esta função possui a reta $x=0$ como assíntota vertical, já que 
+$$
+\lim_{x\to 0^+}\frac{x^3+1}{2x^2}=+\infty\,,\quad \lim_{x\to
+0^-}\frac{x^3+1}{2x^2}=+\infty\,.
+$$
+Por outro lado, $f$ não possui assíntotas horizontais, já que 
+$$
+\lim_{x\to +\infty}\frac{x^3+1}{2x^2}=+\infty\,,\quad \lim_{x\to
+-\infty}\frac{x^3+1}{2x^2}=-\infty\,.
+$$
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\newcommand{\funcao}[1]{ (((#1)^3+1)/(2*(#1)^2)) }
+\pgfmathsetmacro{\a}{4};
+\pgfmathsetmacro{\b}{3};
+\draw[ ->] ({-\a+1},0)--({\a-1},0) node[right]{$x$};
+\draw[ ->] (0,{-\b+1})--(0,\b);
+\draw[thick, domain=-\a:-0.4, samples=50] plot (\x,{\funcao{\x}});
+\draw[thick, domain=0.4:\a, samples=50] plot (\x,{\funcao{\x}});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Apesar de não possuir assíntota horizontal, vemos que longe da origem, 
+o gráfico parece se aproximar de uma reta de inclinação
+positiva. Como determinar essa reta?\\
+
+Para começar, demos uma idéia do que está acontecendo. 
+Observe primeiro que
+$\frac{x^3+1}{2x^2}=
+\frac{x}{2}+\frac{1}{2x^2}$. Logo, quando $x$ for grande, a
+contribuição 
+do termo $\frac{1}{2x^2}$ é desprezível em relação a
+$\frac{x}{2}$, e $f(x)$ é aproximada por
+$$
+f(x)\simeq \frac{x}{2}\,.$$
+Ora, a função $x\mapsto \frac{x}{2}$ é uma reta de inclinação $\frac{1}{2}$. De fato,
+esboçando o gráfico de $f$ junto com a reta $y=\frac{x}{2}$:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\newcommand{\funcao}[1]{ (((#1)^3+1)/(2*(#1)^2)) }
+\pgfmathsetmacro{\a}{4};
+\pgfmathsetmacro{\b}{3};
+\draw[ ->] ({-\a+1},0)--({\a-1},0) node[right]{$x$};
+\draw[ ->] (0,{-\b+1})--(0,\b);
+\draw[thick, domain=-\a:-0.4, samples=50] plot (\x,{\funcao{\x}});
+\draw[thick, domain=0.4:\a, samples=50] plot (\x,{\funcao{\x}});
+\draw[dashed, domain=-\a:\a] plot (\x,{\x/2}) node[below right]{$y=\frac{x}{2}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Podemos agora verificar que de fato, 
+quando $x\to \infty$, \emph{a distância entre o gráfico
+de $f$ e a reta $y=\frac{x}{2}$ tende a zero}:
+\begin{equation}\label{eq:biduleolbik}
+\lim_{x\to \infty}\bigl|f(x)-\tfrac{x}{2}\bigr|=
+\lim_{x\to \infty}\bigl|(\tfrac{x}{2}+\tfrac{1}{2x^2})-\tfrac{x}{2}\bigr|=
+\lim_{x\to \infty}\tfrac{1}{2x^2}=0\,.
+\end{equation}
+Portanto, a reta $y=\frac{x}{2}$ é chamada de \emph{assíntota oblíqua} da função $f$.
+\end{ex}
+
+O exemplo anterior leva naturalmente à seguinte definição:
+
+\begin{defin}
+A reta de equação $y=mx+h$ é chamada de \grasA{assíntota oblíqua para $f$} 
+se pelo menos um
+dos limites abaixo existe e é nulo:
+$$\lim_{x\to +\infty}\bigl|f(x)-(mx+h)\bigr|\,,\quad\lim_{x\to
+-\infty}\bigl|f(x)-(mx+h)\bigr|\,.$$
+(Obs: quando $m=0$, essa definição coincide com a de assíntota
+horizontal.)
+\end{defin}
+
+Como saber se uma função possui uma assíntota oblíqua? E se ela tiver uma, como
+identificar os coeficientes $m$ e $h$?\\
+
+Para começar, observe que $h$ pode ser obtido a partir de $m$, já que 
+$$
+\lim_{x\to \pm\infty}\bigl \{f(x)-(mx+h)\bigr\}=
+\lim_{x\to \pm\infty}\bigl \{(f(x)-mx)-h\bigr\}
+$$
+é zero se e somente se 
+\begin{equation}\label{eq:hparaoblik}
+h=\lim_{x\to \pm\infty}\{f(x)-mx\}\,.
+\end{equation}
+
+Para identificar $m$, podemos escrever
+$$\lim_{x\to \pm\infty}\bigl \{f(x)-(mx+h)\bigr\}
+=\lim_{x\to \pm\infty}x\cdot \bigl\{\tfrac{f(x)}{x}-(m+\tfrac{h}{x})\bigr\}\,,
+$$
+e observar que para este último limite 
+existir e ser igual a zero quando $x\to \pm \infty$, é necessário 
+que 
+$\lim_{x\to \pm \infty} \bigl\{\tfrac{f(x)}{x}-(m+\tfrac{h}{x})\bigr\}=0$. 
+Como $\frac{h}{x}\to 0$, isso implica que
+\begin{equation}\label{eq:mparaoblik}
+m=\lim_{x\to \infty}\frac{f(x)}{x}\,.
+\end{equation}
+
+Assim, vemos que se $f$ possui uma 
+assíntota oblíqua, esta tem uma inclinação
+dada por \eqref{eq:mparaoblik}, e uma abcissa na origem dada por
+\eqref{eq:hparaoblik}.
+Por outro lado, é claro que se os dois limites em
+\eqref{eq:mparaoblik} e 
+\eqref{eq:hparaoblik} existirem e forem \emph{ambos finitos}, então $f$
+possui uma assíntota oblíqua dada por $y=mx+h$. 
+É claro que os limites $x\to +\infty$ precisam ser calculados
+\emph{separadamente}, pois uma função pode possuir assíntotas
+oblíquas diferentes em $+\infty$ e $-\infty$.\\
+
+Voltando para o Exemplo \ref{ex:assolbbb}, temos
+$$
+m=\lim_{x\to \pm \infty} \frac{f(x)}{x}=\lim_{x\to\pm\infty}
+\frac{\frac{x^3+1}{2x^2}}{x}=
+\lim_{x\to\pm\infty}\frac{x^3+1}{2x^3}
+=\lim_{x\to\pm\infty}\bigl\{
+\tfrac12+\tfrac{1}{2x^3}
+\bigr\}=\tfrac12\,,
+$$
+e, como já visto anteriormente,
+$$h=\lim_{x\to\pm \infty}
+\{f(x)-\tfrac{1}{2}x\}=\lim_{x\to\pm \infty}
+\tfrac{1}{2x^3}=0\,.
+$$
+Logo, $y=\tfrac12 x+0$ é assíntota oblíqua.
+Vejamos como usar   o critério acima em outros exemplos.
+
+
+\begin{ex}
+Considere $f(x)=\sqrt{x^2+2x}$.
+Primeiro, tentaremos procurar uma inclinação. Pela presença
+da raiz quadrada, cuidamos de distinguir os
+limites $x\to-\infty$ e $x\to-\infty$:
+$$
+\lim_{x\to +\infty}\frac{f(x)}{x}=\lim_{x\to+\infty}
+\frac{\sqrt{x^2+2x}}{x}=\lim_{x\to +\infty}
+\frac{x\sqrt{1+\tfrac{2}{x}}}{x}=+1
+$$
+Em seguida calculemos 
+\begin{align*}
+\lim_{x\to\infty}\{f(x)-(+1)x\}=\lim_{x\to+\infty}\{\sqrt{x^2+2x}-x\}
+&=\lim_{x\to+\infty}\frac{2x}{\sqrt{x^2+2x}+x}\\
+&=\lim_{x\to+\infty}\frac{2}{\sqrt{1+\frac{2}{x}}+1}=1\,.
+\end{align*}
+Assim, $f$ possui a assíntota oblíqua $y=x+1$ em
+$+\infty$. Refazendo contas parecidas para $x\to-\infty$,
+obtemos
+$$
+\lim_{x\to-\infty}\frac{f(x)}{x}=-1\,,\text{ e }\quad
+\lim_{x\to-\infty}\{f(x)-(-1)x\}=-1\,,
+$$
+logo $f$ possui a assíntota oblíqua $y=-x-1$ em
+$-\infty$. De fato (observe que $f$ tem domínio
+$D=(-\infty,-2]\cup[0,+\infty)$),
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1]
+\newcommand{\funcao}[1]{ (sqrt((#1)^2+2*(#1))) }
+\pgfmathsetmacro{\a}{3};
+\pgfmathsetmacro{\b}{4};
+\draw[ ->] ({-\a-1},0)--({\a+1},0) node[right]{$x$};
+\draw[ ->] (0,{-0.2})--(0,\b) node[above]{$\sqrt{x^2+2x}$};
+\draw[thick, domain={-\a-2}:-2, samples=30] plot (\x,{\funcao{\x}});
+\draw[thick, domain=0:\a,  samples=30] plot (\x,{\funcao{\x}});
+\draw[dashed] (-1,0)--({-\a-2},{\a+1})
+node[right]{{$y=-x-1$}};
+\draw[dashed] (-1,0)--({\a},{\a+1})
+node[left]{{$y=x+1$}};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{ex}
+
+\begin{ex}
+Considere $f(x)=x+\sqrt{x}$, definida somente se $x>0$.
+Então 
+$$\lim_{x\to\infty}\frac{f(x)}{x}=
+\lim_{x\to\infty}\bigl\{1+\frac{\sqrt{x}}{x}\bigr\}=1\,.
+$$
+Mas, como
+$$
+\lim_{x\to\infty}\{f(x)-x\}=\lim_{x\to\infty}\sqrt{x}=\infty\,,
+$$
+vemos que $f$ \emph{não} possui assíntota oblíqua (apesar de
+$\lim_{x\to\infty}\frac{f(x)}{x}$ existir e ser finita).
+\end{ex}
+
+\begin{exo}
+Determine quais das funções abaixo possuem assíntotas
+ (se tiver, calcule-as).
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itasobl1} $4x-5$
+\item\label{itasobl11} $x^2$
+\item\label{itasobl6} $\frac{x^2-1}{x+2}$
+\item\label{itasobl12} $\ln( x^6+1)$
+\item\label{itasobl2} $\ln(1+e^x)$
+\item\label{itasobl3} $\sqrt{x^2-\ln x}$
+\item\label{itasobl4} $\ln(\cosh x)$
+\item\label{itasobl5} $e^{\sqrt{(\ln x)^2+1}}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itasobl1} A função é a sua própria assíntota oblíqua.
+\eqref{itasobl11} Não possui ass.
+\eqref{itasobl6} $y=-2$ (vertical), $y=x-2$ em $\pm\infty$. 
+\eqref{itasobl12} Não possui ass.
+\eqref{itasobl2} $y=0$ em $-\infty$, $y=x$ em $+\infty$.
+\eqref{itasobl3} $y=x$ em $+\infty$.
+\eqref{itasobl4} $y=x-\ln 2$ em $+\infty$, $y=-x-\ln 2$ em
+$-\infty$.
+\eqref{itasobl5} Não possui assíntotas: apesar de
+$m=\lim_{x\to \infty}\frac{e^{\sqrt{\ln^2x+1}}}{x}$
+existir e valer $1$,
+$\lim_{x\to\infty}\{e^{\sqrt{\ln^2x+1}}-x\}=\infty$. 
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Se uma função possui uma assíntota oblíqua $y=mx+h$ em
+$+\infty$, é
+verdade que $\lim_{x\to\infty}f'(x)=m$?
+\begin{sol}
+Em geral, náo. 
+Por exemplo, $f(x)=x+\tfrac{1}{x}\sen (x^2)$ possui $y=x$ como assíntota
+oblíqua em $+\infty$, 
+mas $f'(x)=1-\frac{\sen x^2}{x^2}+2\cos (x^2)$ 
+não possui limite quando $x\to\infty$.
+Na verdade, uma função pode possuir uma assíntota (oblíqua ou
+outra)
+sem sequer ser derivável.
+\end{sol}
+\end{exo}
+
+\section{Estudos de funções}\label{Sec:Estudos}
+\index{estudos de funções}
+Podemos agora juntar as técnicas conhecidas para estabelecer um roteiro
+para o estudo completo de uma função $f$:
+\begin{itemize}
+ \item Para começar, encontrar o \emph{domínio} de $f$. O domínio precisa ser
+especificado para evitar divisões por zero e raizes (ou logaritmos) de números
+negativos. A função poderá depois ser estudada na vizinança de alguns dos
+pontos que não pertencem ao domínio, caso
+sejam associados a assíntotas verticais.
+\item Se for possível (e não sempre é), 
+estudar os \emph{zeros} e o \emph{sinal} de $f$.
+\item Determinar se $f$ possui algumas \emph{simetrias}, via o estudo da
+\emph{paridade}: $f$ é par se $f(-x)=f(x)$, ímpar se $f(-x)=-f(x)$. 
+\item Estudar o comportamento assíntotico de $f$, isto é, $f(x)$ quando $x\to
+\pm \infty$ (se o domínio
+o permite). Se um dos limites $\lim_{x\to \pm\infty}f(x)$ existir (esses limites
+podem precisar da regra de Bernoulli-l'Hôpital), então a
+função possui uma \emph{assíntota horizontal}. 
+Lembre que pode ter assíntotas
+horizontais diferentes em $+\infty$ e $-\infty$.
+Se um dos limites $\lim_{x\to\infty}f(x)$ for infinito, poderá
+procurar saber se existem \emph{assíntotas oblíquas}, como
+descrito na Seção \ref{Sec:Obliquas}.
+\item Procurar pontos na vizinhança dos quais $f(x)$ toma valores
+arbitrariamente grandes, isto é:
+\emph{assíntotas verticais}. Calculando os
+limites laterais $\lim_{x\to a^+}f(x)$ e $\lim_{x\to a^-}f(x)$ nos pontos $a$
+perto dos quais $f$ não é limitada. Isto acontece em geral perto de uma divizão
+por zero, ou quando a variável de um logaritmo tende a zero.
+\item Estudar a primeira derivada de $f$ (se existir). Em particular,
+procurar os \emph{pontos críticos de $f$}. Deduzir a
+\emph{variação} de $f$ via o estudo do sinal de $f'$. Determinar os pontos de
+mínimo e máximo,  locais ou globais.
+\item Estudar $f''$ e a convexidade/concavidade de $f$, via o sinal de $f''$.
+O sinal de $f''$ nos pontos críticos (se tiver) permite
+determinar quais são mínimos/máximos locais.
+Os \emph{pontos de inflexão} são aqueles onde $f$ passa de convexa para
+côncava, ou o contrário.
+\item Juntando essas informações, montar o \emph{gráfico} de $f$.
+Por exemplo, se $f$ é par, o gráfico é simétrico com respeito ao eixo $y$.
+Para montar um gráfico completo, 
+pode ser necessário calcular mais alguns limites, por exemplo para observar o
+comportamento da derivada perto de alguns pontos particulares.
+\end{itemize}
+
+\begin{ex} Comecemos com $f(x)=\frac{x+1}{1-x}$, cujo domínio é $D=\bR\setminus
+\{1\}$. A função se anula no ponto $x=-1$, e o seu sinal é dado por:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\tkzTabInit[lgt=3, nocadre, espcl=2, colorC=red, colorV=gray]
+{Valores de $x$: /.6,  $x+1$ /.6, $1-x$ /.6, $f(x)$ /.8}%
+{,$-1$, $1$,}
+\tkzTabLine{,-,z,+, ,+,}
+\tkzTabLine{,+, ,+,z,-,}
+\tkzTabLine{,-,z,+,d,-,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+(A dupla barra em $x=1$ é para indicar que $f$ não é definida em $x=1$.)
+A funçao não é nem par, nem ímpar.
+Como
+$$
+\lim_{x\to \pm\infty}\frac{x+1}{1-x}=\lim_{x\to
+\pm\infty}\frac{1+\frac{1}{x}}{\frac{1}{x}-1}=
+\frac{1}{-1}=-1\,,
+$$
+$f$ possui a reta $y=-1$ como assíntota horizontal.
+Por outro lado, como
+$$
+\lim_{x\to 1^+}\frac{x+1}{1-x}=-\infty\,,\quad 
+\lim_{x\to 1^-}\frac{x+1}{1-x}=+\infty\,,\quad 
+$$
+$f$ possui a reta $x=1$ como assíntota vertical.
+A derivada existe em todo $x\neq 1$, e vale
+$$
+f'(x)=\frac{(x+1)'(1-x)-(x+1)(1-x)'}{(1-x)^2}=
+\frac{1-x+(x+1)}{(1-x)^2}=
+\frac{2}{(1-x)^2}\,.
+$$
+O sinal de $f'$ dá logo a tabela de variação de $f$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6, $f'(x)$ /.6, Variaç. de $f$ /1.2}%
+{,$1$, }%
+\tkzTabLine{,+,d,+,}
+\tkzTabVar{-/,+D-/$\scriptscriptstyle{+\infty}$/$\scriptscriptstyle{-\infty}$,+/
+}
+%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+(Indicamos o fato de $x=1$ ser uma assíntota vertical.)
+Assim, $f$ não possui pontos críticos, e é crescente nos intervalos
+ $(-\infty,1)$ e $(1,\infty)$.
+A segunda derivada se calcula facilmente (para $x\neq 0$):
+$$f''(x)=2((1-x)^{-2})'=2(-2)(1-x)^{-3}(-1)=\frac{4}{(1-x)^3}\,.$$
+Esta muda de sinal em $x=1$, e permite descrever a convexidade de $f$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6, $f''(x)$ /.6, Conv. de $f$ /1.2}%
+{,$1$, }%
+\tkzTabLine{,+,d,-,}
+\tkzTabLine{,\smile,d,\frown,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Isto é, $f$ é convexa em $(-\infty,1)$, côncava em $(1,\infty)$. Assim, o
+gráfico é da forma
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.6]
+\draw[ ->] (-4,0)--(5,0);
+\draw[ ->] (0,-4)--(0,+2.5);
+\draw[dashed] (-4,-1)node[below right]{$y=-1$}--(5,-1);
+\draw[dashed] (1,-4)--(1,3)node[right]{$x=1$};
+\draw[thick, domain=-4:0.5, samples=50] plot (\x,{(\x+1)/(1-\x)});
+\draw[thick, domain=1.5:5, samples=50] plot (\x,{(\x+1)/(1-\x)});
+\draw (-1,0) node{$\shortmid$} node[above]{$-1$};
+\draw (1,0) node{$\shortmid$} node[above right]{$1$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{ex}
+
+\begin{ex}
+Estudemos agora a função $f(x)=\frac{x^2-1}{x^2+1}$.
+%\eqref{itexoEstudA2}
+O seu domínio é $D=\bR$, e o seu sinal: $f(x)$ é $\geq 0$ se $|x|\geq 1$,
+$<0$ caso contrário.
+Como $f(-x)=\frac{(-x)^2-1}{(-x)^2+1}=\frac{x^2-1}{x^2+1}=f(x)$, $f$ é par.
+Como 
+$$
+\lim_{x\to \pm \infty}\frac{x^2-1}{x^2+1}=\lim_{x\to \pm
+\infty}\frac{1-\tfrac{1}{x^2}}{1+\tfrac{1}{x^2}}=1\,,
+$$
+a reta $y=1$ é assíntota horizontal. Não tem assíntotas verticais (o
+denominador não se anula em nenhum ponto).
+A primeira derivada é dada por $f'(x)=\frac{4x}{(x^2+1)^2}$. Logo,
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\tkzTabInit[nocadre,espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+%{$x$ /.6,  $f'(x)$ /.9, Variação de $f$ /1.5}%
+{$x$ /.5,  $f'(x)$ /.5, Var. de $f$ /1}{,$0$,}
+%\tkzTabLine{,+,z,+,,+,}
+\tkzTabLine{,-,z,+,}
+\tkzTabVar{+/,-/\text{min.},+/,}
+%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+O mínimo local (que é global também) tem coordenada $(0,f(0))=(0,-1)$. A
+segunda derivada é dada por
+$f''(x)=\frac{4(1-3x^2)}{(x^2+1)^3}$, logo:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\tkzTabInit[nocadre,espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+%{$x$ /.5,  $f''(x)$ /.7, Conc. de $f$ /1.3}
+{$x$ /.5,  $f''(x)$ /.5, Conc. de $f$ /1}
+{,$-1/\sqrt{3}$, $-1/\sqrt{3}$,}
+\tkzTabLine{,-,z,+,z,-,}
+\tkzTabLine{,{\frown},,\smile,,\frown,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Os pontos de inflexão estão em
+$(\tfrac{-1}{\sqrt{3}},f(\tfrac{-1}{\sqrt{3}}))=(\tfrac{-1}{\sqrt{3}},-\tfrac{1}
+{2})$,
+e
+$(\tfrac{+1}{\sqrt{3}},f(\tfrac{+1}{\sqrt{3}}))=(\tfrac{+1}{\sqrt{3}},-\tfrac{1
+}{2})$. Finalmente,
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.3]
+\draw [thick, domain=-4:4, samples=100] plot (\x,{((\x)^2-1)/((\x)^2+1)});
+\draw [ ->] (-4,0)--(4,0) node[right] {$x$};
+\draw [ ->] (0,-0.1)--(0,1.5) node[left] {$f(x)$};
+\draw [dotted] (-4,1)--(4,1) node[above left] {$y=1$};
+%\fill (1,0) circle (0.35mm);
+%\fill (-1,0) circle (0.35mm);
+\fill (0,-1) circle (0.35mm);
+\draw (0,-1) node[below] {$(0,-1)$};
+\fill (-0.577,-0.5) circle (0.35mm);
+\draw (-0.577,-0.6) node[left]{$(\tfrac{-1}{\sqrt{3}},-\half)$};
+\fill (+0.577,-0.5) circle (0.35mm);
+\draw (+0.577,-0.6) node[right]{$(\tfrac{+1}{\sqrt{3}},-\half)$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{ex}
+
+\begin{exo}\label{Exo:DoisEstudosLegais} Faça um estudo completo das seguintes
+funções. 
+% \begin{multicols}{1}
+\begin{enumerate}
+\item\label{itexoEstudA1} $\bigl(\frac{x-1}{x}\bigr)^2$ (Segunda prova,
+primeiro semestre 2011)
+%\item \label{itexoEstudA2} $\frac{x^2-1}{x^2+1}$
+\item \label{itexoEstudA3} $x(\ln x)^2$ (Segunda prova, primeiro semestre 2010)
+\end{enumerate}
+% \end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\eqref{itexoEstudA1}:
+O domínio de $\bigl(\frac{x-1}{x}\bigr)^2$ é $D=\bR\setminus \{0\}$, o sinal é
+sempre não-negativo, tem um zero
+em $x=1$. $f$ não é par, nem ímpar.
+Os limites relevantes são $\lim_{x\to 0^{\pm}}f(x)=+\infty$, logo $x=0$ é
+assíntota vertical, e
+$$\lim_{x\to \pm\infty}\bigl(\frac{x-1}{x}\bigr)^2=\Bigl(\lim_{x\to \pm
+\infty}\frac{x-1}{x}\Bigr)^2==\Bigl(\lim_{x\to \pm
+\infty}\bigl(1-\frac{1}{x}\bigr)\Bigr)^2=1^2=1\,.$$
+Logo, $y=1$ é assíntota horizontal. 
+$f$ é derivável em $D$, e $f'(x)=\frac{2(x-1)}{x^3}$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\tkzTabInit[nocadre,espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6,  $f'(x)$ /.6, Var. de $f$ /1.3}%
+{,$0$, $1$,}%
+%\tkzTabLine{,+,z,+,,+,}
+\tkzTabLine{,+,d,-,z,+,}
+\tkzTabVar{-/,+D+/$+\infty$/$+\infty$,-/mín,+/,}
+%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+$f$ possui um mínimo global em $(1,0)$.
+A segunda derivada é dada por $f''(x)=\frac{2(3-2x)}{x^4}$. Ela se anula em
+$x=\tfrac32$, e muda de sinal neste ponto:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\tkzTabInit[nocadre,espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6,  $f''(x)$ /.7, Conv. de $f$ /1.2}%
+{,$0$, $\tfrac32$,}%
+\tkzTabLine{,+,d,+,z,-,}%
+\tkzTabLine{,\smile,d,\smile,z,\frown,}%
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Logo, $f$ é convexa em $(-\infty,0)$ e $(0,\frac32)$,  côncava em
+$(\frac32,\infty)$, e possui um ponto de inflexão em 
+$(\tfrac{3}{2},f(\tfrac{3}{2}))=(\tfrac{3}{2},\tfrac19)$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw [thick, domain=-4:-1.2, samples=100] plot
+(\x,{((\x)-1)^2/((\x)^2)});
+\draw [thick, domain=0.4:4, samples=100] plot (\x,{(\x-1)^2/((\x)^2)});
+\draw [ ->] (-4,0)--(4,0) node[right] {$x$};
+\draw [ ->] (0,-0.1)--(0,3) node[left] {$f(x)$};
+\draw [dotted] (-4,1)--(4,1) node[above] {$y=1$};
+\draw [dotted] (0,0)--(0,3.5) node[right] {$x=0$};
+\fill (1,0) circle (0.35mm);
+\draw (1,0) node[below] {$(1,0)$};
+\fill (1.5,0.1111) circle (0.35mm);
+\draw [ <-] (1.52,0.0911)--(2,-0.3) node[right]
+{$(\tfrac{3}{2},\tfrac{1}{9})$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itexoEstudA3}:
+O domínio de  $f(x)=x(\ln x)^2$ é
+$D=(0,+\infty)$, e o seu sinal é: $f(x)\geq 0$ para todo $x\in D$.
+A função não é { par} nem { ímpar}.
+Como $\lim_{x\to \infty}f(x)=+\infty$, não tem assintota horizontal.
+Para ver se tem assíntota vertical em $x=0$, calculemos 
+$\lim_{x\to 0^+}f(x)=\lim_{x\to 0^+}\frac{(\ln x)^2}{1/x}$. Como ambas funções
+$(\ln x)^2$ e $1/x$ são deriváveis em $(0,1)$ e tendem a $+\infty$ quando $x\to
+0^+$, apliquemos a regra de B.H.:
+$$
+\lim_{x\to 0^+}\frac{(\ln x)^2}{1/x}=
+\lim_{x\to 0^+}\frac{2(\ln x)1/x}{-1/x^2}=
+-2\lim_{x\to 0^+}x\ln x\,.
+$$
+Usando a regra de B.H. de novo, pode ser mostrado que esse segundo limite é
+zero (ver Exemplo \ref{Ex:xlogxemzero}). Logo, $\lim_{x\to 0^+}f(x)=0$: não
+tem assíntota vertical em $x=0$.
+A derivada é dada por $f'(x)=\ln x(\ln x+2)$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6, $f'(x)$ /.6, Variaç. de $f$ /1.2}%
+{,$e^{-2}$, $1$, }%
+\tkzTabLine{,+,z,-,z,+}
+\tkzTabVar{-/,+/{máx.},-/{mín.},+/}
+%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+O máximo local está em
+$(e^{-2},f(e^{-2}))=(e^{-2},4e^{- 2})$, e o
+mínimo global em $(1,f(1))=(1,0)$.
+A {segunda derivada} de $f$ é dada por
+$f''(x)=\frac{2(\ln x+1)}{x}$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6, $f''(x)$ /.6, Conv. de $f$ /1.2}%
+{,$e^{-1}$, }%
+\tkzTabLine{,-,z,+,}
+\tkzTabLine{,\frown,,\smile,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Logo, $f$ é côncava em $(0,e^{-1})$, possui um ponto de inflexão em
+$(e^{-1},f(e^{-1}))=(e^{-1},e^{-1})$, e é convexa em $(e^{-1},+\infty)$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.3]
+\draw [thick, domain=0.001:2.5, samples=100] plot (\x,{(\x)*(ln(\x))^2});
+ \draw [ ->] (0,0)--(2.5,0) node[right] {$x$};
+ \draw [ ->] (0,-0.1)--(0,2);
+% \draw [dotted] (-4,1)--(4,1) node[above left] {Assíntota horiz.: $y=1$};
+ \fill (1,0) circle (0.35mm);
+ \draw (1,0) node[below] {$\scriptscriptstyle{(1,0)}$};
+ \fill (0.367,0.367) circle (0.35mm);
+ \draw[<-] (0.39,0.39)--(0.9,0.5) node[above]
+{$\scriptscriptstyle{(e^{-1},e^{-1})}$};
+ \fill (0.1353,0.541) circle (0.35mm);
+ \draw[<-] (0.14,0.58)--(0.9,1.5) node[above]
+{$\scriptscriptstyle{(e^{-2},4e^{-2})}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Podemos também notar que $\lim_{x\to 0^+}f'(x)=+\infty$.
+\end{sol}
+\end{exo}
+
+\begin{exo}(Segunda prova, segundo semestre de 2011)
+Para $f(x)\pardef\frac{x^2-4}{x^2-16}$, estude:
+o sinal, os zeros, as assíntotas
+(se tiver), a variação, e a posição dos pontos de mín./máx. (se tiver). A
+partir dessas informações, monte o gráfico de $f$. Em seguida,
+complete a sua análise com a determinação dos intervalos em que $f$ é
+convexa/côncava.
+\begin{sol}
+$D=\bR\backslash \{\pm 4\}$. Os zeros de $f(x)\pardef\frac{x^2-4}{x^2-16}$ são
+$x=-2$, $x=+2$, e o seu sinal:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\tkzTabInit[lgt=3, nocadre, espcl=2]
+{ /.6,  $x^2-4$ /.6, $x^2-16$ /.6, $f(x)$ /.8}%
+{,$-4$, $-2$, $2$, $4$,}%
+%\tkzTabLine{,+,z,+,,+,}
+\tkzTabLine{,+,,+,z,-,z,+,,+,}
+\tkzTabLine{,+,z,-,,-,,-,z,+,}
+\tkzTabLine{,+,d,-,z,+,z,-,d,+,}
+%\tkzTabLine{,+,z,-,z,+,}
+%\tkzTabVar{-/,+/\text{a.v.},-/$0$,+/,}
+%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Como 
+$$
+\lim_{x\to \pm\infty}f(x)=\lim_{x\to
+\pm \infty}\frac{1-\frac{4}{x^2}}{1-\frac{16}{x^2}}
+=1\,,$$
+a reta $y=1$ é assíntota horizontal.
+Como 
+$$
+\lim_{x\to -4^\pm}f(x)=\mp \infty\,,\quad \lim_{x\to +4^\pm}f(x)=\pm \infty\,,$$
+as retas $x=-4$ e $x=+4$ são assíntotas verticais. 
+A primeira derivada se calcula facilmente: $f'(x)=\frac{-24 x }{(x^2-16)^2}$,
+logo a variação de $f$ é dada por:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6, $f'(x)$ /.6, Variaç. de $f$ /1.2}%
+{,$-4$,$0$,$4$, }%
+\tkzTabLine{,+,d,+,z,-,d,-}
+\tkzTabVar{-/,+D-/{},+/{máx.},-D+/{},-/}
+%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+A posição do máximo local é: $(0,f(0))=(0,\tfrac14)$.
+O gráfico:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+\pgfmathsetmacro{\a}{10}
+\pgfmathsetmacro{\b}{4}
+\newcommand{\funcao}[1]{ ( (#1)^2-4 )/( (#1)^2-16) }
+\draw[->] (-\a,0)--(\a,0);
+\draw[->] (0,-\b)--(0,\b);
+\draw[thick, domain=-\a:-4.5, samples=50] plot (\x,{\funcao{\x}});
+\draw[thick, domain=-3.5:3.5, samples=50] plot (\x,{\funcao{\x}});
+\draw[thick, domain=4.5:\a, samples=50] plot (\x,{\funcao{\x}});
+\draw[dashed] (-\a,1)node[below]{$y=1$}--(\a,1);
+\draw[dashed] (-4,-\b)node[left]{$x=-4$}--(-4,\b);
+\draw[dashed] (4,-\b)node[right]{$x=+4$}--(4,\b);
+\draw[<-] (0.1,0.3)--(2,2)node[above]{máx.: $(0,\frac14)$};
+\draw (-2,0) node{$\shortmid$} node[above]{$-2$};]
+\draw (2,0) node{$\shortmid$} node[above]{$+2$};]
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+A segunda derivada: $f''(x)=24\frac{16+3x^2}{(x^2-16)^3}$, e a convexidade é
+dada por
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6, $f''(x)$ /.6, Conv. $f$ /1.2}%
+{,$-4$,$4$, }%
+\tkzTabLine{,+,d,-,d,+}
+\tkzTabLine{,\smile,d, \frown,d,\smile,}
+%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{sol}
+\end{exo}
+
+
+\begin{exo}\label{Exo:EstudosBasicos}
+Faça um estudo completo das funções abaixo:
+\begin{multicols}{3}
+\begin{enumerate}
+%\item\label{itEstBas9a} $\frac{x^2}{(x+1)^2}$
+\item\label{itEstBas1} $x+\frac{1}{x}$
+\item\label{itEstBas6} $x+\frac{1}{x^2}$
+\item\label{itEstBas9} $\frac{1}{x^2+1}$
+\item\label{itEstBas2} $\frac{x}{x^2-1}$
+\item\label{itEstBas3} $xe^{-x^2}$
+%\item\label{itEstBas5} $x^4-x^2$
+\item\label{itEstBas7} $\senh x$
+\item\label{itEstBas8} $\cosh x$
+\item\label{itEstBas8t} $\tanh x$
+\item\label{itEstBas13} $\frac{x^3-1}{x^3+1}$, 
+\item\label{itEstBas14} $\tfrac12\sen (2x)-\sen(x)$, 
+\item\label{itEstBas15} $\frac{x}{\sqrt{x^2+1}}$
+\item\label{itEstFuncB30} $\frac{\sqrt{x^2-1}}{x-2}$
+%\item\label{itEstBas4} $\frac{(x+1)^3}{(x-1)^4}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+%%%%%%%%%%%%%%%%%%
+% \eqref{itEstBas9a} 
+%  { Domínio}: $D=\R\backslash \{-1\}$. { Sinal}:
+% $f(x)\geq 0$ para todo $x\in D$, e $f(x)=0$ se e somente se $x=0$.
+% Assíntotas:
+% como $\lim_{x\to -1^-}f(x)=\lim_{x\to -1^+}f(x)=+\infty$, { a reta $x=-1$ é
+% assíntota vertical} 
+% (é a única). Como 
+% $$\lim_{x\to \pm\infty}\frac{x^2}{(x+1)^2}=\lim_{x\to
+% \pm\infty}\frac{1}{(1+\frac{1}{x})^2}=1\,,$$ 
+%  { a reta $y=1$ é assíntota
+% horizontal} (a direita e a esquerda). Como
+% $f'(x)=\frac{2x}{(x+1)^3}$, 
+% \begin{center}
+% \begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+% \tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+% colorC=gray!15]
+% {$x$ /.6, $f'(x)$ /.6, Variaç. de $f$ /1.2}%
+% {,$-1$, $0$, }%
+% \tkzTabLine{,+,d,-,z,+}
+% \tkzTabVar{-/,+D+/,-/mín.,+/}
+% %\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+% \end{tikzpicture}\end{bmlimage}
+% \end{center}
+% $f$ possui um mínimo local no ponto $(0,f(0))=(0,0)$.
+% Como $f''(x)=\frac{2(1-2x)}{(x+1)^4}$, temos:
+% \begin{center}
+% \begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+% \tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+% colorC=gray!15]
+% {$x$ /.6, $f''(x)$ /.6, Conv. de $f$ /1.2}%
+% {,$-1$, $\tfrac12$, }%
+% \tkzTabLine{,+,d,+,z,-}
+% \tkzTabLine{,\smile,d,\smile,z,\frown}
+% %\tkzTabVar{-/,+D+/${+\infty}$/${+\infty}$,-/mín.,+/}
+% %\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+% \end{tikzpicture}\end{bmlimage}
+% \end{center}
+% Logo, $f$ é convexa nos intervalos $]-\infty,-1[$ e $]-1,\tfrac12[$, possui um
+% ponto de inflexão em $(\tfrac12,f(\tfrac12))=(\tfrac12,\tfrac19)$, e é côncava
+% em $(\tfrac12,+\infty)$. Gráfico:
+% \begin{center}
+% \begin{bmlimage}\begin{tikzpicture}
+% \draw[ ->] (-4,0)--(4,0);
+% \draw[dashed] (-5,1)node[below]{$y=1$}--(4,1);
+% \draw[ ->] (0,-0.5)--(0,4);
+% \draw[dashed] (-1,-0.5)node[below]{$x=-1$}--(-1,4);
+% \draw[thick, domain=-5:-1.9, samples=50] plot (\x,{\x^2/(\x+1)^2});
+% \draw[thick, domain=-0.65:4, samples=100] plot (\x,{\x^2/(\x+1)^2});
+% \end{tikzpicture}\end{bmlimage}
+% \end{center}
+% Observe que esse gráfico é o gráfico da função $(\frac{x}{x-1})$
+OBS: Para as demais funções, colocamos somente um \emph{resumo} das
+soluções, na forma de um gráfico no qual o leitor pode verificar os resultados
+do seu estudo.
+
+\eqref{itEstBas1} Ass. vert.: $x=0$. Ass. oblíqua: $y=x$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+\draw [thick, domain=-3:-0.3, samples=100] plot (\x,{(\x)+1/(\x)});
+\draw [thick, domain=0.3:3, samples=100] plot (\x,{(\x)+1/(\x)});
+ \draw [ ->] (-3,0)--(3,0) node[right] {$x$};
+ \draw [ ->] (0,-3)--(0,3) node[left]{$x+\tfrac{1}{x}$};
+ \fill (1,2) circle (0.45mm);
+  \draw (1,2) node[below] {$\scriptscriptstyle{(1,2)}$};
+  \fill (-1,-2) circle (0.45mm);
+  \draw (-1,-2) node[above] {$\scriptscriptstyle{(-1,-2)}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+
+\eqref{itEstBas6} 
+Ass. vert.: $x=0$. Ass. obl.: $y=x$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+\draw [thick, domain=-3:-0.5, samples=100] plot
+(\x,{\x+1/((\x)^2)});
+\draw [thick, domain=0.6:3, samples=100] plot
+(\x,{\x+1/((\x)^2)})node[right]{$x+\tfrac{1}{x^2}$};
+ \draw [ ->] (-3,0)--(3,0) node[right] {$x$};
+ \draw [ ->] (0,-3)--(0,3);
+ \fill (1.256,1.88) circle (0.45mm);
+  \draw (1.256,1.88) node[below]
+{$\scriptscriptstyle{(2^{1/3},2^{1/3}+2^{-2/3})}$};
+\draw (-1,0) node{$\shortmid$} node[above left]{$-1$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstBas9} 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw [thick, domain=-3:3, samples=100] plot
+(\x,{1/((\x)^2+1)});
+\draw [ ->] (-3,0)--(3,0);
+\draw [ ->] (0,-0.5)--(0,1.5)node[right]{$\tfrac{1}{x^2+1}$};
+\fill (0.577,0.75) circle (0.45mm);
+\draw[<-] (0.6,0.8)--(1.3,1)
+node[right]{inflex: $(\tfrac{1}{\sqrt{3}},\tfrac34)$};
+\fill (-0.577,0.75) circle (0.45mm);
+\draw[<-] (-0.6,0.8)--(-1.3,1)
+node[left]{inflex: $(-\tfrac{1}{\sqrt{3}},\tfrac34)$};
+\draw (-5,2) node[left]{$\displaystyle{f'(x)=\frac{-2x}{(x^2+1)^2}}$};
+\draw (-5,0.5) node[left]{$\displaystyle{f''(x)=\frac{2(3x^2-1}{(x^2+1)^3}}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+
+
+\eqref{itEstBas2} 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+\draw [ ->] (-3,0)--(3,0) node[right] {$x$};
+\draw [ ->] (0,-3)--(0,3) node[left]{$\frac{x}{x^2-1}$};
+\draw [thick, domain=-3:-1.2, samples=100] plot (\x,{\x/((\x)^2-1)});
+\draw[dashed] (-1,-2.5)--(-1,2.5) node[below left]{$\scriptscriptstyle{x=-1}$};
+\draw [thick, domain=-0.8:0.8, samples=100] plot (\x,{\x/((\x)^2-1)});
+\draw [thick, domain=1.2:3, samples=100] plot (\x,{\x/((\x)^2-1)});
+\draw[dashed] (1,-2.5)node[right]{$\scriptscriptstyle{x=1}$}--(1,2.5) ;
+\draw[<-] (0.3,-0.1)--(1.5,-1)
+node[right]{pt. inflex.: $\scriptstyle{(0,0)}$};
+\draw (4,2) node[right]{$\displaystyle{f'(x)=\frac{-(1+x^2)}{(x^2-1)^2}}$};
+\draw (4,0.5)
+node[right]{$\displaystyle{f''(x)=\frac{-2x(3x^2+1)}{(x^2-1)^3}}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstBas3}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw [ ->] (-3,0)--(3,0) node[right] {$x$};
+\draw [ ->] (0,-1)--(0,1) node[above]{$xe^{-x^2}$};
+\draw [thick, domain=-2.5:2.5, samples=100] plot (\x,{\x*exp(-(\x)^2)});
+\fill (0.707,0.428) circle (0.45mm);
+  \draw[<-] (0.71,0.44)-- (0.9,1) node[right]
+{$\scriptstyle{(\tfrac{1}{\sqrt{2}},\tfrac{1}{\sqrt{2}}e^{-\tfrac12})}$};
+\fill (-0.707,-0.428) circle (0.45mm);
+  \draw[<-] (-0.71,-0.5)-- (-0.9,-1) node[left]
+{$\scriptstyle{(-\tfrac{1}{\sqrt{2}},-\tfrac{1}{\sqrt{2}}e^{-\tfrac12})}$};
+\draw[<-] (0.1,-0.1)--(0.5,-1.3) node[right]{pt. inflex. $\scriptstyle{(0,0)}$};
+\fill (1.225,0.273) circle (0.40mm);
+\fill (-1.225,-0.273) circle (0.40mm);
+\draw[<-] (1.225,0.24)--(1.5,-0.6)
+node[right]{pt. inflex.: $\scriptstyle{(\sqrt{3/2},f(\sqrt{3/2}))}$};
+\draw[<-] (-1.225,-0.24)--(-1.5,0.6)
+node[left]{pt. inflex.: $\scriptstyle{(-\sqrt{3/2},f(\sqrt{3/2}))}$};
+\draw (4,1.2) node[right]{$\displaystyle{f'(x)=(1-2x^2)e^{-x^2}}$};
+\draw (4,0.5)
+node[right]{$\displaystyle{f''(x)=-2x(3-2x^2)e^{-x^2}}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstBas7}, \eqref{itEstBas8},
+\eqref{itEstBas8t}:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.5]
+\draw [ ->] (0,-0.1)--(0,3);
+\pgfmathsetmacro{\a}{2};
+\draw [ ->] (-\a,0)--(\a,0);
+\draw [thick, domain=-\a:\a, samples=100] plot (\x,{(exp(\x)+exp(-\x))/2})
+node[right]{$\cosh x$};
+
+\begin{scope}[xshift=9cm, yshift=1cm]
+\draw [ ->] (0,-2)--(0,2);
+\pgfmathsetmacro{\a}{1.6};
+\draw [ ->] (-\a,0)--(\a,0);
+\draw [thick, domain=-\a:\a, samples=100] plot (\x,{(exp(\x)-exp(-\x))/2})
+node[right]{$\senh x$};
+\end{scope}
+
+\begin{scope}[xshift=18cm, yshift=1cm]
+\draw [ ->] (0,-1.5)--(0,1.5);
+\pgfmathsetmacro{\a}{3};
+\draw [ ->] (-\a,0)--(\a,0);
+\draw [thick, domain=-\a:\a, samples=100] plot
+(\x,{(exp(\x)-exp(-\x))/(exp(\x)+exp(-\x))})
+node[below right]{$\tanh x$};
+\draw[dashed] (0,1)--(\a,1) node[above]{$x=+1$};
+\draw[dashed] (0,-1)--(-\a,-1) node[below]{$x=-1$};
+\end{scope}
+
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstBas13}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+\draw [ ->] (-3,0)--(3,0);
+\draw [ ->] (0,-3)--(0,3) node[right]{$\frac{x^3-1}{x^3+1}$};
+\draw [thick, domain=-3:-1.2, samples=100] plot (\x,{((\x)^3-1)/((\x)^3+1)});
+\draw [thick, domain=-0.8:3, samples=100] plot (\x,{((\x)^3-1)/((\x)^3+1)});
+\draw[dashed] (-1,-3)node[left]{$\scriptscriptstyle{x=-1}$}--(-1,3) ;
+\draw[dashed] (-3,1) node[below]{$\scriptscriptstyle{x=1}$}--(3,1) ;
+\fill (0,-1) circle (0.45mm);
+\fill (0.793, -0.3333) circle (0.45mm);
+\draw[<-] (0.1,-1.1)--(1,-3)node[right]{Pt. de inflexão e crítico: $(0,-1)$};
+\draw[<-] (0.8, -0.4)--(1.2,-1) node[right]{Pt. de inflexão:
+$(2^{-1/3},-1/3)$};
+\draw (1,0) node{$\shortmid$} node[above]{$1$};
+\draw (4,2) node[right]{$\displaystyle{f'(x)=\frac{6x^2}{(x^3+1)^2}}$};
+\draw (4,0.5)
+node[right]{$\displaystyle{f''(x)=\frac{12x(1-2x^3)}{(x^3+1)^3}}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstBas14}:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw [ ->] (-0.2,0)--(2*pi+0.5,0);
+\draw [ ->] (0,-1.5)--(0,1.5) node[right]{$\scriptstyle{\tfrac12\sen
+(2x)-\sen(x)}$};
+\draw [color=gray!20, domain=-1:2*pi+1, samples=100] plot (\x,{0.5*sin(2*\x
+r)-sin(\x r)});
+\draw [thick, domain=0:2*pi, samples=100] plot (\x,{0.5*sin(2*\x r)-sin(\x r)});
+\foreach \k in {0, 0.666, 1.333, 2} {
+\draw ({\k*pi},0) node{$\shortmid$};
+}
+\draw (0.666*pi,0) node[above]{$\tfrac{2\pi}{3}$};
+\draw (1.333*pi,0) node[below]{$\tfrac{4\pi}{3}$};
+\fill (1.318,-0.726) circle (0.40mm); 
+\fill (4.965,0.726) circle (0.40mm); 
+\fill (0,0) circle (0.40mm); 
+\fill (pi,0) circle (0.40mm); 
+\fill (2*pi,0) circle (0.40mm); 
+% \draw[dashed] (-1,-3)node[left]{$\scriptscriptstyle{x=-1}$}--(-1,3) ;
+% \draw[dashed] (-3,1) node[below]{$\scriptscriptstyle{x=1}$}--(3,1) ;
+% \fill (0,-1) circle (0.45mm);
+% \fill (0.793, -0.3333) circle (0.45mm);
+% \draw[<-] (0.1,-1.1)--(1,-3)node[right]{Pt. de inflexão e crítico: $(0,-1)$};
+% \draw[<-] (0.8, -0.4)--(1.2,-1) node[right]{Pt. de inflexão:
+% $(2^{1/3},f(2^{1/2}))$};
+% \draw (1,0) node{$\shortmid$} node[above]{$1$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstBas15}: 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw [ ->] (-5,0)--(5,0);
+\draw [ ->] (0,-1.3)--(0,1.3) node[left]{$\frac{x}{\sqrt{x^2+1}}$};
+\draw [thick, domain=-5:5, samples=50] plot (\x,{\x/(sqrt((\x)^2+1))});
+ \draw[dashed] (0,1)--(5,1)node[above]{$\scriptscriptstyle{y=1}$};
+ \draw[dashed] (-5,-1) node[below]{$\scriptscriptstyle{y=-1}$}--(0,-1) ;
+ \draw[<-] (0.2, -0.2)--(0.5,-0.7) node[right]{Pt. de inflexão: $(0,0)$};
+\draw (6,0.5) node[right]{$\displaystyle{f'(x)=\frac{1}{(x^2+1)^{3/2}}}$};
+\draw (6,-0.5)
+node[right]{$\displaystyle{f''(x)=\frac{-3x}{(x^2+1)^{5/2}}}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+
+\end{sol}
+\end{exo}
+
+
+\begin{exo}
+Faça um estudo completo das seguintes funções.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itEstFuncB1} $\ln |2-5x|$
+\item\label{itEstFuncB3} $\ln(\ln x)$
+\item\label{itEstFuncB7} $e^{-x}(x^2-2x)$.
+\item\label{itEstFuncB70} $\sqrt[x]{x}$.
+\item\label{itEstFuncB4} $\frac{\ln x}{\sqrt{x}}$
+\item\label{itEstFuncB5} $\frac{\ln x-2}{(\ln x)^2}$
+\item\label{itEstFuncB2} $\ln(e^{2x}-e^x+3)$
+\item\label{itEstFuncB29} $(e^{|x|}-2)^3$
+\item\label{itEstFuncB33} $\frac{e^x}{e^x-x}$
+\item\label{itEstFuncB33a} $\arcos(\frac{1-x^2}{1+x^2})$
+\item\label{itEstFuncB36} $\sqrt[5]{x^4(x-1)}$
+%\item\label{itEstFuncB6} $\arcsen(2x^2-1)$
+%\item   $\frac{\sqrt{x^2-1}}{x-2}$
+%\item\label{itEstFuncB8} $\frac{\sqrt{x^2-1}}{x-2}$ 
+%\item\label{itEstFuncB9} $(\ln x)^2+\ln x$.
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+
+\begin{sol}
+\eqref{itEstFuncB1}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.8]
+\draw [ ->] (-4,0)--(4,0);
+\draw [ ->] (0,-1.3)--(0,2.3) node[above]{$\ln |2-5x|$};
+\draw [thick, domain=-4:0.3, samples=100] plot (\x,{ln(abs(2-5*(\x)))});
+\draw[dashed] (0.4,-1.5)node[right]{$\scriptscriptstyle{x=\frac25}$}--(0.4,1.5);
+\draw [thick, domain=0.5:4, samples=100] plot (\x,{ln(abs(2-5*\x))});
+%  \draw[dashed] (-5,-1) node[below]{$\scriptscriptstyle{y=-1}$}--(0,-1) ;
+% \fill (0,-1) circle (0.45mm);
+% \fill (0.793, -0.3333) circle (0.45mm);
+% \draw[<-] (0.1,-1.1)--(1,-3)node[right]{Pt. de inflexão e crítico: $(0,-1)$};
+% \draw[<-] (0.2, -0.2)--(0.5,-0.7) node[right]{Pt. de inflexão: $(0,0)$};
+% \draw (1,0) node{$\shortmid$} node[above]{$1$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+
+\eqref{itEstFuncB3}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+\draw [ ->] (0,0)--(5,0);
+\draw [ ->] (0,-1.3)--(0,2.3) node[left]{$\ln(\ln x)$};
+\draw [thick, domain=1.2:5, samples=100] plot (\x,{ln(ln(\x))});
+% \draw[dashed]
+%(0.4,-1.5)node[right]{$\scriptscriptstyle{x=\frac25}$}--(0.4,1.5);
+% \draw [thick, domain=0.5:4, samples=100] plot (\x,{ln(abs(2-5*\x))});
+ \draw[dashed] (1,-2) node[left]{$\scriptscriptstyle{x=1}$}--(1,2) ;
+% \fill (-0.693,1.012) circle (0.45mm);
+% \fill (-1.365,1.033) circle (0.45mm);
+% \fill (2.46,4.86) circle (0.45mm);
+% \fill (0.793, -0.3333) circle (0.45mm);
+% \draw[<-] (0.1,-1.1)--(1,-3)node[right]{Pt. de inflexão e crítico: $(0,-1)$};
+% \draw[<-] (0.2, -0.2)--(0.5,-0.7) node[right]{Pt. de inflexão: $(0,0)$};
+% \draw (1,0) node{$\shortmid$} node[above]{$1$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstFuncB7}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{2.5*exp( -1*(#1) )*( (#1)^2 - 2*(#1))}
+\draw [ ->] (-1,0)--(6.5,0);
+\draw [ ->] (0,-1)--(0,2.3) node[right]{$e^{-x}(x^2-2x)$};
+\draw [thick, domain=-0.35:5.5, samples=100] plot (\x,{\funcao{\x}});
+\fill ({2-sqrt(2)},{\funcao{2-sqrt(2)}}) circle (0.40mm);
+\draw ({2-sqrt(2)},{\funcao{2-sqrt(2)}})
+node[below]{$\scriptstyle{(2-\sqrt{2},f(2-\sqrt{2}))}$};
+\draw ({2+sqrt(2)},{\funcao{2+sqrt(2)}})
+node[above]{$\scriptstyle{(2+\sqrt{2},f(2+\sqrt{2}))}$};
+\fill ({2+sqrt(2)},{\funcao{2+sqrt(2)}}) circle (0.40mm);
+\fill ({(6+sqrt(10))/2},{\funcao{(6+sqrt(10))/2}}) circle (0.40mm);
+\draw[<-] ({(6+sqrt(10))/2+0.1},{\funcao{(6+sqrt(10))/2}+0.1})--
+({(6+sqrt(10))/2+0.5},{\funcao{(6+sqrt(10))/2}+0.3})
+node[right]{$\scriptstyle{(3+\sqrt{10}/2,f(3+\sqrt{10}/2))}$};
+\fill ({(6-sqrt(10))/2},{\funcao{(6-sqrt(10))/2}}) circle (0.40mm);
+\draw[<-] ({(6-sqrt(10))/2-0.1},{\funcao{(6-sqrt(10))/2}+0.1})--
+({(6-sqrt(10))/2-0.5},{\funcao{(6-sqrt(10))/2}+2})
+node[right]{$\scriptstyle{(3-\sqrt{10}/2,f(3-\sqrt{10}/2))}$};
+\draw[<-] (5,-0.2)--(4.5,-0.5)node[below]{ass. horiz.: $y=0$};
+\draw (6,2)
+node[right]{$\displaystyle{f'(x)=-(x^2-4x+2)e^{-x}}$};
+\draw (6,1.5)
+node[right]{$\displaystyle{f''(x)=(x^2-6x+6)e^{-x}}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+
+
+
+\eqref{itEstFuncB70}
+
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+\draw [ ->] (0,0)--(2.5,0);
+\draw [ ->] (0,-0.3)--(0,1.5) node[left]{$\sqrt[x]{x}$};
+\draw [thick, domain=0.2:6, samples=100, <-] plot 
+(\x,{exp(ln(\x)/\x)});
+\fill (2.718,1.444) circle (0.45mm) node[above]{máx. glob.:
+$(e,\sqrt[e]{e})$};
+\coordinate (A) at (0.539,0.318);
+\coordinate (B) at (5.04,1.37);
+\fill (A) circle (0.45mm);
+\fill (B) circle (0.45mm);
+\draw[<-] (A)--(1.2,-0.3) node[right]{pt. infl.:
+$(x_1,f(x_1))$};
+\draw[<-] (B)--(5.2,1.9) node[right]{pt. infl.:
+$(x_2,f(x_2))$};
+%\draw[<-] (-0.67,0.9)--(0.2,0.4)node[right]{mín. global: $(\ln \tfrac12,f(\ln
+%\tfrac12))$};
+%\fill (-1.365,1.033) circle (0.45mm);
+%\draw[<-] (-1.4,0.9)--(-1.6,0.5)node[left]{pt. infl.};
+%\fill (2.46,4.86) circle (0.45mm);
+%\draw[<-] (2.55,4.7)--(3,4)node[right]{pt. infl.};
+\draw[dashed] (0,1)--(6,1);
+\draw (2,1) node[below right]{Ass. Horiz.: $y=1$};
+%\draw (5,2.5)
+%node[right]{$\displaystyle{f'(x)=\frac{e^x(2e^x-1)}{e^{2x}-e^x+3}}$};
+%\draw (5,0.5)
+%node[right]{$\displaystyle{f''(x)=\frac{e^x(12e^x-e^{2x}
+%-3)}{(e^{2x}-e^x+3)^2}}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Os pontos de inflexão são soluções da equação $(1-\ln
+x)^2-3x+2x\ln x=0$. Pode ser mostrado que esses satisfazem
+$x_1\simeq 0.58$, $x_1\simeq 4.37$.  
+
+\eqref{itEstFuncB4}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+\newcommand{\funcao}[1]{ln( 5*(#1) )/sqrt( 5*(#1) ) }
+\draw [ ->] (0,0)--(8,0);
+\draw [ ->] (0,-1.3)--(0,2.3) node[left]{$\frac{\ln x}{\sqrt{x}}$};
+\draw [thick, domain=0.1:8, samples=100] plot (\x,{\funcao{\x}});
+% \draw[dashed] (1,-2) node[left]{$\scriptscriptstyle{x=1}$}--(1,2) ;
+\fill ({2.718^2/5},{\funcao{2.718^2/5}}) circle (0.40mm);
+\draw ({2.718^2/5},{\funcao{2.718^2/5}}) node[above]{$(e^2,2/e)$};
+\fill ({2.718^(8/3)/5},{\funcao{2.718^(8/3)/5}}) circle (0.40mm);
+\draw[<-] ({2.718^(8/3)/5+0.1},{\funcao{2.718^(8/3)/5}+0.2})--
+({2.718^(8/3)/5+0.3},{\funcao{2.718^(8/3)/5}+1.3})
+node[above]{pt. infl.: $(e^{8/3},f(e^{8/3}))$};
+\draw (6,2.8)
+node[right]{$\displaystyle{f'(x)=\frac{2-\ln x}{2x^{3/2}}}$};
+\draw (6,1.5)
+node[right]{$\displaystyle{f''(x)=-\frac{\sqrt{x}}{2}\frac{4-\tfrac32 \ln
+x}{|x|^3}}$};
+\draw[<-] (5,-0.2)--(4,-0.6) node[below]{ass. horiz.: $y=0$};
+
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstFuncB5} 
+%$\frac{\ln x-2}{(\ln x)^2}$
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.5]
+\newcommand{\funcao}[1]{( ln( (#1) ) -2)/ ( (ln( (#1) ))^2 ) }
+\draw [ ->] (0,0)--(12,0);
+\draw [ ->] (0,-1.3)--(0,2.3) node[left]{$\frac{\ln x-2}{(\ln x)^2}$};
+\draw[dashed] (1,1)node[above]{$x=1$}--(1,-5);
+\draw [thick, domain=0.1:0.5, samples=100] plot (\x,{\funcao{\x}});
+\draw [thick, domain=1.6:11, samples=100] plot (\x,{\funcao{\x}});
+% \draw[dashed] (1,-2) node[left]{$\scriptscriptstyle{x=1}$}--(1,2) ;
+% \fill ({2.718^2/5},{\funcao{2.718^2/5}}) circle (0.40mm);
+% \draw ({2.718^2/5},{\funcao{2.718^2/5}}) node[above]{$(e^2,2/e)$};
+% \fill ({2.718^(8/3)/5},{\funcao{2.718^(8/3)/5}}) circle (0.40mm);
+% \draw[<-] ({2.718^(8/3)/5+0.1},{\funcao{2.718^(8/3)/5}+0.2})--
+% ({2.718^(8/3)/5+0.3},{\funcao{2.718^(8/3)/5}+1.3})
+% node[above]{pt. infl.: $(e^{8/3},f(e^{8/3}))$};
+% \draw (6,2.8)
+% node[right]{$\displaystyle{f'(x)=\frac{2-\ln x}{2x^{3/2}}}$};
+% \draw (6,1.5)
+% node[right]{$\displaystyle{f''(x)=-\frac{\sqrt{x}}{2}\frac{4-\tfrac32 \ln
+% x}{|x|^3}}$};
+\draw[<-] (6,0.2)--(5,0.6) node[above]{ass. horiz.: $y=0$};
+\draw (7,-1.5) node[right]{máx. global em $(e^4,f(e^4))$};
+\draw (7,-3) node[right]{pt. infl. em
+$(e^{1+\sqrt{13}},f(e^{1+\sqrt{13}})$};
+\draw (5,-4.5) node[right]{$f'(x)=\frac{4-\ln x}{x(\ln x)^3}$, 
+$f''(x)=\frac{(\ln x)^2-2\ln x-12}{x^2(\ln x)^4}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+
+\eqref{itEstFuncB2}
+Ass. horiz.: $y=\ln 3$. Ass. obl.: $y=2x$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+\draw [ ->] (-4,0)--(2.5,0);
+\draw [ ->] (0,-1.3)--(0,2.3) node[left]{$\ln(e^{2x}-e^x+3)$};
+\draw [thick, domain=-4:2.6, samples=100] plot (\x,{ln(exp(2*\x)-exp(\x)+3)});
+\fill (-0.693,1.012) circle (0.45mm);
+\draw[<-] (-0.67,0.9)--(0.2,0.4)node[right]{mín. global: $(\ln \tfrac12,f(\ln
+\tfrac12))$};
+\fill (-1.365,1.033) circle (0.45mm);
+\draw[<-] (-1.4,0.9)--(-1.6,0.5)node[left]{pt. infl.};
+\fill (2.46,4.86) circle (0.45mm);
+\draw[<-] (2.55,4.7)--(3,4)node[right]{pt. infl.};
+\draw[dashed] (-4,{ln(3)})node[above]{$y=\ln 3$}--(-1,{ln(3)});
+\draw (5,2.5)
+node[right]{$\displaystyle{f'(x)=\frac{e^x(2e^x-1)}{e^{2x}-e^x+3}}$};
+\draw (5,0.5)
+node[right]{$\displaystyle{f''(x)=\frac{e^x(12e^x-e^{2x}
+-3)}{(e^{2x}-e^x+3)^2}}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstFuncB29} Observe que $(e^{|x|}-2)^3$ é par, e não
+é derivável em $x=0$. 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+\draw [ ->] (-2,0)--(2,0);
+\draw [ ->] (0,-1.3)--(0,2.3) node[above]{$(e^{|x|}-2)^3$};
+\draw [thick, domain=0:1.2, samples=50] plot
+(\x,{(exp(\x)-2)^3});
+\draw [thick, domain=0:1.2, samples=50] plot
+(-\x,{(exp(\x)-2)^3});
+%\fill (-0.693,1.012) circle (0.45mm);
+\draw[<-] (0.1,-1.05)--(1,-1.3) node[right]{mín. global: $(0,-1)$};
+%\fill (-1.365,1.033) circle (0.45mm);
+\draw[<-] (0.683,-0.1)--({0.693+0.5},-0.5) 
+node[right]{pt. infl.: $(\ln 2,0)$};
+\draw[<-] (-0.683,-0.1)--({-0.693-0.5},-0.5) 
+node[left]{pt. infl.: $(-\ln 2,0)$};
+\fill (0.693,0) circle (0.45mm);
+\fill (-0.693,0) circle (0.45mm);
+%\draw[<-] (2.55,4.7)--(3,4)node[right]{pt. infl.};
+%\draw[dashed] (-4,{ln(3)})node[above]{$y=\ln 3$}--(-1,{ln(3)});
+%\draw (5,2.5)
+%node[right]{$\displaystyle{f'(x)=\frac{e^x(2e^x-1)}{e^{2x}-e^x+3}}$};
+%\draw (5,0.5)
+%node[right]{$\displaystyle{f''(x)=\frac{e^x(12e^x-e^{2x}
+%-3)}{(e^{2x}-e^x+3)^2}}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstFuncB33}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+\draw [ ->] (-3,0)--(3,0);
+\draw [ ->] (0,-0.3)--(0,1.4) node[above]{$\frac{e^x}{e^x-x}$};
+\draw [thick, domain=-3:3, samples=50] plot
+(\x,{exp(\x)/(exp(\x)-\x)});
+\draw[dashed] (0,1)--(3,1);
+%\draw [thick, domain=0:1.2, samples=50] plot
+%(-\x,{(exp(\x)-2)^3});
+%\fill (-0.693,1.012) circle (0.45mm);
+%\draw[<-] (0.1,-1.05)--(1,-1.3) node[right]{mín. global: $(0,-1)$};
+%\fill (-1.365,1.033) circle (0.45mm);
+%\draw[<-] (0.683,-0.1)--({0.693+0.5},-0.5) 
+%node[right]{pt. infl.: $(\ln 2,0)$};
+%\draw[<-] (-0.683,-0.1)--({-0.693-0.5},-0.5) 
+%node[left]{pt. infl.: $(-\ln 2,0)$};
+%\fill (0.693,0) circle (0.45mm);
+%\fill (-0.693,0) circle (0.45mm);
+%\draw[<-] (2.55,4.7)--(3,4)node[right]{pt. infl.};
+%\draw[dashed] (-4,{ln(3)})node[above]{$y=\ln 3$}--(-1,{ln(3)});
+%\draw (5,2.5)
+%node[right]{$\displaystyle{f'(x)=\frac{e^x(2e^x-1)}{e^{2x}-e^x+3}}$};
+%\draw (5,0.5)
+%node[right]{$\displaystyle{f''(x)=\frac{e^x(12e^x-e^{2x}
+%-3)}{(e^{2x}-e^x+3)^2}}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstFuncB33a}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=1]
+\draw [ ->] (-4,0)--(4,0);
+\draw [ ->] (0,-0.3)--(0,3.3) node[above right]{$\displaystyle{
+\arcos(\frac{1-x^2}{1+x^2})}$};
+\draw [thick, domain=-3.7:3.7, samples=51] plot
+(\x,{3.1415/180*acos((1-\x*\x)/(1+\x*\x))});
+\draw[dashed] (-4,3.14)--(4,3.14) node[right]{$y=\pi$};
+\draw (5,1.7) node{Obs: a função não é derivável em $x=0$!};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\eqref{itEstFuncB36}
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.9]
+%\newcommand{\funcao}[1]{(abs(#1))^(0.8)*(abs((#1)-1))^(0.2)*(-1)};
+\draw [ ->] (-3,0)--(3,0);
+\draw [ ->] (0,-0.3)--(0,1.4) node[above]{
+$\sqrt[5]{x^4(x-1)}$};
+\pgfmathsetmacro{\e}{0.002};
+\coordinate (A) at (0.8,-0.606);
+\fill (A) circle (0.45mm);
+\draw[<-] (0.8,-0.73)--(1.3,-1) node[right]{mín. loc.: 
+$(\tfrac45,f(\tfrac45))$};
+\draw [thick, domain=-2:-\e, samples=50] plot
+%%PROBLEMA:
+(\x,{-exp(0.8*ln(abs(\x))+0.2*ln(abs(\x-1)))});
+\draw [thick, domain=\e:{1-\e}, samples=50] plot
+%(\x,{(abs(\x))^(0.8)*(abs(\x-1))^(0.2)*(-1)});
+(\x,{-exp(0.8*ln(abs(\x))+0.2*ln(abs(\x-1)))});
+\draw [thick, domain={1+\e}:3, samples=50] plot
+(\x,{exp(0.8*ln(abs(\x))+0.2*ln(abs(\x-1)))});
+\draw[<-] (-0.1,0.1)--(-1.5,1) node[left]{máx. loc.: $(0,0)$};
+\draw[thick]
+({1-\e},{-exp(0.8*ln(abs(1-\e))+0.2*ln(abs(1-\e-1)))})--
+({1+\e},{exp(0.8*ln(abs(1+\e))+0.2*ln(abs(1+\e-1)))});
+\draw[dashed] (-2,-2.2)--(3,2.8) node[right]{Ass. obl.:
+$y=x-\tfrac15$.};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Obs: $f'(x)=f(x)\varphi(x)$, onde
+$\varphi(x)=\tfrac15(\tfrac{4}{x}+\tfrac{1}{x-1})$. 
+A função não é derivável nem em $x=0$, nem em $x=1$
+(apesar de ser contínua nesses pontos).
+$f''(x)=(\varphi(x)^2+\varphi'(x))f(x)=-\tfrac{4}{25}
+\frac{f(x)}{x^2(x-1)^2}$, logo, $f$ é convexa em
+$(-\infty,0)$ e $(0,1)$, côncava em $(1,\infty)$.
+Essa função possui uma assíntota \emph{oblíqua}:
+$y=x-\tfrac15$.
+\end{sol}
+\end{exo}
+
+%\begin{itemize}
+% \item Antes de tudo, encontrar o \emph{domínio} de $f$. O domínio precisa ser
+%especificado para evitar indeterminações, divisões por zero, e raizes
+%ou logaritmos de números negativos.
+%Em particular, alguns pontos excluidos do domínio serão estudados depois, caso
+%sejam associados a assíntotas verticais.
+%\item Se for possível, estudar os \emph{zeros} e o \emph{sinal} de $f$.
+%\item Determinar se $f$ possui algumas \emph{simetrias}, via o estudo da
+%\emph{paridade} de $f$. Exemplos de funções pares são $x^p$ ($p$ par), $\cos
+%x$, $\cosh x$, etc.
+%\item Estudar o comportamento de $f$ para valores de $x$ grandes (se o domínio
+%o permite). Isto é, procurar \emph{assíntotas horizontais}. Os limites
+%envolvidos podem precisar da regra de Bernoulli-l'Hopital.
+% \item Estudar o comportamento de $f$ perto dos valores de $x$ onde $f(x)$ toma
+%valores grandes. Isto é, procurar \emph{assíntotas verticais} calculando os
+%limites laterais $\lim_{x\to a^+}f(x)$ e $\lim_{x\to a^+}f(x)$ nos pontos $a$
+%perto dos quais $f$ não é limitada.
+%\item Estudar a derivabilidade de $f$ e da sua derivada. Em particular,
+%procurar os \emph{pontos críticos de $f$}. Deduzir a sua \emph{variação} (via o
+%estudo do sinal de $f'$).
+%\item Estudar a convexidade de $f$, via o sinal da segunda derivada.
+%Às vezes, o estudo do sinal de $f''$ nos pontos críticos (se tiver) pode
+%permitir determinar se é mínimo ou máximo local.
+%\item Juntando todas essas informações, montar o gráfico de $f$.
+%Por exemplo, se $f$ é par, o gráfico é simétrico com respeito ao eixo $y$.
+%Na hora de montar o gráfico, pode ser necessário calcular mais alguns limites.
+%\end{itemize}
+%
+%
+%
+%
+%O QUE NAO CAI NA PROVA: linearizacao.
+%
+%\begin{ex} Comecemos com $f(x)=\frac{x+1}{1-x}$, cujo domínio é $D=\bR\setminus
+%\{1\}$. A função se anula no ponto $x=-1$, e o seu sinal é dado por:
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}
+%\tkzTabInit[lgt=3, nocadre, espcl=2, colorC=red, colorV=blue]
+%{Valores de $x$: /.6,  $x+1$ /.6, $1-x$ /.6, $f(x)$ /.8}%
+%{,$-1$, $1$,}
+%\tkzTabLine{,-,z,+, ,+,}
+%\tkzTabLine{,+, ,+,z,-,}
+%\tkzTabLine{,-,z,+,d,-,}
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%(A dupla barra em $x=1$ é para indicar que $f$ não é definida em $x=1$.)
+%A funçao não é nem par, nem ímpar.
+%Como
+%$$
+%\lim_{x\to \pm\infty}\frac{x+1}{1-x}=\lim_{x\to
+%\pm\infty}\frac{1+\frac{1}{x}}{\frac{1}{x}-1}=
+%\frac{1}{-1}=-1\,,
+%$$
+%$f$ possui a reta $y=-1$ como assíntota horizontal.
+%Por outro lado, como
+%$$
+%\lim_{x\to 1^+}\frac{x+1}{1-x}=-\infty\,,\quad 
+%\lim_{x\to 1^-}\frac{x+1}{1-x}=+\infty\,,\quad 
+%$$
+%$f$ possui a reta $x=1$ como assíntota vertical.
+%A derivada existe em todo $x\neq 1$, e vale
+%$$
+%f'(x)=\frac{(x+1)'(1-x)-(x+1)(1-x)'}{(1-x)^2}=
+%\frac{1-x+(x+1)}{(1-x)^2}=
+%\frac{2}{(1-x)^2}\,.
+%$$
+%O sinal de $f'$ dá logo a tabela de variação de $f$:
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+%\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=blue!15,
+%colorC=blue!15]
+%{$x$ /.6, $f'(x)$ /.6, Variaç. de $f$ /1.2}%
+%{,$1$, }%
+%\tkzTabLine{,+,d,+,}
+%\tkzTabVar{-/,+D-/$\scriptscriptstyle{+\infty}$/$\scriptscriptstyle{-\infty}$,+/
+%}
+%%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%(Indicamos o fato de $x=1$ ser uma assíntota vertical.)
+%Assim, $f$ não possui pontos críticos, e é crescente nos intervalos
+% $]-\infty,1[$ e $]1.\infty[$.
+%A segunda derivada se calcula facilmente (para $x\neq 0$):
+%$$f''(x)=2((1-x)^{-2})'=2(-2)(1-x)^{-3}(-1)=\frac{4}{(1-x)^3}\,.$$
+%Esta muda de sinal em $x=1$, e permite descrever a convexidade de $f$:
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+%\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=blue!15,
+%colorC=blue!15]
+%{$x$ /.6, $f''(x)$ /.6, Conv. de $f$ /1.2}%
+%{,$1$, }%
+%\tkzTabLine{,+,d,-,}
+%\tkzTabLine{,\smile,d,\frown,}
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%Isto é, $f$ é convexa em $]-\infty,1[$, côncava em $]1,\infty[$. Assim, o
+%gráfico é da forma
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[yscale=0.6]
+%\draw[>=latex, ->] (-4,0)--(5,0);
+%\draw[>=latex, ->] (0,-4)--(0,+2.5);
+%\draw[dashed] (-4,-1)node[below right]{$y=-1$}--(5,-1);
+%\draw[dashed] (1,-4)--(1,3)node[right]{$x=1$};
+%\draw[thick, domain=-4:0.5, samples=50] plot (\x,{(\x+1)/(1-\x)});
+%\draw[thick, domain=1.5:5, samples=50] plot (\x,{(\x+1)/(1-\x)});
+%\draw (-1,0) node{$\shortmid$} node[above]{$-1$};
+%\draw (1,0) node{$\shortmid$} node[above right]{$1$};
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%\end{ex}
+%
+%\begin{exo} Faça um estudo completo das seguintes funções. 
+%% \begin{multicols}{1}
+%\begin{enumerate}
+%\item\label{itexoEstudA1} $\bigl(\frac{x-1}{x}\bigr)^2$ (Segunda prova,
+%primeiro semestre 2011)
+%\item \label{itexoEstudA2} $\frac{x^2-1}{x^2+1}$
+%\item \label{itexoEstudA3} $x(\ln x)^2$ (Segunda prova, 2010)
+%\end{enumerate}
+%% \end{multicols}
+%\begin{sol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%\eqref{itexoEstudA1}
+%O domínio de $\bigl(\frac{x-1}{x}\bigr)^2$ é $D=\bR\setminus \{0\}$, o sinal é
+%sempre não-negativo, tem um zero
+%em $x=1$. $f$ não é par, nem ímpar.
+%Os limites relevantes são $\lim_{x\to 0^{\pm}}f(x)=+\infty$, logo $x=0$ é
+%assíntota vertical, e
+%$$\lim_{x\to \pm\infty}\bigl(\frac{x-1}{x}\bigr)^2=\Bigl(\lim_{x\to \pm
+%\infty}\frac{x-1}{x}\Bigr)^2==\Bigl(\lim_{x\to \pm
+%\infty}\bigl(1-\frac{1}{x}\bigr)\Bigr)^2=1^2=1\,.$$
+%Logo, $y=1$ é assíntota horizontal. 
+%$f$ é derivável em $D$, e $f'(x)=\frac{2(x-1)}{x^3}$.
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}
+%\tkzTabInit[nocadre,espcl=2,  color, colorV=lightgray!5, colorL=blue!15,
+%colorC=blue!15]
+%{$x$ /.6,  $f'(x)$ /.6, Var. de $f$ /1.3}%
+%{,$0$, $1$,}%
+%%\tkzTabLine{,+,z,+,,+,}
+%\tkzTabLine{,+,d,-,z,+,}
+%\tkzTabVar{-/,+D+/$+\infty$/$+\infty$,-/mín,+/,}
+%%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%$f$ possui um mínimo global em $(1,0)$.
+%A segunda derivada é dada por $f''(x)=\frac{2(3-2x)}{x^4}$. Ela se anula em
+%$x=\tfrac32$, e muda de sinal neste ponto:
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}
+%\tkzTabInit[nocadre,espcl=2,  color, colorV=lightgray!5, colorL=blue!15,
+%colorC=blue!15]
+%{$x$ /.6,  $f''(x)$ /.7, Conv. de $f$ /1.2}%
+%{,$0$, $\tfrac32$,}%
+%\tkzTabLine{,+,d,+,z,-,}%
+%\tkzTabLine{,\smile,d,\smile,z,\frown,}%
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%Logo, $f$ é convexa em $]-\infty,0[$ e $]0,\frac32[$,  côncava em
+%$]\frac32,\infty[$, e possui um ponto de inflexão em 
+%$(\tfrac{3}{2},f(\tfrac{3}{2}))=(\tfrac{3}{2},\tfrac19)$.
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}
+%\draw [thick, domain=-4:-1.2, samples=100] plot (\x,{(\x-1)^2/\x^2});
+%\draw [thick, domain=0.4:4, samples=100] plot (\x,{(\x-1)^2/\x^2});
+%\draw [>=latex, ->] (-4,0)--(4,0) node[right] {$x$};
+%\draw [>=latex, ->] (0,-0.1)--(0,3) node[left] {$f(x)$};
+%\draw [dotted] (-4,1)--(4,1) node[above] {$y=1$};
+%\draw [dotted] (0,0)--(0,3.5) node[right] {$x=0$};
+%\fill (1,0) circle (0.35mm);
+%\draw (1,0) node[below] {$(1,0)$};
+%\fill (1.5,0.1111) circle (0.35mm);
+%\draw [>=latex, <-] (1.52,0.0911)--(2,-0.3) node[right]
+%{$(\tfrac{3}{2},\tfrac{1}{9})$};
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%\eqref{itexoEstudA2}
+%Domínio: $D=\bR$.  Sinal: $f(x)$ é $\geq 0$ se $|x|\geq 1$, $<0$ caso contrário.
+%Como $f(-x)=\frac{(-x)^2-1}{(-x)^2+1}=\frac{x^2-1}{x^2+1}=f(x)$, $f$ é par.
+%Como 
+%$$
+%\lim_{x\to \pm \infty}\frac{x^2-1}{x^2+1}=\lim_{x\to \pm
+%\infty}\frac{1-\tfrac{1}{x^2}}{1+\tfrac{1}{x^2}}=1\,,
+%$$
+%a reta $y=1$ é assíntota horizontal. Não tém assíntotas verticais.
+%A derivada é dada por $f'(x)=\frac{4x}{(x^2+1)^2}$. Logo,
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}
+%\tkzTabInit[nocadre,espcl=2,  color, colorV=lightgray!5, colorL=blue!15,
+%colorC=blue!15]
+%%{$x$ /.6,  $f'(x)$ /.9, Variação de $f$ /1.5}%
+%{$x$ /.5,  $f'(x)$ /.5, Var. de $f$ /1}{,$0$,}
+%%\tkzTabLine{,+,z,+,,+,}
+%\tkzTabLine{,-,z,+,}
+%\tkzTabVar{+/,-/\text{min.},+/,}
+%%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%O mínimo tém coordenadas $(0,f(0))=(0,-1)$. A segunda derivada é dada por
+%$f''(x)=\frac{4(1-3x^2)}{x^2+1}$, logo:
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}
+%\tkzTabInit[nocadre,espcl=2,  color, colorV=lightgray!5, colorL=blue!15,
+%colorC=blue!15]
+%%{$x$ /.5,  $f''(x)$ /.7, Conc. de $f$ /1.3}
+%{$x$ /.5,  $f''(x)$ /.5, Conc. de $f$ /1}
+%{,$-1/\sqrt{3}$, $-1/\sqrt{3}$,}
+%\tkzTabLine{,-,z,+,z,-,}
+%\tkzTabLine{,{\frown},,\smile,,\frown,}
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%Pontos de inflexão:
+%$(\tfrac{-1}{\sqrt{3}},f(\tfrac{-1}{\sqrt{3}}))=(\tfrac{-1}{\sqrt{3}},-\tfrac{1}
+%{2})$,
+%$(\tfrac{+1}{\sqrt{3}},f(\tfrac{+1}{\sqrt{3}}))=(\tfrac{+1}{\sqrt{3}},-\tfrac{1}
+%{2})$.
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[scale=1.3]
+%\draw [thick, domain=-4:4, samples=100] plot (\x,{(\x^2-1)/(\x^2+1)});
+%\draw [>=latex, ->] (-4,0)--(4,0) node[right] {$x$};
+%\draw [>=latex, ->] (0,-0.1)--(0,1.5) node[left] {$f(x)$};
+%\draw [dotted] (-4,1)--(4,1) node[above left] {$y=1$};
+%%\fill (1,0) circle (0.35mm);
+%%\fill (-1,0) circle (0.35mm);
+%\fill (0,-1) circle (0.35mm);
+%\draw (0,-1) node[below] {$(0,-1)$};
+%\fill (-0.577,-0.5) circle (0.35mm);
+%\draw (-0.577,-0.6) node[left]{$(\tfrac{-1}{\sqrt{3}},-\half)$};
+%\fill (+0.577,-0.5) circle (0.35mm);
+%\draw (+0.577,-0.6) node[right]{$(\tfrac{+1}{\sqrt{3}},-\half)$};
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%\eqref{itexoEstudA3}
+%O domínio de  $f(x)=x(\ln x)^2$ é
+%$D=(0,+\infty)$, e o seu sinal é: $f(x)\geq 0$ para todo $x\in D$.
+%A função não é { par} nem { ímpar}.
+%Como $\lim_{x\to \infty}f(x)=+\infty$, não tém assintota horizontal.
+%Para ver se tém assíntota vertical em $x=0$, calculemos 
+%$\lim_{x\to 0^+}f(x)=\lim_{x\to 0^+}\frac{(\ln x)^2}{1/x}$. Como ambas funções
+%$(\ln x)^2$ e $1/x$ são deriváveis em $]0,1[$ e tendem a $+\infty$ quando $x\to
+%0^+$, apliquemos a regra de B.H.:
+%$$
+%\lim_{x\to 0^+}\frac{(\ln x)^2}{1/x}=
+%\lim_{x\to 0^+}\frac{2(\ln x)1/x}{-1/x^2}=
+%-2\lim_{x\to 0^+}x\ln x\,.
+%$$
+%Usando a regra de B.H. de novo, pode ser mostrado que esse segundo limite é
+%zero (ver Exemplo \ref{Ex:xlogxemzero}). Logo, $\lim_{x\to 0^+}f(x)=0$: não
+%tém assíntota vertical em $x=0$.
+%A derivada é dada por $f'(x)=\ln x(\ln x+2)$.
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+%\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=blue!15,
+%colorC=blue!15]
+%{$x$ /.6, $f'(x)$ /.6, Variaç. de $f$ /1.2}%
+%{,$e^{-2}$, $1$, }%
+%\tkzTabLine{,+,z,-,z,+}
+%\tkzTabVar{-/,+/{máx.},-/{mín.},+/}
+%%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%O máximo local está em
+%$(e^{-2},f(e^{-2}))=(e^{-2},4e^{- 2})$, e o
+%mínimo global em $(1,f(1))=(1,0)$.
+%A {segunda derivada} de $f$ é dada por
+%$f''(x)=\frac{2(\ln x+1)}{x}$.
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+%\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=blue!15,
+%colorC=blue!15]
+%{$x$ /.6, $f''(x)$ /.6, Conv. de $f$ /1.2}%
+%{,$e^{-1}$, }%
+%\tkzTabLine{,-,z,+,}
+%\tkzTabLine{,\frown,,\smile,}
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%Logo, $f$ é côncava em $(0,e^{-1})$, possui um ponto de inflexão em
+%$(e^{-1},f(e^{-1}))=(e^{-1},e^{-1})$, e é convexa em $(e^{-1},+\infty)$.
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[scale=1.3]
+%\draw [thick, domain=0.001:2.5, samples=100] plot (\x,{\x*(ln(\x))^2});
+% \draw [>=latex, ->] (0,0)--(2.5,0) node[right] {$x$};
+% \draw [>=latex, ->] (0,-0.1)--(0,2);
+%% \draw [dotted] (-4,1)--(4,1) node[above left] {Assíntota horiz.: $y=1$};
+% \fill (1,0) circle (0.35mm);
+% \draw (1,0) node[below] {$\scriptscriptstyle{(1,0)}$};
+% \fill (0.367,0.367) circle (0.35mm);
+% \draw[<-] (0.39,0.39)--(0.9,0.5) node[above]
+%{$\scriptscriptstyle{(e^{-1},e^{-1})}$};
+% \fill (0.1353,0.541) circle (0.35mm);
+% \draw[<-] (0.14,0.58)--(0.9,1.5) node[above]
+%{$\scriptscriptstyle{(e^{-2},4e^{-2})}$};
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%Podemos também notar que $\lim_{x\to 0^+}f'(x)=+\infty$.
+%\end{sol}
+%\end{exo}
+%
+%
+%\begin{exo}\label{Exo:EstudosBasicos}
+%Faça um estudo completo das funções abaixo:
+%\begin{multicols}{3}
+%\begin{enumerate}
+%\item\label{itEstBas1} $x+\frac{1}{x}$
+%\item\label{itEstBas6} $x+\frac{1}{x^2}$
+%\item\label{itEstBas9} $\frac{1}{x^2+1}$
+%\item\label{itEstBas2} $\frac{x}{x^2-1}$
+%\item\label{itEstBas3} $xe^{-x^2}$
+%%\item\label{itEstBas5} $x^4-x^2$
+%\item\label{itEstBas7} $\senh x$
+%\item\label{itEstBas8} $\cosh x$
+%\item\label{itEstBas8t} $\tanh x$
+%\item\label{itEstBas13} $(x^3-1)/(x^3+1)$, 
+%\item\label{itEstBas14} $\tfrac12\sen (2x)-\sen(x)$, 
+%\item\label{itEstBas15} $x/\sqrt{x^2+1}$
+%\item\label{itEstBas4} $\frac{(x+1)^3}{(x-1)^4}$
+%\end{enumerate}
+%\end{multicols}
+%\begin{sol}
+%OBS: Colocamos aqui somente um \emph{resumo} das soluções, na forma de um
+%gráfico. Os detalhes são deixados para o leitor.
+%
+%\eqref{itEstBas1} 
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+%\draw [thick, domain=-3:-0.3, samples=100] plot (\x,{\x+1/\x});
+%\draw [thick, domain=0.3:3, samples=100] plot (\x,{\x+1/\x});
+% \draw [>=latex, ->] (-3,0)--(3,0) node[right] {$x$};
+% \draw [>=latex, ->] (0,-3)--(0,3) node[left]{$x+\tfrac{1}{x}$};
+% \fill (1,2) circle (0.45mm);
+%  \draw (1,2) node[below] {$\scriptscriptstyle{(1,2)}$};
+%  \fill (-1,-2) circle (0.45mm);
+%  \draw (-1,-2) node[above] {$\scriptscriptstyle{(-1,-2)}$};
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%
+%
+%\eqref{itEstBas6} 
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+%\draw [thick, domain=-3:-0.5, samples=100] plot
+%(\x,{\x+1/(\x*\x)});
+%\draw [thick, domain=0.6:3, samples=100] plot
+%(\x,{\x+1/(\x*\x)})node[right]{$x+\tfrac{1}{x^2}$};
+% \draw [>=latex, ->] (-3,0)--(3,0) node[right] {$x$};
+% \draw [>=latex, ->] (0,-3)--(0,3);
+% \fill (1.256,1.88) circle (0.45mm);
+%  \draw (1.256,1.88) node[below]
+%{$\scriptscriptstyle{(2^{1/3},2^{1/3}+2^{-2/3})}$};
+%\draw (-1,0) node{$\shortmid$} node[above left]{$-1$};
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%
+%\eqref{itEstBas9} 
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}
+%\draw [thick, domain=-3:3, samples=100] plot
+%(\x,{1/(\x*\x+1)});
+%\draw [>=latex, ->] (-3,0)--(3,0);
+%\draw [>=latex, ->] (0,-0.5)--(0,1.5)node[right]{$\tfrac{1}{x^2+1}$};
+%\fill (0.577,0.75) circle (0.45mm);
+%\draw[<-] (0.6,0.8)--(1.3,1)
+%node[right]{inflex: $(\tfrac{1}{\sqrt{3}},\tfrac34)$};
+%\fill (-0.577,0.75) circle (0.45mm);
+%\draw[<-] (-0.6,0.8)--(-1.3,1)
+%node[left]{inflex: $(-\tfrac{1}{\sqrt{3}},\tfrac34)$};
+%% {$\scriptscriptstyle{(2^{1/3},2^{1/3}+2^{-2/3})}$};
+%% \draw (-1,0) node{$\shortmid$} node[above left]{$-1$};
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%
+%\eqref{itEstBas2} 
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+%\draw [>=latex, ->] (-3,0)--(3,0) node[right] {$x$};
+%\draw [>=latex, ->] (0,-3)--(0,3) node[left]{$\frac{x}{x^2-1}$};
+%\draw [thick, domain=-3:-1.2, samples=100] plot (\x,{\x/(\x^2-1)});
+%\draw[dashed] (-1,-2.5)--(-1,2.5) node[below left]{$\scriptscriptstyle{x=-1}$};
+%\draw [thick, domain=-0.8:0.8, samples=100] plot (\x,{\x/(\x^2-1)});
+%\draw [thick, domain=1.2:3, samples=100] plot (\x,{\x/(\x^2-1)});
+%\draw[dashed] (1,-2.5)node[right]{$\scriptscriptstyle{x=1}$}--(1,2.5) ;
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%
+%\eqref{itEstBas3}
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}
+%\draw [>=latex, ->] (-3,0)--(3,0) node[right] {$x$};
+%\draw [>=latex, ->] (0,-1)--(0,1) node[above]{$xe^{-x^2}$};
+%\draw [thick, domain=-2.5:2.5, samples=100] plot (\x,{\x*exp(-\x*\x)});
+%\fill (0.707,0.428) circle (0.45mm);
+%  \draw[<-] (0.71,0.44)-- (0.9,1) node[right]
+%{$\scriptstyle{(\tfrac{1}{\sqrt{2}},\tfrac{1}{\sqrt{2}}e^{-\tfrac12})}$};
+%\fill (-0.707,-0.428) circle (0.45mm);
+%  \draw[<-] (-0.71,-0.5)-- (-0.9,-1) node[left]
+%{$\scriptstyle{(-\tfrac{1}{\sqrt{2}},-\tfrac{1}{\sqrt{2}}e^{-\tfrac12})}$};
+%\draw[<-] (0.1,-0.1)--(0.5,-1.3) node[right]{pt. inflex. $\scriptstyle{(0,0)}$};
+%\fill (1.225,0.273) circle (0.40mm);
+%\fill (-1.225,-0.273) circle (0.40mm);
+%\draw[<-] (1.225,0.24)--(1.5,-0.6)
+%node[right]{pt. inflex.: $\scriptstyle{(\sqrt{3/2},f(\sqrt{3/2}))}$};
+%\draw[<-] (-1.225,-0.24)--(-1.5,0.6)
+%node[left]{pt. inflex.: $\scriptstyle{(-\sqrt{3/2},f(\sqrt{3/2}))}$};
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%
+%\eqref{itEstBas7}, \eqref{itEstBas8},
+%\eqref{itEstBas8t}:
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[scale=0.5]
+%\draw [>=latex, ->] (0,-0.1)--(0,3);
+%\pgfmathsetmacro{\a}{2};
+%\draw [>=latex, ->] (-\a,0)--(\a,0);
+%\draw [thick, domain=-\a:\a, samples=100] plot (\x,{(exp(\x)+exp(-\x))/2})
+%node[right]{$\cosh x$};
+%
+%\begin{scope}[xshift=9cm, yshift=1cm]
+%\draw [>=latex, ->] (0,-2)--(0,2);
+%\pgfmathsetmacro{\a}{1.6};
+%\draw [>=latex, ->] (-\a,0)--(\a,0);
+%\draw [thick, domain=-\a:\a, samples=100] plot (\x,{(exp(\x)-exp(-\x))/2})
+%node[right]{$\senh x$};
+%\end{scope}
+%
+%\begin{scope}[xshift=18cm, yshift=1cm]
+%\draw [>=latex, ->] (0,-1.5)--(0,1.5);
+%\pgfmathsetmacro{\a}{3};
+%\draw [>=latex, ->] (-\a,0)--(\a,0);
+%\draw [thick, domain=-\a:\a, samples=100] plot
+%(\x,{(exp(\x)-exp(-\x))/(exp(\x)+exp(-\x))})
+%node[below right]{$\tanh x$};
+%\draw[dashed] (0,1)--(\a,1) node[above]{$x=+1$};
+%\draw[dashed] (0,-1)--(-\a,-1) node[below]{$x=-1$};
+%\end{scope}
+%
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%
+%\eqref{itEstBas13}
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+%\draw [>=latex, ->] (-3,0)--(3,0);
+%\draw [>=latex, ->] (0,-3)--(0,3) node[right]{$\frac{x^3-1}{x^3+1}$};
+%\draw [thick, domain=-3:-1.2, samples=100] plot (\x,{(\x^3-1)/(\x^3+1)});
+%\draw [thick, domain=-0.8:3, samples=100] plot (\x,{(\x^3-1)/(\x^3+1)});
+%\draw[dashed] (-1,-3)node[left]{$\scriptscriptstyle{x=-1}$}--(-1,3) ;
+%\draw[dashed] (-3,1) node[below]{$\scriptscriptstyle{x=1}$}--(3,1) ;
+%\fill (0,-1) circle (0.45mm);
+%\fill (0.793, -0.3333) circle (0.45mm);
+%\draw[<-] (0.1,-1.1)--(1,-3)node[right]{Pt. de inflexão e crítico: $(0,-1)$};
+%\draw[<-] (0.8, -0.4)--(1.2,-1) node[right]{Pt. de inflexão:
+%$(2^{1/3},f(2^{1/2}))$};
+%\draw (1,0) node{$\shortmid$} node[above]{$1$};
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%
+%\eqref{itEstBas14}:
+%\begin{center}
+%\begin{bmlimage}\begin{tikzpicture}[yscale=0.7]
+%\draw [>=latex, ->] (-3,0)--(3,0);
+%\draw [>=latex, ->] (0,-3)--(0,3) node[right]{$\tfrac12\sen (2x)-\sen(x)$};
+%\draw [thick, domain=0:2*pi, samples=100] plot (\x,{sin(2*\x r)-sin(\x r)});
+%% \draw [thick, domain=-0.8:3, samples=100] plot (\x,{(\x^3-1)/(\x^3+1)});
+%% \draw[dashed] (-1,-3)node[left]{$\scriptscriptstyle{x=-1}$}--(-1,3) ;
+%% \draw[dashed] (-3,1) node[below]{$\scriptscriptstyle{x=1}$}--(3,1) ;
+%% \fill (0,-1) circle (0.45mm);
+%% \fill (0.793, -0.3333) circle (0.45mm);
+%% \draw[<-] (0.1,-1.1)--(1,-3)node[right]{Pt. de inflexão e crítico: $(0,-1)$};
+%% \draw[<-] (0.8, -0.4)--(1.2,-1) node[right]{Pt. de inflexão:
+%% $(2^{1/3},f(2^{1/2}))$};
+%% \draw (1,0) node{$\shortmid$} node[above]{$1$};
+%\end{tikzpicture}\end{bmlimage}
+%\end{center}
+%
+%
+%\end{sol}
+%\end{exo}
+%
+%
+%\begin{exo}
+%Faça um estudo completo das seguintes funções.
+%\begin{multicols}{3}
+%\begin{enumerate}
+%\item $\ln |2-5x|$
+%\item $\ln(e^{2x}-e^x+3)$
+%\item $\ln(\ln x)$
+%\item $\frac{\ln x}{\sqrt{x}}$
+%\item $\frac{\ln x-2}{(\ln x)^2}$
+%\item $\arcsen(2x^2-1)$
+%\item (Gilcione, legal) $e^{-x}(x^2+2x)$.
+%\item $\frac{\sqrt{x^2-1}}{x-2}$ 
+%\item $(\ln x)^2+\ln x$.
+%\end{enumerate}
+%\end{multicols}
+%(Pris dans \verb|exan_ln.pdf|, dans le dossier Coisasinternet,
+%TRuc)
+%\end{exo}
+%
+%\begin{exo} 
+% Faça o esboço de uma função que tenha as 
+%propriedades \ref{KKK1}-\ref{KKK4} abaixo: 
+%\begin{enumerate}
+%\item\label{KKK1} $f(0)=1$, $f'(0)=\half$,
+%\item $x=-2$ e $x=2$ são assíntotas verticais,
+%\item $y=1$ é assíntota horizontal,
+%\item\label{KKK4} $f$ decresce no intervalo $[-3,-2[$, e cresce no intervalo
+%$]2,3]$,
+%\end{enumerate}
+%\end{exo}
+%
+%
+%\begin{exo}
+%Mostre que $a^b=b^a$ n'a que deux solutions (Tikz pour l'impatient, page 61)
+%\end{exo}

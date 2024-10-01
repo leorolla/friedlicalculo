@@ -1,0 +1,1386 @@
+
+% !TeX spellcheck = pt_BR
+% !TEX encoding = UTF-8 Unicode
+
+\chapter{Extremos e problemas de otimização}\label{Cap:Extremos}
+  
+\ifdefined\updateans
+% Only need to run once in a lifetime, when the file ans.tex needs to be updated.
+\Writetofile{ans}{\protect\section*{Capítulo \ref{Cap:Extremos}}}
+\fi
+
+\index{máximos e mínimos}
+
+%\section{Valores extremos}\label{Sec:MineMax}
+Neste capítulo resolveremos vários problemas concretos de \emph{otimização}. 
+Basicamente, se tratará de definir uma função associada a uma situação
+concreta, e de encontrar os maiores e menores valores tomados por
+ela.
+Primeiro, definiremos o que significa ``maior/menor valor'', no
+sentido global e local. Em seguida veremos como a derivada aparece na
+procura desses valores. Nos problemas de otimização estudados depois,
+mostraremos como a Lei de Snell, bem conhecida em ótica, pode ser
+obtida a partir de um problema de otimização.
+
+\section{Extremos globais}
+
+\begin{defin}
+Considere uma função $f:D\to \bR$.
+\begin{enumerate}
+\item Um ponto $x_*\in D$ é chamado de \grasA{máximo global
+de $f$} se $f(x)\leq f(x_*)$ para todo $x\in D$.
+\index{máximo!global}
+Diremos então que $f$ \grasA{atinge o seu valor máximo em $x_*$}.
+\index{mínimo!global}
+\item Um ponto $x_*\in D$ é chamado de \grasA{mínimo global
+de $f$} se $f(x)\geq f(x_*)$ para todo $x\in D$.
+Diremos então que $f$ \grasA{atinge o seu valor mínimo em $x_*$}.
+\end{enumerate}
+\end{defin}
+Um \grasA{problema de otimização} 
+consiste em achar um extremo (isto é, um mínimo ou
+um máximo) global de uma função dada. 
+
+\begin{ex}\label{Ex:extremxdois}
+A função $f(x)=x^2$, em $D=[-1,2]$,
+atinge o seu mínimo global em $x=0$ e 
+o seu máximo global em $x=2$.
+Observe que ao considerar a mesma função $f(x)=x^2$ com um domínio diferente,
+os extremos globais mudam. Por exemplo, com $D=[\tfrac12,\frac32]$, 
+$f$ atinge o seu mínimo global em $x=\tfrac12$, e o seu máximo global em
+$x=\frac32$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+\newcommand{\funcao}[1]{(#1)^2}
+
+\begin{scope}
+\draw[ ->, thin] (-1.3,0)--(2.3,0);
+\draw[ ->, thin] (0,-0.2)--(0,4.3);
+\draw[thick, domain=-1:2] plot (\x,{\funcao{\x}});
+\fill (-1,1) circle (0.4mm);
+\fill (2,4) circle (0.4mm);
+\draw(0,3) node[left]{${D=[-1,2]}$};
+\draw[dotted] (-1,0)node[below]{$\scriptstyle{-1}$}--(-1,1);
+\draw[dotted] (2,0)node[below]{$\scriptstyle{2}$}--(2,4);
+\coordinate (m) at (0,0);
+\coordinate (M) at (2,4);
+\fill (m) circle (0.5mm);
+\draw (m) node[below]{\footnotesize{mín.}};
+\fill (M) circle (0.5mm);
+\draw (M) node[above]{\footnotesize{máx.}};
+\end{scope}
+
+\begin{scope}[xshift=8cm]
+\draw[ ->, thin] (-1.3,0)--(2.3,0);
+\draw[ ->, thin] (0,-0.2)--(0,4.3);
+\draw[color=gray, domain=-1:2] plot (\x,{\funcao{\x}});
+\draw[thick, domain=0.5:1.5] plot (\x,{\funcao{\x}});
+%\fill (-0.5,0.25) circle (0.4mm);
+\fill (1.5,2.25) circle (0.4mm);
+\draw(0,3) node[left]{${D=[\tfrac12,\tfrac32]}$};
+\draw[dotted] (0.5,0)node[below]{$\scriptstyle{\tfrac12}$}--(0.5,0.25);
+\draw[dotted] (1.5,0)node[below]{$\scriptstyle{\tfrac32}$}--(1.5,2.25);
+\coordinate (m) at (0.5,0.25);
+\coordinate (M) at (1.5,2.25);
+\fill (m) circle (0.5mm);
+\draw (m) node[left]{\footnotesize{mín.}};
+\fill (M) circle (0.5mm);
+\draw (M) node[above]{\footnotesize{máx.}};
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{ex}
+
+\begin{ex}
+Considere $f(x)=\frac{x^3}{3}-x$ em $[-\sqrt{3},\sqrt{3}]$. 
+Pelo gráfico do Exercício \ref{Ex:variacoesbasicas}, vemos que $f$ atinge o seu
+máximo global em $x=-1$ e o seu mínimo global em $x=+1$.
+\end{ex}
+
+Uma função pode \emph{não possuir} mínimos e/ou máximos, por várias razões.
+
+\begin{ex}\label{Ex:naoexistenciaextremos1}
+$f(x)=e^{-\tfrac{x^2}{2}}$ (lembre do Exercício
+\ref{Ex:variacoesbasicas}) em $\bR$  possui um máximo global em $x=0$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+\draw[ ->] (-4,0)--(4,0);
+\draw[ ->] (0,-0.2)--(0,1.3);
+\draw[thick, domain=-4:4, samples=50] plot (\x,{exp(-\x*\x*0.5)});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Mas $f$ não possui ponto de mínimo global.
+De fato, a função é sempre positiva e tende a zero quando $x\to\pm
+\infty$. Logo, escolhendo pontos $x$ sempre mais longe da origem,
+consegue-se alcançar valores sempre menores, não nulos: não 
+pode existir um ponto $x_*$ em que a função toma um
+valor menor ou igual a todos os outros pontos.
+\end{ex}
+
+\begin{ex}\label{Ex:naoexistenciaextremos2}
+A função $f(x)=\frac{1}{1-x}$ em $D=[0,1)$ possui um mínimo global em
+$x=0$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{ 1/(1-#1)}
+\draw[ ->, thin] (-0.3,0)--(1.3,0);
+\draw[ ->, thin] (0,-0.2)--(0,2.3);
+%\draw[color=, domain=0:0.6] plot (\x,{\funcao{\x}});
+\draw[thick, domain=0:0.6] plot (\x,{\funcao{\x}});
+\fill (0,1) circle (0.4mm);
+%\fill (2,4) circle (0.4mm);
+%\draw(0,3) node[left]{${D=[-1,2]}$};
+\draw[dashed] (1,-0.2)--(1,2.5)node[right]{$x=1$};
+%\draw[dotted] (-1,0)node[below]{$\scriptstyle{-1}$}--(-1,1);
+%\draw[dotted] (2,0)node[below]{$\scriptstyle{2}$}--(2,4);
+\coordinate (m) at (0,1);
+% \coordinate (M) at (2,4);
+% \fill (m) circle (0.5mm);
+ \draw (m) node[left]{\footnotesize{mín.}};
+% \fill (M) circle (0.5mm);
+% \draw (M) node[above]{\footnotesize{máx.}};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Mas, como $x=1$ é assíntota vertical, $f$ não possui máximo
+global: ao se aproximar de $1$ pela esquerda, a função toma valores
+arbitrariamente grandes.
+\end{ex}
+
+\begin{ex}\label{Ex:funcaonaocontnaotemminmax}
+Uma função pode também ser limitada e não possuir extremos globais:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw(-2,0) node[left]{$\displaystyle{
+f(x)\pardef 
+\begin{cases}
+x &\text{ se } 0\leq x<1\,,\\
+0 &\text{ se } x=1\,,\\
+x-2  & \text{ se }1<x\leq 2\,.
+\end{cases}
+}$};
+\draw[ ->, thin] (-0.3,0)--(2.3,0);
+\draw[ ->, thin] (0,-1.2)--(0,1.5);
+\fill (0,0) circle (0.4mm);
+\fill (1,0) circle (0.4mm);
+\fill (2,0) circle (0.4mm);
+\draw[thick, ->] (0,0)--(1,1);
+\draw[thick, <-] (1,-1)--(2,0);
+\draw[dotted] (1,-1)--(1,1);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{ex}
+
+Os três últimos exemplos mostram que a não-existência de extremos globais
+para uma função definida num intervalo pode ser oriundo 1) do intervalo não ser
+limitado (como no Exemplo \ref{Ex:naoexistenciaextremos1}) ou não fechado
+(como no Exemplo \ref{Ex:naoexistenciaextremos2}), 2) da função não ser
+contínua (como no Exemplo \ref{Ex:funcaonaocontnaotemminmax}).
+O seguinte resultado garante que se a função é contínua e o intervalo fechado,
+então sempre existem extremos globais.
+
+\begin{teo}\label{Teo:funcaocontcompactpossuiextr}
+Sejam  $a<b$, e $f$ uma função contínua em $[a,b]$. Então $f$ possui
+(pelo menos) um mínimo e (pelo menos) um máximo global em $[a,b]$.
+\end{teo} 
+
+\begin{exo}
+Para cada função $f:D\to \bR$ a seguir, verifique se as hipóteses do Teorema 
+\ref{Teo:funcaocontcompactpossuiextr} são satisfeitas. Em seguida,
+procure os pontos de mínimo/máximo global (se tiver).
+\begin{multicols}{2}
+\begin{enumerate}
+\item\label{itminmaxbasico1} $f(x)=3$, $D=\bR$.
+\item\label{itminmaxbasico101} $f(x)=\ln x$, $D=[1,\infty)$
+\item\label{itminmaxbasico10} $f(x)=e^{-x}$ em $\bR_+$
+\item\label{itminmaxbasico2} $f(x)=|x-2|$, $D=(0,4)$
+\item\label{itminmaxbasico3} $f(x)=|x-2|$, $D=[0,4]$
+\item\label{itminmaxbasico4} $f(x)=|x^2-1|+|x|-1$, $D=[-\tfrac32,\tfrac32]$
+\item\label{itminmaxbasico5} $f(x)=\frac{x^3}{3}-x$, $D=[-2,2]$
+\item\label{itminmaxbasico6} $f(x)=\frac{x^3}{3}-x$, $D=[-1,1]$
+\item\label{itminmaxbasico7} $\displaystyle{f(x)=
+\begin{cases}
+x &\text{ se } x\in [0,2)\,,\\
+(x-3)^2  & \text{ se }x\in [2,4]\,.
+\end{cases}
+}$
+\item\label{itminmaxbasico8} $\displaystyle{f(x)=
+\begin{cases}
+x &\text{ se } x\in [0,2)\,,\\
+(x-3)^2+1  & \text{ se }x\in [2,4]\,.
+\end{cases}
+}$
+\item\label{itminmaxbasico9} $f(x)=x^{\frac23}$ em $\bR$
+\item\label{itminmaxbasico11} $f(x)=\sen x$ em $\bR$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itminmaxbasico1} As hipóteses do teorema não são satisfeitas, pois o
+domínio não é um intervalo finito e fechado. Mesmo assim, qualquer $x\in \bR$ é
+ponto de máximo e mínimo global ao mesmo tempo.
+\eqref{itminmaxbasico101} As hipóteses não são satisfeitas: o intervalo
+não é limitado. Tém um
+mínimo global em $x=1$, não tem máximo global.
+\eqref{itminmaxbasico10} Hipóteses não satisfeitas (domínio não limitado).
+Máximo global em $x=0$, não tem mínimo global.
+\eqref{itminmaxbasico2} Hipóteses não satisfeitas (o intervalo não é fechado).
+Tém mínimo global em $x=2$, não tem máximo global.
+\eqref{itminmaxbasico3} Hipóteses satisfeitas: mínimo global em $x=2$, máximos
+globais em $x=0$ e $x=2$.
+\eqref{itminmaxbasico4} Hipóteses satisfeitas: 
+mínímos globais em $1,-1$ e $0$, máximos globais em 
+$-\tfrac32$ e $\tfrac32$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\a}{1.5};
+\draw [thick, domain=-\a:\a, samples=150] plot (\x,{abs(1-\x^2)+abs(\x)-1});
+\pgfmathsetmacro{\x}{0.6};
+\draw [ ->] (-\a-0.2,0)--(\a+0.2,0);
+\draw [ ->] (0,-0.2)--(0,2);
+\foreach \k in {-1.5,1.5}{
+\draw (\k,0) node{$\shortmid$};
+\draw[dotted] (\k,0)--(\k,{abs(1-\k^2)+abs(\k)-1});
+\fill (\k,{abs(1-\k^2)+abs(\k)-1}) circle (0.45mm);
+}
+\draw (-1.5,0) node[below]{$-\tfrac32$};
+\draw (1.5,0) node[below]{$\tfrac32$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itminmaxbasico5} Hipóteses satisfeitas: mínimos globais em $x=-2$ e
+$+1$, máximos globais em $x=-1$ e $+2$.
+\eqref{itminmaxbasico6} Hipóteses satisfeitas: mínimo global em $x=+1$, máximo
+global em $x=-1$.
+\eqref{itminmaxbasico7} Hipóteses não satisfeitas ($f$ não é contínua). Não tem
+máximo global, tem mínimos globais em $x=0$ e $+3$.
+\eqref{itminmaxbasico8} Hipóteses satisfeitas: mínimo global em $x=0$, máximos
+locais em $x=2$ e $4$.
+\eqref{itminmaxbasico9} Hipóteses não satisfeitas ($f$ é contínua, mas o
+domínio não é limitado). Tém mínimo global em $x=0$, não possui máximo global.
+\eqref{itminmaxbasico11} Hipóteses não satisfeitas (intervalo não
+limitado). No entanto, tem infinitos mínimos
+globais, em todos os pontos da forma $x=-\pisobredois+k2\pi$, e infinitos
+máximos globais, em todos os pontos da forma $x=\pisobredois+k2\pi$.
+\end{sol}
+\end{exo}
+
+\section{Extremos locais}
+
+\begin{defin}
+Considere uma função real $f$.
+\begin{enumerate}
+\item Um ponto $x_*\in D$ é chamado de \grasA{máximo local
+de $f$} se existir um intervalo aberto $I\ni x_*$ tal que
+$f(x)\leq f(x_*)$ para todo $x\in I$.
+\index{máximo!local}
+\item Um ponto $x_*\in D$ é chamado de \grasA{mínimo local
+de $f$} se existir um intervalo aberto $I\ni x_*$ tal que
+$f(x)\geq f(x_*)$ para todo $x\in I$.
+\index{mínimo!local}
+\end{enumerate}
+\end{defin}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+\newcommand{\funcao}[1]{ -0.3* ( (#1)^4- 4*(#1)^2 + 3*(#1) ) + 1.7}
+\draw[->] (-3,0)--(2.4,0);
+\pgfmathsetmacro{\a}{-1.56};
+\pgfmathsetmacro{\b}{1.17};
+\fill[color=gray!15]
+(\b-0.3,0)--plot[domain=\b-0.3:\b+0.3](\x,{\funcao{\x}})--(\b+0.3,0)--cycle;
+\draw[thick, domain=-2.3:1.8, samples=50] plot (\x,{\funcao{\x}});
+\draw[dotted] (\a,0)node[below]{$x_1$}--(\a,{\funcao{\a}});
+\fill (\a,{\funcao{\a}}) circle (0.4mm);
+\draw (\a,{\funcao{\a}}) node[above]{\footnotesize{global}};
+\draw[dotted] (\b,0)node[below]{$x_2$}--(\b,{\funcao{\b}});
+\fill (\b,{\funcao{\b}}) circle (0.4mm);
+\draw (\b,{\funcao{\b}}) node[above]{\footnotesize{local}};
+\draw[->] (0.3,0.8)node[left]{$I$}--(\b-0.2,0.1);
+\end{tikzpicture}\end{bmlimage}
+\captionof{figure}{Uma função com um máximo global
+em $x_1$ e um máximo local em $x_2$.}\label{Fig:maxgloballocal}
+\end{center}
+
+Observe que um ponto de máximo (resp. mínimo) global, quando pertencente
+ao interior do domínio, é local ao mesmo tempo. 
+Vejamos agora como que extremos locais podem ser encontrados usando derivada.
+
+\begin{teo}\label{Teo:maxminlocderivadazero}
+Seja $f$ uma função com um máximo (resp. mínimo) local em $x_*$. 
+Se $f$ é derivável em $x$, então $f'(x_*)=0$.
+\end{teo}
+\begin{proof}
+Seja $x_*$ um máximo local (se for mínimo local, a prova é parecida).
+Isto é, $f(x)\leq f(x_*)$ para todo $x$ suficientemente perto de $x_*$. 
+Como $f'(x_*)$ existe por hipótese, podemos escrever 
+$f'(x_*)=\lim_{x\to x_*^+}\frac{f(x)-f(x_*)}{x-x_*}$. Mas aqui $x-x_*>0$, e 
+como $x_*$ é máximo local, $f(x)-f(x_*)\leq 0$. Portanto, 
+$f'(x_*)\leq 0$. 
+Por outro lado, podemos escrever 
+$f'(x_*)=\lim_{x\to x_*^-}\frac{f(x)-f(x_*)}{x-x_*}$. Aqui, $x-x_*<0$, e 
+$f(x)-f(x_*)\leq 0$, logo $f'(x_*)\geq 0$. Consequentemente, $f'(x_*)=0$.
+\end{proof}
+
+O resultado acima permite achar \emph{candidatos} a pontos de mínimo/máximo
+local. Vejamos alguns exemplos.
+
+\begin{ex}
+Considere $f(x)=1-x^2$, que é obviamente derivável.
+Logo, sabemos pelo Teorema \ref{Teo:maxminlocderivadazero} que qualquer extremo
+local deve anular a derivada. Como $f'(x)=-2x$, e como $f'(x)=0$ se e somente se
+$x=0$, o ponto $x=0$ é candidato a ser um extremo local. Para determinar se de
+fato é, estudemos o sinal de $f'(x)$, e observemos que $f'(x)>0$ 
+se $x<0$, $f'(x)<0$ se $x>0$. Logo, $f$ cresce antes de $0$, decresce depois:
+$x=0$ é um ponto de máximo local:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre,espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6,  $f'(x)$ /.9, Var. $f$ /1.5}%
+{,$0$, }%
+\tkzTabLine{,+,z,-,}
+\tkzTabVar{-/,+/\text{máx.},-/$0$,}
+\begin{scope}[xshift=10cm, yshift=-2.2cm]
+ \draw[ ->] (-1.5,0)--(1.5,0);
+ \draw[ ->] (0,-0.3)--(0,2);
+\draw[thick, domain=-1.1:1.1] plot (\x,{1-(\x)^2});
+\fill (0,1) circle (0.4mm);
+\draw (0,1) node[above]{máx.};
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Observe que podia também calcular $f''(x)=-2$, que é sempre $<0$, o que implica
+que $f$ é côncava, logo $x=0$ só pode ser um máximo local.
+A \emph{posição} do máximo local no gráfico de $f$ é $(0,f(0))=(0,1)$.
+\end{ex}
+
+\begin{obs}
+No exemplo anterior, localizamos um ponto onde a primeira derivada é nula, e
+em seguida usamos o \grasA{teste da segunda derivada}: 
+estudamos o sinal da segunda derivada neste mesmo ponto para determinar se ele
+é um mínimo ou um máximo local.
+\end{obs}
+
+\begin{ex}
+Considere $f(x)=x^3$, derivável também.
+Como $f'(x)=3x^2$, $x=0$ é candidato a ser ponto de mínimo ou máximo local.
+Ora, vemos que $f'(x)\geq 0$ para todo $x$, logo \emph{$f'$ não muda de sinal em
+$x=0$}. Portanto esse ponto não é nem mínimo, nem máximo.
+\end{ex}
+
+\begin{ex}
+A função $f(x)=|x|$ possui um mínimo local (que também é global) em $x=0$.
+Observe que esse fato não segue do Teorema
+\ref{Teo:maxminlocderivadazero}, já que $f$ não é derivável em zero.
+\end{ex}
+
+\begin{ex}
+Considere
+$f(x)=\frac{x^4}{4}-\frac{x^2}{2}$, que é derivável em todo $x$.
+Como $f'(x)=x^3-x=x(x^2-1)$, as soluções de $f'(x)=0$ são $x=-1$, $x=0$,
+$x=+1$. A tabela de variação já foi montada no Exercício
+\ref{Ex:variacoesbasicas}. Logo,
+$x=-1$ e $x=+1$ são pontos de mínimo local (posições:
+$(-1,f(-1))=(-1,-\frac12)$ e $(+1,f(+1))=(+1,-\frac12)$), e $x=0$ é máximo
+local (posição: $(0,0)$).
+\end{ex}
+
+\begin{exo}
+Para cada função abaixo (todas são deriváveis), determine os extremos locais
+(se tiver). %Quando puder, monte um gráfico, por exemplo usando 
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itextremoslocais1} $2x^3+3x^2-12x+5$
+\item\label{itextremoslocais2} $2x^3+x$
+\item\label{itextremoslocais3} $\frac{x^4}{4}+\frac{x^3}{3}$
+\item\label{itextremoslocais30} $\frac{x^2+1}{x^2+x+1}$
+\item\label{itextremoslocais31} $e^{-\frac{x^2}{2}}$
+\item\label{itextremoslocais32} $xe^{-x}$
+\item\label{itextremoslocais5} $\frac{x}{1+x^2}$
+\item\label{itextremoslocais6} $x^x$, $x>0$
+\item\label{itextremoslocais4} $x(\ln x)^2$, $x>0$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itextremoslocais1} Máximo local no ponto $(-2,25)$, um mínimo local (e
+global) em $(1,-2)$.
+\eqref{itextremoslocais2} Sem mín./máx.
+\eqref{itextremoslocais3} Mínimo local (e global) em
+$(-1,-\frac{1}{12})$ (Atenção: a derivada é nula em $x=0$, mas não é nem
+máximo nem mínimo pois a derivada não muda de sinal).
+\eqref{itextremoslocais30} $f'(x)=-\frac{1-x^2}{x^2+x+1}$, tem um mínimo local
+(em global) em $(1,f(1))$, um máximo local (e global) em $(-1,f(-1))$.
+\eqref{itextremoslocais31} Máximo local (e global) em $(0,1)$.
+\eqref{itextremoslocais32} Máximo local em $(1,e^{-1})$.
+\eqref{itextremoslocais5} Mínimo local em $(-1,-\frac12)$, máximo local em
+$(1,\frac12)$.
+\eqref{itextremoslocais6} Mínimo local em $(e^{-1},e^{-1/e})$.
+\eqref{itextremoslocais4} Máximo local em $(e^{-2}, 4e^{-2})$, mínimo local em
+$(1,0)$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Determine os valores dos parâmetros $a$ e $b$ para que $f(x)=x^3+ax^2+b$ tenha
+um extremo local posicionado em $(-2,1)$.
+\begin{sol}
+$a=-b=3$.
+\end{sol}
+\end{exo}
+
+\begin{exo} A energia de interação entre dois átomos (ou moléculas) a
+distância $r>0$ é modelizado pelo \grasA{potencial de 
+Lennard-Jones}~\footnote{Sir John Edward Lennard-Jones (27 de outubro de 1894 –
+1 de novembro de 1954).}:
+$$
+V(r)=4\epsilon\Big\{
+\big(\frac{\sigma}{r}\big)^{12}
+-\big(\frac{\sigma}{r}\big)^6
+\Big\}\,,
+$$
+onde $\epsilon$ e $\sigma$ são duas constantes positivas.
+\begin{enumerate}
+ \item\label{itLJ1} Determine a distância $r_0$ tal que o potencial seja zero.
+\item\label{itLJ2} Determine a distância $r_*$ tal que a interação seja mínima.
+Existe máximo global? Determine a variação e esboce $V$.
+\index{Potencial!de Lennard-Jones}
+\end{enumerate}
+\begin{sol}
+\eqref{itLJ1} $r_0=\sigma$, \eqref{itLJ2} $r_*=\sqrt[6]{2}\sigma$. 
+Como $\lim_{r\to 0^+}V(r)=+\infty$, $V$ não possui máximo global.
+$V$ decresce em $(0,r_*]$, cresce em $[r_*,\infty)$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\e}{1};
+\pgfmathsetmacro{\s}{1};
+\newcommand{\funcao}[1]{4*\e*(\s/(#1))^(12)-4*\e*(\s/(#1))^(6)}
+\draw[->] (0,0)--(4.4,0)node[right]{$r$};
+\draw[->] (0,-1)--(0,2)node[left]{$V(r)$};
+\pgfmathsetmacro{\rzer}{\s};
+\pgfmathsetmacro{\ret}{\s*1.122};
+\draw[thick, domain=0.95:3.8, samples=50] plot (\x,{\funcao{\x}});
+\draw[dotted] (\ret,0)node[above right]{$r_*$}--(\ret,{\funcao{\ret}});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Obs: O potencial de Lennard-Jones $V(r)$ descreve a energia de interação entre
+dois átomos neutros a distância $r$. 
+Quando $0<r<r_0$ essa energia é positiva (os átomos se repelem), e quando
+$r_0<r<\infty$ essa energia é negativa (os átomos se atraem).
+Vemos que quando $r\to \infty$, a energia tende a zero e que ela tende a
+$+\infty$ quando $r\to 0^+$: a distâncias longas, os átomos não interagem, e a
+distâncias curtas a energia diverge (caroço duro).
+A posição mais estável é quando a distância entre os dois átomos é
+$r=r_*$.
+\end{sol}
+\end{exo}
+
+\section{A procura de extremos em intervalos
+fechados}\label{sec:extremintfechados}
+
+Daremos agora o método geral para determinar os extremos globais de uma função
+$f:[a,b]\to \bR$. Suporemos que $f$ é \emph{contínua}; assim o Teorema
+\ref{Teo:funcaocontcompactpossuiextr} garante que os extremos existem. \\
+
+Vimos que extremos \emph{locais} são ligados, quando $f$ é derivável, aos
+pontos onde a derivada de $f$ é nula. Chamaremos tais pontos de
+\emph{pontos críticos}.
+
+\begin{defin} Seja $f:D\to \bR$.
+Um ponto $a\in D$ é chamado de \grasA{ponto crítico} de $f$ se a
+derivada de $f$ não existe em $a$, ou se ela existe e é nula: $f'(a)=0$.
+\end{defin}
+
+Por exemplo, $a=0$ é ponto crítico de $f(x)=x^2$, porqué $f'(0)=0$. Por outro
+lado, $a=0$ é ponto crítico da função $f(x)=|x|$, porqué $f$ não é
+derivável em zero.\\
+
+Às vezes, os extremos são ligados a pontos críticos mas vimos que eles podem
+também se encontrar na \emph{fronteira} do intervalo considerado (como nos
+Exemplos \ref{Ex:naoexistenciaextremos1} e \ref{Ex:extremxdois}). Logo, o
+procedimento para achar os valores extremos de $f$ é o seguinte:\\
+
+\emph{
+ Seja $f$ uma função contínua no intervalo fechado e limitado
+$[a,b]$. Os extremos globais de $f$ são determinados da seguintes maneira:
+\begin{itemize}
+ \item Procure os pontos críticos $x_1,x_2,\dots,x_n$ 
+de $f$ contidos em $(a,b)$ (isto é, em $[a,b]$ mas diferentes de $a$ e de $b$). 
+\item Olhe $f$ na fronteira do intervalo, calcule $f(a)$, $f(b)$.
+\item Considere a lista $\{f(a), f(b),
+f(x_1),\dots,f(x_n)\}$. O maior valor dessa lista dá o máximo global; o menor
+dá o mínimo global.
+\end{itemize}
+}
+
+\begin{ex}
+Procuremos os extremos globais da função $f(x)=2x^3-3x^2-12x$ no intervalo
+$[-3,3]$. Como esse intervalo é fechado e que $f$ é contínua, podemos aplicar o
+método descrito acima.
+Os pontos críticos são solução de $f'(x)=0$, isto é, solução de $6(x^2+x-2)=0$.
+Assim, $f$ possui dois pontos críticos, $x_1=-1$ e $x_2=+2$, e ambos pertencem
+a $(-3,3)$. Observe também que $f(x_1)=f(-1)=+7$, e $f(x_2)=f(2)=-20$.
+Agora, na fronteira do intervalo temos $f(-3)=-45$, $f(+3)=-9$. Assim, olhando
+para os valores $\{f(-3), f(+3), f(-1), f(+2)\}$, vemos que o maior é
+$f(-1)=+7$ (máximo global), e o menor é $f(-3)=-45$ (mínimo global).
+(Essa função já foi considerada no Exercício \ref{Ex:variacoesbasicas}.)
+\end{ex}
+
+\begin{ex}
+Procuremos os extremos globais da função $f(x)=x^{2/3}$ no intervalo
+$[-1,2]$.
+Se $x\neq 0$, então $f'(x)$ existe e é dada por $f'(x)=\tfrac23x^{-1/3}$. 
+Em $x=0$, $f$ não é derivável (lembre do Exemplo \ref{Ex:derivracine}). 
+Logo, o único ponto crítico de $f$ em $(-1,2)$ é $x=0$. 
+Na fronteira, $f(-1)=1$, $f(2)=\sqrt[3]{4}$. Comparando os valores 
+$\{f(-1),f(2),f(0)\}$, vemos que o máximo global é atingido em $x=2$ e o mínimo
+local em $x=0$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw[ ->] (-1.5,0)--(2.5,0);
+\draw[ ->] (0,-0.2)--(0,1.5);
+\draw[thick, domain=0.0001:2] plot (\x,{exp(0.6666*ln(\x))});
+\draw[thick, domain=0.0001:1] plot (-\x,{exp(0.6666*ln(\x))});
+\draw[dotted] (-1,0)node[below]{$-1$}--(-1,1);
+\draw[dotted] (2,0)node[below]{$2$}--(2,1.587);
+\draw (0,0) node[below]{mín.};
+\draw (2,1.587) node[above]{máx.};
+\fill (0,0) circle (0.40mm);
+\fill (2,1.587) circle (0.40mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{ex}
+
+Os exercícios relativos a essa seção serão incluidos na resolução dos
+problemas de otimização.
+
+\section{Problemas de otimização}
+\index{otimização}
+\begin{ex} 
+\emph{Dentre os retângulos contidos debaixo da parábola $y=1-x^2$, com o
+lado inferior no eixo $x$, qual é que tem maior área?}
+Considere a família dos retângulos inscritos debaixo da parábola:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.2]
+\newcommand{\funcao}[1]{1-(#1)^2}
+\pgfmathsetmacro{\a}{1.1};
+\draw [domain=-\a:\a] plot (\x,{\funcao{\x}});
+\pgfmathsetmacro{\x}{0.6};
+\foreach \x in {0.3, 0.65, 0.9} {
+%\draw ({-\x},0)--({-\x},{\funcao{\x}})--({\x},{\funcao{\x}})--({\x},0)--cycle;
+\fill[color=gray!20] ({-\x},0) rectangle ({\x},{\funcao{\x}});
+}
+\foreach \x in {0.3, 0.65, 0.9} {
+\draw ({-\x},0)--({-\x},{\funcao{\x}})--({\x},{\funcao{\x}})--({\x},0)--cycle;
+%\fill[color=gray!20] ({-\x},0) rectangle ({\x},{\funcao{\x}});
+}
+\pgfmathsetmacro{\x}{0.65};
+\draw[thick] ({-\x},0)--({-\x},{\funcao{\x}})--({\x},{\funcao{\x}})--({\x},
+0)--cycle;
+\draw[decorate, decoration=brace] (\x,0)--(0,0) node[midway, below]{$x$};
+\draw [ ->] (-1.3,0)--(1.3,0);
+\draw [ ->] (0,-0.4)--(0,1.2);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Fixemos um retângulo e chamemos de
+$x$ a metade do comprimento do lado horizontal.
+Como os cantos superiores estão
+no gráfico de $y=1-x^2$, a altura do retângulo é
+igual a $1-x^2$. Portanto, a área em função de $x$ é 
+dada pela função $$A(x)=2x(1-x^2)\,.$$
+Observe que $A$ tem domínio $[0,1]$ (o menor lado horizontal possível é $0$, o
+maior é
+$2$). 
+Para achar os valores extremos de $A$, procuremos os seus pontos críticos em
+$(0,1)$, soluções de $A'(x)=0$.
+Como $A'(x)=2-6x^2$, o único ponto crítico é
+$x_*=\frac{1}{\sqrt{3}}$. O estudo do
+sinal mostra que $x_*$ 
+é um ponto de máximo local de $A$. Como $A(0)=0$ e
+$A(1)=0$, o máximo global é atingido em $x_*$ mesmo. Logo o retângulo de
+maior área tem largura $2x_*\simeq 1.154$ e altura
+$1-x_*^2=\frac{2}{3}=0.666\dots$.
+\end{ex}
+
+O método usado neste último exemplo pode ser usado na resolução de
+outros problemas: 
+\begin{enumerate}
+\item Escolher uma variável que descreve a situação e os
+objetos envolvidos no problema. Determinar os valores possíveis dessa
+variável.
+\item Montar uma função dessa variável, que represente a quantidade a
+ser maximizada (ou minimizada).
+\item Resolver o problema de otimização correspondente, usando as
+ferramentas descritas na Seção~\ref{sec:extremintfechados}.
+\end{enumerate}
+
+\begin{exo}
+Qual é o retângulo de maior área que pode ser inscrito 
+\begin{enumerate}
+ \item\label{itexoretanginscrito1} em um círculo de raio $R$?
+\item\label{itexoretanginscrito2} no triângulo determinado pelas três retas
+$y=x$, $y=-2x+12$ e $y=0$?
+\end{enumerate}
+
+\begin{sol} \eqref{itexoretanginscrito1}
+A função área é dada por $A(x)=4x\sqrt{R^2-x^2}$, $x\in [0,R]$. O leitor pode
+verificar que o seu máximo global em $[0,R]$ é atingido em
+$x_*=\frac{R}{\sqrt{2}}$. Logo, o retângulo de maior área inscrito no círculo
+tem largura $2x_*=\sqrt{2}R$, e altura $2\sqrt{R^2-x_*^2}=\sqrt{2}R$. Logo, é
+um quadrado!
+\eqref{itexoretanginscrito2} Usaremos a variável $h\in [0,4]$ definida da
+seguinte maneira
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.3]
+\newcommand{\funcao}[1]{-2*(#1)+12}
+\draw[ ->] (-0.2,0)--(6.5,0);
+\draw[ ->] (0,-0.2)--(0,13);
+\draw (-0.3,{\funcao{-0.3}})node[left]{$y=-2x+12$}--(7,{\funcao{7}});
+\draw (-0.3,-0.3)--(5,5)node[right]{$y=x$};
+\fill (4,4) circle (0.40mm);
+\pgfmathsetmacro{\h}{2.2};
+\draw[decorate, decoration=brace] (0,0)--(0,\h) node[midway, left]{$h$};
+\draw[dotted] (0,\h)--(\h,\h);
+\fill[color=gray!15] (\h,0) rectangle ({-\h/2+6},\h);
+\draw[thick] (\h,0) rectangle ({-\h/2+6},\h);
+\draw (\h,0) node[below]{$x_1$};
+\draw ({-\h/2+6},0) node[below]{$x_2$};
+\draw (4,4) node{$\bullet$};
+% \fill (\h,\h) circle (0.50mm);
+% \fill ({-\h/2+6},\h) circle (0.50mm);
+\draw (4,4) node[above]{$(4,4)$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+A área do retângulo é dada por $A(h)=h(x_2-x_2)$. Ora, $x_1=h$ e
+$x_2=6-\frac{h}{2}$. Logo, $x_2-x_1=6-\frac{3h}{2}$. Portanto,
+queremos maximizar $A(h)=h(6-\frac{3h}{2})$ em
+$h\in [0,4]$.
+É fácil ver que o de máximo é atingido em $h_*=2$. Logo o maior retângulo tem
+altura $h_*=2$, e largura $6-\frac{3h_*}{2}=3$.
+\end{sol}
+\end{exo}
+
+\begin{exo}(Segunda prova, Segundo semestre de 2011)
+Considere a família de todos os triângulos isósceles cujos dois lados iguais
+tem tamanho igual a $1$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw[thick] (0,0)--(1,1)node[midway, above left]{$1$}--(2,0)node[midway,
+above right]{$1$}--cycle;
+\draw (0.8,0.8) arc (225:315:0.3);
+\draw (1,0.5) node{$\theta$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Qual desses triângulos tem maior área? 
+\begin{sol}
+A altura do triângulo de abertura
+$\theta\in [0,\pi]$ é $\cos \frac{\theta}{2}$, a sua base é $2\sen
+\frac{\theta}{2}$, logo a sua área é dada por
+$$A(\theta)=\cos(\frac{\theta}{2})\sen (\frac{\theta}{2})=\frac12 \sen
+\theta\,.\pt{3}$$
+Queremos maximizar $A(\theta)$ quando $\theta\in [0,\pi]$.
+Ora, $A(0)=A(\pi)=0$, e como $A'(\theta)=\frac12\cos \theta$,
+$A'(\theta)=0$ se e somente se $\cos
+\theta=0$, isto é, se e somente se $\theta=\frac{\pi}{2}$ $pt{1}$. Ora, como
+$A'(\theta)>0$ se $\theta<\frac{\pi}{2}$, 
+$A'(\theta)<0$ se $\theta>\frac{\pi}{2}$, $\frac{\pi}{2}$ é um máximo de $A$
+$\pt{2}$. 
+Logo, {o triângulo que tem maior área é aquele cuja abertura vale
+$\frac{\pi}{2}$ $\pt{2}$.} Obs: pode também expressar a área em função do lado
+horizontal $x$, $A(x)=\tfrac12 x\sqrt{1-(\tfrac{x}{2})^2}$.
+Obs: Pode também introduzir a variável $h$, definida como
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw[thick] (0,0)--(1,0)node[midway,
+below]{$\scriptstyle{1}$}--(1.5,0.866)node[midway,
+below]{$\scriptstyle{1}$}--cycle;
+\draw[dotted] (1.5,0)--(1.5,0.866) node[midway, right]{$h$};
+\fill (1.5,0) circle (0.40mm);
+%\draw (1,0.5) node{$\theta$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+e fica claro que o triângulo de maior área é aquele que tem maior altura $h$,
+isto é, $h=1$ (aqui nem precisa calcular uma derivada...), o que acontece quando
+a abertura vale $\frac{\pi}{2}$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Dentre todos os retângulos de perímetro fixo igual a $L$, qual é o de maior
+área?
+\begin{sol}
+Seja $x$ o tamanho do lado horizontal do retângulo, e $y$ o seu lado vertical.
+A área vale $A=xy$.
+Como o perímetro é fixo e vale $2x+2y=L$, podemos expressar $y$ em função de
+$x$, $y=\frac{L}{2}-x$, e expressar tudo em termos de $x$:
+$A(x)=x(\frac{L}{2}-x)$. Maximizar essa função em $x\in [0,L/2]$ mostra que $A$
+é máxima quando $x=x_*=\frac{L}{4}$. Como $y_*=\frac{L}{2}-x_*=\frac{L}{4}$, o
+retângulo com maior área é um quadrado!
+\end{sol}
+\end{exo}
+
+
+\begin{exo}
+Uma corda de tamanho $L$ é cortada em dois pedaços. Com o primeiro pedaço,
+faz-se um quadrado, e com o segundo, um círculo. Como que a corda deve ser
+cortada para que a área total (quadrado $+$
+círculo) seja máxima? mínima?
+\begin{sol}
+Suponha que a corda seja cortada em dois pedaços. Com o primeiro pedaço, de
+tamanho $x\in [0,L]$, façamos um quadrado: cada um dos seus lados tem lado
+$\frac{x}{4}$, e a sua área vale $(\frac{x}{4})^2$. Com o outro pedaço façamos
+um círculo, de perímetro $L-x$, logo o seu raio é $\frac{L-x}{2\pi}$, e a sua
+área $\pi(\frac{L-x}{2\pi})^2$. Portanto, queremos maximizar a função 
+$$
+A(x)\pardef \frac{x^2}{16}+\frac{(L-x)^2}{4\pi}\,,\quad \text{ com }x\in
+[0,L]\,.
+$$
+Na fronteira, $A(0)=\frac{L^2}{4\pi}$ (a corda inteira usada para fazer um
+círculo), $A(L)=\frac{L^2}{16}$ (a corda inteira para fazer um quadrado).
+Procuremos os pontos críticos de $A$: é fácil ver que $A'(x)=0$ se e somente
+$x=x_*=\frac{L}{1+\frac{\pi }{4}}\in (0,L)$.
+Como $A(x_*)=\frac{L^2}{4(4+\pi)}$, temos que $A(x_*)<A(L)<A(0)$. Logo, 
+a área total mínima é obtida fazendo um quadrado com o primeiro pedaço de
+tamanho $x_*\simeq 0.56 L$, e  um círculo com o outro pedaço ($L-x_*\simeq
+0.43 L$). A área total máxima é obtida usando a corda toda para fazer um
+círculo.
+\end{sol}
+\end{exo}
+
+\begin{ex}
+\emph{Qual é o ponto $Q_*$ da reta $y={2x}$ que está mais próximo do ponto
+$P=(1,0)$?}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.5]
+\draw[->] (-0.5,0)--(3,0);
+\draw[->] (0,-0.5)--(0,1.5);
+\draw[thick] (-0.5,-0.25)--(2,1) node[right]{$y=2x$};
+\fill (1,0) circle (0.5mm);
+\fill (1.5,0.75) circle (0.5mm);
+\draw (1,0) node[below]{$P$};
+\draw[dotted] (1,0)--(1.5,0.75) node[above]{$Q$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Se $Q=(x,y)$ é um ponto qualquer do plano, então
+\[ d(Q,P)=\sqrt{(x-1)^2+y^2}\,.
+\]
+Mas se $Q$ pertence à reta, então $y=2x$ e podemos escrever a
+distância em função da variável $x$ só: $d(Q,P)=f(x)$, onde 
+\[ 
+f(x)=\sqrt{(x-1)^2+(2x)^2}=
+\sqrt{5x^2-2x+1}\,
+\]
+é a função que queremos \emph{minimizar}.
+Como $Q$ pode se mover na reta toda, $f$ tem $\bR$ como domínio.
+Como $f$ é derivável e $f'(x)=0$
+se e somente se $x=\frac15$, e como $d$ é convexa ($d''(z)>0$ para todo $z$), o
+ponto de abcissa $x=\frac15$ é um ponto de mínimo global de $d$. Logo, o ponto
+procurado é $Q_*=(\frac{1}{5},\frac{2}{5})$.
+Observe que a inclinação do segmento $Q_*P$ é igual a $-\tfrac12$: ele
+é perpendicular à reta, como era de se esperar (sabemos desde o curso
+de geometria elementar que o caminho mais curto
+entre um ponto $P$ e uma reta é o segmento perpendicular à reta passando
+por $P$).
+\end{ex}
+
+\begin{exo}
+Qual é o ponto $Q_*$ da parábola $y=x^2$ cuja distância a $P=(10,2)$ é
+mínima?
+\begin{sol}
+$Q_*=(2,4)$
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Considere os pontos $A=(1,3)$, $B=(8,4)$. Determine o ponto $C$ do eixo $x$,
+tal que o perímetro do triângulo $ABC$ seja mínimo.
+\begin{sol}
+Seja $C=(x,0)$, com $1\leq x\leq 8$. É preciso minimizar
+$f(x)=\sqrt{(x-1)^2+3^2}+\sqrt{(x-8)^2+4^2}$
+para $x\in [1,8]$.
+Os pontos críticos de $f$ são soluções de $7x^2+112x-560=0$ (em $[1,8]$), isto é,
+$x=4$. Como $f''(4)>0$, $x=4$ é um mínimo de $f$ (pode verificar calculando os
+valores $f(1)$, $f(8)$).
+Logo, $C=(4,0)$ é tal que o perímetro de $ABC$ seja mínimo.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Seja $r_\alpha$ a reta tangente ao gráfico da função $f(x)=3-x^2$, no ponto
+$(\alpha,f(\alpha))$, $\alpha\neq 0$.  
+Seja $\cT_\alpha$ o triângulo determinado pela origem e pelos pontos em
+que $r_\alpha$ corta os eixos de coordenada. Determine o(s) valores de $\alpha$
+para os quais a área de $\cT_\alpha$ é mínima.
+\begin{sol}
+$\alpha=\pm 1$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+ Considere um ponto $P=(a,b)$ fixo no primeiro quadrante. 
+Para um ponto $Q$ no eixo $x$ positivo, considere a área do triângulo
+determinado pelos eixos de coordenadas e pela reta que passa por $P$ e
+$Q$. Ache a posição do ponto $Q$ que minimize a área do triângulo, e dê o valor
+dessa área.
+\begin{sol}
+Considere a variável $x$ definida da seguinte maneira:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw[ ->] (-0.2,0)--(4,0);
+\draw[ ->] (0,-0.2)--(0,2);
+\pgfmathsetmacro{\a}{1.5};
+\pgfmathsetmacro{\b}{0.5};
+\coordinate (P) at (\a,\b);
+\pgfmathsetmacro{\d}{1.4};
+\coordinate (Q) at (\a+\d,0);
+\coordinate (Qp) at (0,{\b*(\d+\a)/\d});
+\fill (P) circle (0.4mm);
+\draw (P) node[above right]{$P=(a,b)$};
+\fill (Q) circle (0.4mm);
+\draw (Q) node[below]{$Q$};
+\draw[dashed] (Q)--(Qp);
+\draw[decorate, decoration=brace] (0,0)--(Qp) node[midway, left]{$h$};
+\draw[decorate, decoration=brace] (\a,0)--(P) node[midway, left]{$b$};
+\draw[decorate, decoration=brace] (\a,0)--(0,0) node[midway, below]{$a$};
+\draw[decorate, decoration=brace] (Q)--(\a,0) node[midway, below]{$x$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Assim temos que a área do triângulo em função de $x$, $A(x)$, é dada por 
+$A(x)=\half (a+x)\cdot h$. Mas, como $\frac{h}{a+x}=\frac{b}{x}$, temos
+$h=\frac{b(x+a)}{x}$, que dá
+$A(x)=\frac{b}{2}\frac{(x+a)^2}{x}$.
+Procuremos o mínimo de $A(x)$ para $x\in (0,\infty)$.
+Como $A$ é derivável em todo $x>0$, $A'(x)=\frac{b}{2}\frac{(x-a)(x+a)}{x^2}$,
+vemos que $A$ possui dois pontos críticos, em $-a$ e $+a$, e $A'(x)>0$ se
+$x<-a$, $A'(x)<0$ se $-a<x<a$, e $A'(x)>0$ se $x>a$. Desconsideremos o $-a$ pois
+queremos um ponto em $(0,\infty)$. Assim, o mínimo de $A$ é atingido em $x=a$,
+e nesse ponto $A(a)=2ab$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\a}{1.5};
+\pgfmathsetmacro{\b}{0.5};
+\draw[ ->] (0,0)--(4,0)node[right]{$x$};
+\draw[ ->] (0,-0.2)--(0,2.2) node[left]{$A(x)$};
+\draw[thick, domain=0.4:4] plot (\x,{(\b*(\x^2+2*\a*\x+\a^2))/(2*\x)});
+\draw[dotted] (\a,0)node[below]{$a$}--(\a,{2*\a*\b})--(0,{2*\a*\b})
+node[left]{$2ab$};
+\fill (\a,{2*\a*\b}) circle (0.45mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Qual é o triângulo isósceles de maior área que pode ser inscrito
+dentro de um disco de raio $R$?
+\begin{sol} Representamos o triângulo da seguinte maneira:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\r}{1};
+\draw (0,0) circle(\r cm);
+\draw[->] (-\r-0.2,0)--(\r+0.2,0);
+\draw[->] (0,-\r-0.2)--(0,\r+0.2);
+\coordinate (A) at (0,\r);
+\coordinate (B) at (0.5*\r,-0.866*\r);
+\coordinate (T) at (0,-0.866*\r);
+\coordinate (C) at  (-0.5*\r,-0.866*\r);
+\fill[color=gray!30, opacity=0.8] (A)--(B)--(C)--cycle;
+\draw[thick] (A)--(B)--(C)--cycle;
+\draw[decorate, decoration={brace, raise=1pt}] (B)--(T)
+node[midway, below]{$x$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Parametrizando o triângulo usando a variável $x$ acima (pode
+também usar um ângulo),
+obtemos a área como sendo a função
+$A(x)=x(R+\sqrt{R^2-x^2})$, com $x\in [0,R]$. 
+Observe que não é necessário considerar os triângulos cuja
+base fica acima do eixo $x$. (Por qué?)
+Deixamos o leitor verificar que o máximo da função $A(x)$ é
+atingido no ponto $x_*=\tfrac{\sqrt{3}}{2}R$, e que esse $x_*$
+corresponde ao triângulo equilátero.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Sejam $x_1,\dots,x_n$ os resultados de medidas repetidas feitas a respeito de
+uma grandeza. Procure o número $x$ que minimize 
+$$\sigma(x)=\sum_{i=1}^n(x-x_i)^2\,.$$
+\begin{sol}
+O único ponto crítico de $\sigma(x)$ é $x_*=\frac{x_1+\dots+ x_n}{n}$ (isto é,
+a média aritmética). Como $\sigma''(x)=2n>0$, $x_*$ é mínimo global.
+\end{sol}
+\end{exo}
+
+
+\begin{exo}\label{Exo:TelaoBIS}
+Uma formiga entra no cinema, e vê que 
+o telão tem $5$ metros de altura e está afixado na parede, $3$ metros acima do
+chão.
+A qual distância da parede a formiga deve ficar para que o ângulo sob o qual
+ela vê o telão seja máximo? (Vide: Exercício \ref{Exo:Telao}.)
+\begin{sol}
+Seja $F$ a formiga, $S$ (respectivamente $I$) a extremidade superior
+(respectivamente inferior) do telão, $\theta$ o ângulo $SFI$, e $x$ a distância
+de $F$ à parede:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[yscale=0.3]
+\draw (-1,0)--(0,0)--(0,10);
+\coordinate (F) at (-7,0);
+\coordinate (S) at (0,8);
+\coordinate (I) at (0,3);
+\draw[thick] (S)--(F)--(I);
+\draw (F) node{$\bullet$} node[below]{$F$};
+\draw (S) node[right]{$S$};
+\draw (I) node[right]{$I$};
+\draw (0,0) node[right]{$O$};
+\draw[decorate, decoration=brace] (I)--(0,0) node[midway, right]{$3$};
+\draw[decorate, decoration=brace] (S)--(I) node[midway, right]{$5$};
+\draw[decorate, decoration=brace] (0,0)--(F) node[midway, below]{$x$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Se $x$ é a distância de $F$ à parede, precisamos expressar $\theta$ em função
+de $x$. Para começar, $\theta=\alpha-\beta$, em que $\alpha$ é o ângulo $SFO$,
+e $\beta$ o ângulo $IFO$. Mas $\tan \alpha =\frac{8}{x}$ e $\tan
+\beta=\frac{3}{x}$. Logo, precisamos achar o máximo da função 
+$$
+\theta(x)=\arctan\tfrac{8}{x}-\arctan \tfrac{3}{x}\,,\quad \text{ com }x>0\,.
+$$
+Observe que $\lim_{x\to 0^+}\theta(x)=0$ (indo infinitamente perto da
+parede, a formiga vê o telão sob um ângulo nulo) e $\lim_{x\to
+\infty}\theta(x)=0$ (indo infinitamente longe da parede, a
+formiga também vê o telão sob um ângulo nulo), é claro que deve existir (pelo
+menos) um $0<x_*<\infty$ que maximize $\theta(x)$. Como $\theta$ é derivável,
+procuremos os seus pontos críticos: 
+$$
+\theta'(x)=\frac{1}{1+(\tfrac8x)^2}(\frac{-8}{x^2})
+-\frac{1}{1+(\tfrac3x)^2}(\frac{-3}{x^2})=(\cdots)=\frac{120-5x^2}{
+(x^2+8^2)(x^2+3^2)}\,.
+$$
+Logo o único ponto crítico de $\theta$ no intervalo $(0,\infty)$ é
+$x_*=\sqrt{24}$. Vemos também que $\theta'(x)>0$ se $x<x_*$ e 
+$\theta'(x)<0$ se $x>x_*$, logo $x_*$ é o ponto onde $\theta$ atinge o seu
+valor máximo. 
+Logo, para ver o telão sob um ângulo máximo, a formiga precisa ficar a uma
+distância de $\sqrt{24}\simeq 4.9$ metros da parede.
+\end{sol}
+\end{exo}
+
+Consideremos alguns exemplos de problemas de otimização em três dimensões:
+
+\begin{ex}
+\emph{Qual é, dentre os cilíndros inscritos numa esfera de raio $R$, o de volume
+máximo?}
+Um cílindro cuja base tem raio $r$, e cuja altura é $h$ tem volume 
+$V=\pi r^2h$. Quando o cilíndro é inscrito na esfera de raio $R$ centrada na
+origem, $r$ e $h$ dependem um do outro:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\def\R{1.5}
+\def\alf{1}
+\draw (0,0) circle (\R cm);
+\coordinate (A) at ({\R*cos(\alf r)},{\R*sin(\alf r)});
+\coordinate (W) at ({\R*cos(\alf r)},0);
+\coordinate (B) at ({-\R*cos(\alf r)},{-\R*sin(\alf r)});
+\coordinate (U) at (0,{-\R*sin(\alf r)});
+\coordinate (V) at ({\R*cos(\alf r)},{-\R*sin(\alf r)});
+\fill[color=gray!10] (B) rectangle (A);
+\draw[thin] (-\R,0)--(\R,0);
+\draw[thin] (0,-\R)--(0,\R);
+\draw[thick] (B) rectangle (A);
+\draw[dotted, ->] (0,0)--(A) node[midway, above, sloped]{$R$};
+\draw[decorate, decoration={brace, raise=2pt}] (V)--(U) node[midway,
+below]{$r$};
+\draw[decorate, decoration={brace, raise=2pt}] (A)--(V) node[midway,
+right]{$h$};
+\draw (0,0) circle (\R cm);
+\draw ({-\R-2},0) node[left]{$r^2+(\tfrac{h}{2})^2=R^2$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Assim, $V$ pode ser escrito como função de uma variável só.
+Em função de $r$,
+$$V(r)=2\pi r^2\sqrt{R^2-r^2}\,,\quad r\in [0,R]\,,$$
+ou em função de $h$:
+$$
+V(h)=\pi h(R^2-\tfrac{h^2}{4})\,,\quad h\in [0,2R]\,.
+$$
+Para achar o cílindro de volume máximo, procuremos o máximo global de qualquer
+uma dessas funções no seu domínio. Consideremos por exemplo $V(r)$. Como $V$ é
+derivável em $(0,R)$, temos 
+$$
+V'(r)=2\pi\Big\{
+2r\sqrt{R^2-r^2}+r^2\frac{-r}{\sqrt{R^2-r^2}}
+\Big\}=2\pi r\frac{2R^2-3r^2}{\sqrt{R^2-r^2}}\,.
+$$
+Portanto, $V'(r)=0$ se e somente se $r=0$ ou $2R^2-3r^2=0$. Logo, o único ponto
+crítico
+de $V$ em $(0,R)$ é $r_*=\sqrt{2/3}R$ ($\simeq 0.82 R$). Estudando o sinal de
+$V'$ obtemos a variação de $V$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$r$ /.6, $V'(r)$ /.6, Variaç. de $V$ /1.2}%
+{,$\scriptstyle{\sqrt{2/3}}R$, }%
+\tkzTabLine{,+,z,-,}
+\tkzTabVar{-/,+/\text{máx.},-/}
+%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Na fronteira do intervalo $[0,R]$, $V(0)=0$ e $V(R)=0$. Logo, $V$ atinge o
+seu máximo global em $r_*$. Portanto, o cilíndro com volume máximo que pode
+ser inscrito numa esfera de raio $R$ tem base com raio $r_*$, e altura
+$h_*=2\sqrt{R^2-r_*^2}=\frac{2}{\sqrt{3}}R$ ($\simeq 1.15 R$).
+\end{ex}
+
+\begin{exo}
+Qual é, dentre os cilíndros inscritos em um cone de altura $H$ e base circular
+de raio $R$, o de volume máximo?
+\begin{sol}
+Seja $R$ o raio da base do cone, $H$ a sua altura, $r$ o raio da base do
+cilíndro e $h$ a sua altura.
+Para o cilíndro ser inscrito, $\frac{h}{H}=\frac{R-r}{R}$ (para entender essa
+relação, faça um desenho de um corte vertical).
+Logo, expressando o volume do cilíndro em função de $r$, $V(r)=\frac{\pi
+H}{R}r^2(R-r)$. É fácil ver que essa função possui um máximo local em $[0,R]$
+atingido em $r_*=\frac{2}{3}R$. A altura do cilíndro correspondente é
+$h_*=\frac{H}{3}$.
+(Obs: pode também expressar $V$ em função de $h$: $V(h)=\pi
+R^2h(1-\frac{h}{H})^2$.)
+\end{sol}
+\end{exo}
+
+\begin{exo} (Segunda prova, 27 de maio de 2011)
+Considere um cone de base circular, inscrito numa esfera de raio $R$.
+Expresse o volume $V$ do cone em função da sua altura $h$. 
+Dê o domínio de $V(h)$ e ache os seus pontos de mínimo e máximo globais. 
+Dê as dimensões exatas do cone que tem volume máximo.
+\begin{sol}
+Seja $r$ o raio da base do cone, $h$ a sua altura.
+O volume do cone é dado por $V=\tfrac13 \times \pi r^2\times h$. Como $h$ e
+$r$ são ligados pela relação $(h-R)^2+r^2=R^2$, podemos expressar $V$ somente
+em termos de $h$:
+$$V(h)=\tfrac{\pi}{3}h(R^2-(h-R)^2)=\tfrac{\pi}{3}(2Rh^2-h^3)\,,$$
+onde $h\in [0,2R]$.
+Os valores na fronteira são $V(0)=0$, $V(2R)=0$.
+Procurando os pontos críticos dentro do intervalo: $V'(h)=0$ se e somente se
+$4Rh-3h^2=0$. Como $h=0$ não está \emph{dentro} do intervalo, somente
+consideramos o ponto crítico $h_*=\tfrac{4}{3}R$. (Como $V''(h_*)<0$, é máximo
+local.) Comparando $V(h_*)$ com os valores na fronteira, vemos que $h_*$ é
+máximo global de $V$ em $[0,2R]$, e que tem dois mínimos globais, em $h=0$ e
+$h=2R$. 
+{O maior cone, portanto, tem altura $\tfrac{4}{3}R$, e raio
+$\sqrt{R^2-(\tfrac{4}{3}R-R)^2}=\frac{\sqrt{8}}{3}R$.}
+\end{sol}
+\end{exo}
+
+\begin{exo}\label{exo_coneemtornoesfera}
+De todos os cones que contêm uma esfera de raio $R$, qual tem o menor
+volume?
+\end{exo}
+
+\begin{exo}
+Uma caixa retangular  é feita retirando quatro quadrados dos cantos de uma
+folha de papelão de dimensões $2m\times1m$, e dobrando os quatro
+lados:
+\begin{center}
+\newcommand{\bzzz}{0.3}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\draw[dotted] (0,0)--(2,0)--(2,1)--(0,1)--cycle;
+\draw[very thick] (0,\bzzz)--(\bzzz,\bzzz)--(\bzzz,0)--({2-\bzzz},0)--({2-\bzzz},\bzzz)--(2,\bzzz)--(2,{1-\bzzz})--({2-\bzzz},{1-\bzzz})--({2-\bzzz},1)--(\bzzz,1)--(\bzzz,{1-\bzzz})--(0,{1-\bzzz})--(0,\bzzz);
+\draw[thick, ->] (1,0)--(1,{\bzzz/2});
+\draw[thick, ->] (1,1)--(1,{1-\bzzz/2});
+\draw[thick, ->] (0,0.5)--({\bzzz/2},0.5);
+\draw[thick, ->] (2,0.5)--({2-\bzzz/2},0.5);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Qual deve ser o tamanho dos quadrados retirados para maximizar o
+volume da caixa obtida?
+\begin{sol}
+Cada quadrado retirado deve ter os seus lados iguas a 
+$\tfrac12(1-\frac{1}{\sqrt{3}})$.
+\end{sol}
+\end{exo}
+
+\section{A Lei de Snell}
+\index{Lei de Snell}
+Considere uma partícula que evolui na interface entre dois ambientes,
+$1$ e $2$ (veja a figura abaixo).
+Suponhamos que num ambiente dado, a partícula anda sempre em linha reta e que a
+partícula evolui no ambiente $1$ com uma 
+velocidade constante $v_1$ e no ambiente $2$ com uma velocidade constante
+$v_{2}$.
+Suponhamos também que a partícula queira viajar de um ponto $A$ no
+ambiente $1$ para um ponto $B$ no ambiente $2$; qual estratégia a
+partícula deve adotar
+para \emph{minimizar o seu tempo de viagem entre $A$ e $B$}? 
+%\begin{wrapfigure}{r}{7cm}
+%\vspace{-5mm}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\a}{0};
+\coordinate (A) at (\a,-3);
+\pgfmathsetmacro{\b}{4};
+\coordinate (B) at (\b,+2);
+\pgfmathsetmacro{\c}{1};
+\coordinate (C) at (\c,0);
+
+\fill[color=gray!15] (\a-1,-3.5) rectangle (\b+1,0);
+\draw (\a-1,0)--(\b+1,0);
+\draw[thick] (A)--(C) node[midway, above left]{$v_1$}--(B)node[midway,
+above left]{$v_2$};
+\fill (A) circle (0.4mm);
+\fill (B) circle (0.4mm);
+
+\draw (\a-0.8,0.2) node{$2$};
+\draw (\a-0.8,-0.2) node{$1$};
+
+\draw[thick, ->] (A)--($(A)!0.5!(C)$);
+\draw[thick, ->] (C)--($(C)!0.5!(B)$);
+
+\draw (A) node[left]{$A$};
+\draw (B) node[right]{$B$};
+\draw (C) node[above left]{$C$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+%\vspace{-5mm}
+%\end{wrapfigure}
+É claro que se $v_1=v_2$, a partícula não precisa se preocupar com  a
+interface, e pode andar em linha reta de $A$ até $B$. Mas se porventura
+$v_1<v_2$, a partícula precisa escolher um ponto $C$ na
+interface entre $1$ e $2$, mais perto de $A$ do que de $B$, andar em linha reta
+de $A$ até $C$, para depois andar em linha reta de $C$ até $B$.
+O problema é de saber como escolher $C$, de maneira tal que o tempo total de
+viagem seja mínimo. Modelemos a situação da seguinte maneira:
+%\begin{wrapfigure}{r}{7cm}
+%\vspace{-5mm}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\a}{0};
+\coordinate (A) at (\a,-3);
+\pgfmathsetmacro{\b}{4};
+\coordinate (B) at (\b,+2);
+\pgfmathsetmacro{\c}{1};
+\coordinate (C) at (\c,0);
+%\fill[color=gray!15] (\a-1,-3.5) rectangle (\b+1,0);
+\draw[->] (\a,0)--(\b+1,0);
+\draw[->] (\a,-3)--(\a,2.3);
+\draw[thick] (A) node[left]{$A$}--(C) node[midway, right]{$d_1$}--(B)
+node[right]{$B$} node[midway, below]{$d_2$};
+\fill (A) circle (0.4mm);
+\fill (B) circle (0.4mm);
+\draw[decorate, decoration=brace] (C)node[above] {$C$}
+--(\a,0) node[midway, below]{$x$} ;
+\draw[dotted] (\b,0)--(B)node[midway, right]{$h_2$};
+\draw ($(\a,0)!0.5!(A)$) node[left]{$h_1$};
+\draw[dotted, <->] (0,2)--(B) node[midway, above]{$L$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+%\vspace{-5mm}
+%\end{wrapfigure}
+A nossa variável será $x$, a distância entre $C$ e a projeção de $A$ na
+horizontal.
+Quando $x$ é fixo, a distância de $A$ até $C$ é dada por
+$d_1=\sqrt{h_1^2+x^2}$, e a distância de $C$ até $B$ é dada por
+$d_2=\sqrt{h_2^2+(L-x)^2}$.
+Indo de $A$ até $C$, a partícula percorre a distância $d_1$ em um
+tempo $t_1=\frac{d_1}{v_1}$, e indo de $C$ até $B$, percorre a distância $d_2$
+em um
+tempo $t_2=\frac{d_2}{v_2}$. Logo, o tempo total de viagem de $A$ até $B$ é
+de $T=t_1+t_2$. Indicando explicitamente a dependência em $x$, 
+$$
+T(x)=\frac{\sqrt{h_1^2+x^2}}{v_1}+\frac{\sqrt{h_2^2+(L-x)^2}}{v_2}\,.
+$$
+Assim, o nosso objetivo é \emph{achar o mínimo global da função $T(x)$,
+para $x\in [0,L]$.} Comecemos procurando os pontos críticos de $T$ em
+$(0,L)$, isto é, os $x_*$ tais que $T'(x_*)=0$, isto é,
+
+\eq{\label{eq:solSNell}\frac{x_*}{v_1\sqrt{h_1^2+x_*^2}}-\frac{L-x_*}{v_2\sqrt{
+h_2^2+(L-x_*)^2}}
+=0\,.}
+Essa equação é do quarto grau em $x_*$. Pode ser mostrado que a sua solução
+existe, é única, e dá o mínimo global de $T$ em $[0,L]$. 
+Em vez de
+buscar o valor exato do $x_*$, daremos uma interpretação geométrica da solução.
+De fato, observe que em \eqref{eq:solSNell} aparecem dois quocientes 
+que podem ser interpretados,
+respectivamente, como os senos dos ângulos entre $AC$ e a vertical, e $BC$ e a
+vertical:
+$$\frac{x_*}{\sqrt{h_1^2+x_*^2}}\equiv
+\sen \theta_1\,,\quad\frac{L-x_*}{\sqrt{h_2^2+(L-x_*)^2 }}\equiv \sen
+\theta_2\,.$$
+Portanto, vemos que o mínimo de $T$ é atingido uma vez que os ângulos
+$\theta_1$ e $\theta_2$ são tais que
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.9]
+\pgfmathsetmacro{\a}{0};
+\coordinate (A) at (\a,-2);
+\pgfmathsetmacro{\b}{3};
+\coordinate (B) at (\b,+2);
+\pgfmathsetmacro{\c}{1};
+\coordinate (C) at (\c,0);
+\fill[color=gray!15] (\a-0.5,-2) rectangle (\b,0);
+\draw (\a-0.5,0)--(\b,0);
+\draw[thick] (A)--(C)--(B);
+\draw[dotted] (\c,-2)--(\c,2);
+\draw[->] (\c,-1) arc (270:245:1);
+\draw[ultra thin] (\c,-1) arc (270:255:1) node[below]{$\theta_1$};
+\draw[->] (\c,1) arc (90:45:1);
+\draw[ultra thin] (\c,1) arc (90:65:1) node[above]{$\theta_2$};
+\draw (\b+4,0) node{$\boxed{\displaystyle{\frac{\sen \theta_1}{\sen
+\theta_2}=\frac{v_1}{v_2}}}$};
+ \draw[thick, ->] (A)--($(A)!0.3!(C)$);
+ \draw[thick, ->] (C)--($(C)!0.7!(B)$);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Em ótica, quando um raio de luz passa de ambiente $1$ para um ambiente $2$,
+observe-se um desvio ao atravessar a interface;
+$\theta_1$ é chamado o \grasA{ângulo de incidência}, $\theta_2$ o
+\index{ângulo! de refração}
+\grasA{ângulo de refração}. O ângulo de refração depende das propriedades dos
+ambientes $1$ e $2$ via $v_1$ e $v_2$, e a relação acima é chamada a
+\grasA{Lei de Snell~\footnote{Willebrord Snellius van Royen, Leiden, 1580 -
+1626.}}.\\
+
+No exemplo acima não obtivemos um valor explícito para o $x_*$ que minimize o
+tempo de viagem de $A$ até $B$, mas aprendemos alguma coisa a respeito dos
+ângulos $\theta_1$ e $\theta_2$. Em alguns casos particulares, $x_*$ pode
+ser calculado explicitamente: 
+\begin{exo}
+Um ponto $A$ flutuando a $h$ metros da praia precisa atingir um ponto $B$
+situado na beirada da água, a $L$ metros do ponto da praia mais perto de $A$.
+Supondo que $A$ se move na água com uma velocidade $v_1$ e na areia com uma
+velocidade $v_2>v_1$, elabore uma estratégia para que $A$ atinja $B$ o mais
+rápido possível. E se $v_1<v_2$?
+\begin{sol}
+Como no exemplo anterior, $T(x)=\frac{\sqrt{x^2+h^2}}{v_1}+\frac{L-x}{v_2}$. 
+Procuremos o mínimo global de $T$ em $[0,L]$.
+O ponto crítico $x_*$ é solução de
+$\frac{x}{v_1\sqrt{x^2+h^2}}-\frac{1}{v_2}=0$. Isto é,
+$x_*=\frac{h}{\sqrt{(v_2/v_1)^2-1}}$. 
+Se $v_1\geq v_2$, $T$ não tem ponto critico no intervalo, e  $T$ atinge o seu
+mínimo global em $x=L$ (a melhor estratégia é de nadar diretamente até $B$). Se 
+$v_1<v_2$, e se $\frac{h}{\sqrt{(v_2/v_1)^2-1}}<L$, então $T$ tem um mínimo
+global em $x_*$ (como $T''(x)=\frac{h^2}{v_1(x^2+h^2)}>0$
+para todo $x$, $T$ é convexa, logo $x_*\in (0,L)$ é bem um ponto de
+mínimo global).
+Por outro lado, se $\frac{h}{\sqrt{(v_2/v_1)^2-1}}\geq L$, então $x_*$ não
+pertence a $(0,L)$, e o mínimo global de $T$ é atingido em $x=L$.
+\end{sol} 
+\end{exo}
+
+\begin{exo}
+Uma partícula parte de um ponto $A$ para 
+atingir o mais rápido possível 
+um ponto $B$ situado do outro lado de uma piscina redonda:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\fill[color=lightgray] (0,0) circle (1cm);
+\fill (-1,0) circle (0.5mm);
+\fill (1,0) circle (0.5mm);
+\draw (-1,0) node[left]{$A$};
+\draw (1,0) node[right]{$B$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Se $A$ nada com uma velocidade de $2km/h$ e anda
+com uma velocidade de $4km/h$, será que é melhor 1) dar a volta toda
+andando, 2) usar o caminho mais direto, atravessando a piscina
+nadando, 3) adotar uma outra estratégia?
+\begin{sol}
+Seja $O$ o centro da piscina. Uma estratégia que minimize o tempo de
+viagem é de nadar em linha
+reta de $A$ até um ponto $C$ na beirada tal que o ângulo $COB$ seja igual a
+$\frac{\pi}{3}$ (ou $-\frac{\pi}{3}$). Depois, andar na beirada de $C$
+até $B$.
+\end{sol}
+\end{exo}
+
+\begin{exo}\label{exo:escada}
+Considere a esquina do corredor em formato de L representado  na figura
+abaixo (suponha-se que o corredor é infinitamente extenso nas
+direções perpendiculares).
+Qual é o tamanho $\ell$ da maior vara rígida  que pode passar por esse
+corredor?
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\L}{1};
+\pgfmathsetmacro{\M}{2};
+\pgfmathsetmacro{\m}{2};
+\pgfmathsetmacro{\l}{4};
+\coordinate (A) at (0,{\M+\m});
+\coordinate (B) at (\L,{\M+\m});
+\coordinate (C) at (\L,{\M});
+\coordinate (D) at ({\L+\l},\M);
+\coordinate (E) at ({\L+\l},0);
+\draw (A)--(0,0)--(E); 
+\draw (B)--(C)--(D);
+\coordinate (X) at (1.8,1.5);
+\coordinate (Y) at (4.2,0.5);
+\fill (X) circle (0.3mm);
+\fill (Y) circle (0.3mm);
+\draw[thick] (X)--(Y) node[midway, above]{$\ell$};
+\draw[dotted, <->] (A)--(B) node[midway, above]{$L$};
+\draw[dotted, <->] (D)--(E) node[midway, right]{$M$};
+%\fill[color=gray!15] (0,0)--(A)--(B)--(C)--(D)--(E)--cycle; 
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\begin{sol}
+%%%%%%%%%
+A maior vara corresponde ao menor segmento que passa por $C$ e
+encosta nas paredes em dois pontos $P$ e $Q$ (ver imagem
+abaixo).
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\L}{1};
+\pgfmathsetmacro{\M}{2};
+\pgfmathsetmacro{\m}{2};
+\pgfmathsetmacro{\l}{4};
+\coordinate (A) at (0,{\M+\m});
+\coordinate (B) at (\L,{\M+\m});
+\coordinate (C) at (\L,{\M});
+\coordinate (D) at ({\L+\l},\M);
+\coordinate (E) at ({\L+\l},0);
+\draw (A)--(0,0)--(E); 
+\draw (B)--(C)--(D);
+\pgfmathsetmacro{\t}{30};
+\coordinate (P) at (0,{\M+(\L*sin(\t)/cos(\t))});
+\draw (P) node[left]{$P$};
+\coordinate (Q) at ({\L+(\M*cos(\t)/sin(\t))},0);
+\draw (Q) node[below]{$Q$};
+\draw[thick] (P)--(C);
+\draw[thick] (Q)--(C);
+\draw (C) node[below left]{$C$};
+\draw (D) node[right]{$D$};
+%\coordinate (X) at (1.8,1.5);
+%\coordinate (Y) at (4.2,0.5);
+%\fill (X) circle (0.3mm);
+%\fill (Y) circle (0.3mm);
+%\draw[thick] (X)--(Y) node[midway, above]{$\ell$};
+%\draw[dotted, <->] (A)--(B) node[midway, above]{$L$};
+%\draw[dotted, <->] (D)--(E) node[midway, right]{$M$};
+%\fill[color=gray!15] (0,0)--(A)--(B)--(C)--(D)--(E)--cycle; 
+\fill (P) circle (0.4mm);
+\fill (Q) circle (0.4mm);
+\fill (C) circle (0.4mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Seja $\theta$ o ângulo $QCD$. Quando $\theta$ é fixo, a
+distância de $P$ a $Q$ vale 
+$$
+f(\theta)=\frac{L}{\cos \theta}+\frac{M}{\sen \theta}\,.
+$$
+Precisamos minimizar $f$ no intervalo $(0,\pisobredois)$.
+(Observe que $\lim_{\theta\to 0^+}f(\theta)=+\infty$,
+$\lim_{\theta\to {\pisobredois}^-}f(\theta)=+\infty$.)
+Resolvendo $f'(\theta)=0$, vemos que o único ponto crítico
+$\theta_*$ satisfaz $\tan^3\theta_*=M/L$. É fácil verificar
+que $f$ é convexa, logo $\theta_*$ é um ponto de mínimo global
+de $f$.
+Assim, o tamanho da maior vara possível é igual a
+$$
+f(\theta_*)=\cdots=L\bigl(1+(M/L)^{2/3}\bigr)^{3/2}\,.
+$$
+Observe que quando $L=M$, a maior vara tem tamanho
+$2\sqrt{2}L$, e quando $M\to 0^+$, a maior vara tende a ter
+tamanho igual a $L$.
+\end{sol}
+\end{exo}
+

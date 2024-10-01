@@ -1,0 +1,3945 @@
+
+% !TeX spellcheck = pt_BR
+% !TEX encoding = UTF-8 Unicode
+
+\chapter{Derivada}\label{Cap:Derivacao}
+  
+\ifdefined\updateans
+% Only need to run once in a lifetime, when the file ans.tex needs to be updated.
+\Writetofile{ans}{\protect\section*{Capítulo \ref{Cap:Derivacao}}}
+\fi
+
+A \emph{derivada} será o nosso principal uso da noção de limite.
+Veremos primeiro, na Seção \ref{Sec:RetasGraf}, como ela aparece 
+naturalmente na
+procura da equação da reta tangente a um gráfico. 
+Em seguida, a derivada será
+tratada como uma nova função e as suas propriedades serão descritas.
+Estudaremos a \emph{segunda derivada} e o seu sentido geométrico na Seção 
+\ref{Sec:Segundaderivada}.
+Mais tarde abordaremos o estudo de problemas concretos de otimização
+no Capítulo~\ref{cap:MineMax}, e no Capítulo~\ref{cap:Estudos},
+derivada e derivada segunda serão
+usadas para estudos detalhados de funções.
+
+\section{Retas e gráficos de funções}\label{Sec:RetasGraf}
+
+Para começar, consideraremos retas do plano
+associadas \emph{ao gráfico de uma função}.
+Isto é, escolheremos um ponto \emph{fixo} $P$, um ponto \emph{móvel} $Q$, e 
+consideraremos a inclinação da reta que passa por $P$ e $Q$.
+Será interessante estudar como que essa inclinação evolui em função da 
+posição de $Q$, quando $Q$ se mexe ao longo do gráfico de uma função.
+
+\begin{ex}
+Considere o ponto {fixo} $P=(0,-1)$ e a reta horizontal $r$ de
+equação $y=1$. Consideremos agora um ponto móvel $Q$ em $r$. Isto é, $Q$ 
+é da forma
+$Q=(\lambda,1)$, onde $\lambda$ varia em $\bR$, e estudemos
+\emph{a inclinação da reta passando por $P$ e $Q$}, dada por 
+$$m(\lambda)=\frac{1-(-1)}{\lambda-0}=\frac{2}{\lambda}\,.$$
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw[ ->] (-3,0)--(3,0);
+\draw[ ->] (0,-1.5)--(0,1.5);
+\draw[thick] (-2.8,1)--(2.8,1);
+\coordinate (P) at (0,-1);
+\pgfmathsetmacro{\l}{1.5};
+\coordinate (Q) at (\l,1);
+\draw[dashed, domain=-0.3:\l+0.5] plot (\x,{2*\x/\l-1})
+node[right]{$\leftarrow$ inclinação: $m(\lambda)$};
+\fill (P) circle (0.50mm);
+\fill (Q) circle (0.50mm);
+\draw[dotted] (\l,0)node[below]{$\lambda$}--(Q);
+\draw (P) node[left]{$P$};
+\draw (Q) node[above]{$Q$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Vemos que quando $Q$ pertence ao primeiro quadrante ($\lambda>0$),
+$m(\lambda)$ é positiva, e quando $Q$ pertence ao segundo quadrante
+($\lambda<0$), $m(\lambda)$ é negativa.
+Observemos também que a
+medida que $Q$ se afasta pela direita ou pela esquerda, a reta tende a ficar
+mais
+horizontal. Em termos da sua inclinação: 
+$$\lim_{\lambda\to-\infty}m(\lambda)=0\,,\quad
+\quad\lim_{\lambda\to +\infty}m(\lambda)=0\,.$$
+Por outro lado, quando $Q$ se aproximar de $(0,1)$, a reta se aproxima
+de uma vertical, e a sua inclinação toma valores
+arbitrariamente grandes:
+$$\lim_{\lambda\to 0^-}m(\lambda)=-\infty\,,\quad \quad\lim_{\lambda\to
+0^+}m(\lambda)=+\infty\,.$$
+\end{ex}
+
+
+\begin{ex}
+Considere agora o ponto fixo $P=(-1,0)$ e um
+ponto móvel $Q$ no gráfico da função $f(x)=\frac1x$, contido no primeiro
+quadrante. Isto é,
+$Q$ é da forma $Q=(\lambda,\frac{1}{\lambda})$, com $\lambda>0$. Como no
+exemplo anterior, 
+estudemos {a inclinação da reta passando por $P$ e $Q$},
+dada por 
+$$m(\lambda)=\frac{\frac{1}{\lambda}-0}{\lambda-(-1)}=\frac{1}{
+\lambda(\lambda+1)}\,.$$
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw[ ->] (-1.5,0)--(3,0);
+\draw[ ->] (0,-0.5)--(0,2.5);
+\draw[thick, domain=0.4:3] plot (\x,{1/\x});
+\coordinate (P) at (-1,0);
+\pgfmathsetmacro{\l}{1.5};
+\coordinate (Q) at (\l,{1/\l});
+\draw[dashed, domain=-1.6:\l+0.6] plot (\x,{(\x+1)/(\l*(\l+1))});
+\fill (P) circle (0.50mm);
+\fill (Q) circle (0.50mm);
+\draw[dotted] (\l,0)node[below]{$\lambda$}--(Q);
+\draw (P) node[above]{$P$}; 
+\draw (Q) node[above]{$Q$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Aqui vemos que 
+$$\lim_{\lambda\to 0^+}m(\lambda)=+\infty\,,\quad \quad\lim_{\lambda\to
++\infty}m(\lambda)=0\,.$$
+\end{ex}
+
+Finalmente, consideremos um exemplo em que \emph{ambos} pontos pertencem ao
+gráfico de uma mesma função.
+
+\begin{ex}\label{Ex:primeiraretatangente}
+Considere a parábola\index{parábola}, gráfico da função $f(x)=x^2$. Consideremos , de novo, um
+ponto fixo nessa parábola, $P=(-1,1)$, e um ponto móvel $Q=(\lambda,\lambda^2)$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{(#1)^2}
+\draw[ ->] (-3,0)--(3,0);
+\draw[ ->] (0,-0.5)--(0,2.5);
+\draw[thick, domain=-1.5:1.5] plot (\x,{\funcao{\x}});
+\coordinate (P) at (-1,1);
+\pgfmathsetmacro{\l}{1.4};
+\coordinate (Q) at (\l,{\funcao{\l}});
+\draw[dashed, domain=-1.6:\l+0.4] plot (\x,{(\l-1)*\x+\l});
+\fill (P) circle (0.50mm);
+\fill (Q) circle (0.50mm);
+\draw[dotted] (\l,0)node[below]{$\lambda$}--(Q);
+\draw (P) node[above right]{$P$};
+\draw[dotted] (P)--(-1,0) node[below]{$-1$};
+\draw (Q) node[above left]{$Q$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Aqui, 
+$$
+m(\lambda)=\frac{\lambda^2-1}{\lambda-(-1)}=\frac{\lambda^2-1}{\lambda+1}\,.
+$$
+Quando $Q$ se afasta de $P$,
+$$
+\lim_{\lambda\to -\infty}m(\lambda)=-\infty\,,\quad \quad\lim_{\lambda\to
++\infty}m(\lambda)=+\infty\,.
+$$
+Vejamos agora algo mais interessante: \emph{o que acontece quando $Q$
+se aproxima arbitrariamente perto de $P$, isto é, quando $\lambda\to -1$?}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.5]
+\newcommand{\funcao}[1]{(#1)^2}
+\draw[ ->] (-3,0)--(3,0);
+\draw[ ->] (0,-0.5)--(0,2.3);
+\draw[ domain=-1.5:1.5] plot (\x,{\funcao{\x}});
+\coordinate (P) at (-1,1);
+\foreach \l in {0.3,0,-0.3,-0.7} {
+\coordinate (Q) at (\l,{\funcao{\l}});
+\draw[dashed, domain=-1.6:\l+0.4] plot (\x,{(\l-1)*\x+\l});
+\fill (Q) circle (0.40mm);
+}
+\pgfmathsetmacro{\l}{-1+0.01};
+\draw[thick, domain=\l+0.4:-1.6] plot (\x,{(\l-1)*\x+\l})
+node[left]{$r_t^P\,\rightarrow$};
+\draw (-1,1) node[below left]{$P$};
+\fill (P) circle (0.45mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Vemos que a medida que $Q$ se aproxima de $P$, a reta $r$ se aproxima da
+\grasA{reta tangente à parábola no ponto $P$}, denotada $r_t^P$.
+Em particular, a inclinação de $r_t^P$ pode ser calculada pelo limite 
+$$
+m_t^P=\lim_{\lambda\to -1}m(\lambda)=\lim_{\lambda\to
+-1}\frac{\lambda^2-1}{\lambda+1}\,.$$
+Esse limite é indeterminado, da forma ``$\tfrac00$'', mas pode ser calculado:
+$$\lim_{\lambda\to
+-1}\frac{\lambda^2-1}{\lambda+1}=\lim_{\lambda\to
+-1}\frac{(\lambda-1)(\lambda+1)}{\lambda+1}
+=\lim_{\lambda\to -1}(\lambda-1)=-2\,.
+$$
+\index{reta!tangente}
+Portanto, a equação da reta tangente $r_t^P$ é da forma $y=-2x+h$, e a ordenada
+na origem pode ser calculada usando o fato de $r_t^P$ passar por $P$. Obtém-se:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.5]
+\newcommand{\funcao}[1]{(#1)^2}
+\draw[ ->] (-3,0)--(3,0);
+\draw[ ->] (0,-0.5)--(0,2.3);
+\draw[thick, domain=-1.5:1.5] plot (\x,{\funcao{\x}});
+\coordinate (P) at (-1,1);
+\pgfmathsetmacro{\l}{-1+0.01};
+\draw[thick,  domain=\l+0.4:-1.6] plot (\x,{(\l-1)*\x+\l})
+node[below left]{$r_t^P:\, y=-2x-1$};
+\draw (-1,1) node[below left]{$P$};
+\fill (P) circle (0.50mm);
+\draw[dotted] (-1,0)node[below]{$-1$}--(-1,1);
+\draw[dotted] (0,1)node[right]{$1$}--(-1,1);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{ex}
+
+Na verdade, a mesma conta permite calcular a inclinação da reta tangente a
+qualquer ponto do gráfico:
+\begin{exo}\label{Exo:retatangxisdois}
+Considere um ponto $P$ da parábola, cuja primeira coordenada é um número
+$a\in\bR$ qualquer, fixo.
+Escolha um ponto $Q$ da parábola (com primeira coordenada $\lambda$), e
+calcule
+a equação da reta $r$ que passa por $P$ e $Q$.
+Estude o que acontece com a equação dessa reta quando $\lambda\to a$?
+\begin{sol}
+Se $P=(a,a^2)$, $Q=(\lambda,\lambda^2)$, a equação da reta $r^{PQ}$ é dada por
+$y=(\lambda+a)x-a\lambda$. Quando $\lambda\to a$ obtemos 
+a equação da reta tangente à parábola em $P$: $y=2a x-a^2$.
+Por exemplo, se $a=0$, a equação da reta tangente é $y=0$, se $a=2$, é
+$y=4x-4$, 
+$a=-1$, é $y=-2x-1$ (o que foi calculado no Exemplo
+\ref{Ex:primeiraretatangente}).
+\end{sol}
+\end{exo}
+
+\section{Reta tangente e derivada}
+\index{reta!tangente}
+O procedimento descrito no Exemplo \ref{Ex:primeiraretatangente} acima pode ser
+generalizado, e fornece um método para calcular a reta tangente ao gráfico de
+uma função $f$ num ponto $P=(a,f(a))$.
+Escolhamos
+um ponto vizinho de $P$, também no gráfico de $f$, denotado $Q=(x,f(x))$, e
+consideremos a reta $r$ que passa por $P$ e $Q$.
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.5]
+\newcommand{\funcao}[1]{(#1)^2/4+0.4}
+\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/(#2)-(\funcao{#1})/(#2)}
+\draw[ ->] (0,-0.2)--(0,1.5)node[left]{$f(x)$};
+ \draw[ ->] (-0.5,0)--(3,0);
+ \draw[thick, domain=-0.5:2.7] plot (\x,{\funcao{\x}});
+ 
+ \pgfmathsetmacro{\a}{0.5};
+ \coordinate (P) at (\a,{\funcao{\a}});
+ \pgfmathsetmacro{\l}{2.5};
+ \coordinate (Q) at (\l,{\funcao{\l}});
+\draw[->, very thick, domain=\l+0.1:\l-0.2] plot (\x,{\funcao{\x}-0.2});
+\draw[thick,  domain={\a-0.4}:{\l+0.4}] plot
+(\x,{(\dfuncao{\a}{0.03})*(\x-\a)+\funcao{\a}});
+\draw[dashed, domain={\a-0.4}:{\l+0.6}] plot
+(\x,{(\dfuncao{\a}{(\l-\a)})*(\x-\a)+\funcao{\a}}) node[above
+right]{$r$};
+\draw (P) node[above]{$P$};
+\fill (P) circle (0.50mm);
+\draw (Q) node[above]{$Q$};
+\fill (Q) circle (0.50mm);
+\draw[dotted] (\a,0)node[below]{$a$}--(\a,{\funcao{\a}});
+\draw[dotted] (\l,0)node[below]{$x$}--(\l,{\funcao{\l}});
+\draw[dotted] 
+(\a,{\funcao{\a}})--({\l+0.4},{\funcao{\a}})node[right]{$f(a)$};
+ \draw[dotted] 
+(\l,{\funcao{\l}})--({\l+0.4},{\funcao{\l}})node[right]{$f(x)$};
+ \end{tikzpicture}\end{bmlimage}
+\end{center}
+A inclinação da reta $r$ é dada por
+$$\frac{f(x)-f(a)}{x-a}\,,$$
+e a inclinação da reta tangente em $P$ é obtida pegando $Q\to P$,
+isto é, $x\to a$.
+
+
+\begin{defin}
+Considere uma função $f$ definida num ponto $a$ e na sua vizinhança.
+Se o limite 
+\eq{\boxed{
+f'(a)\pardef \lim_{x\to a}\frac{f(x)-f(a)}{x-a}\,,}}
+existir e for finito, diremos que \index{função ! derivável num ponto}
+$f$ \grasA{é derivável (ou diferenciável) em $a$}. O valor de $f'(a)$
+é chamado de \grasA{derivada de $f$ no ponto $a$}, e 
+\index{diferenciabilidade}\index{reta!inclinação de}
+representa a \grasA{inclinação da reta tangente ao
+gráfico de $f$ no ponto $P=(a,f(a))$}.
+\end{defin}
+
+%\begin{obs}
+\begin{wrapfigure}{r}{5cm}
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{2-(#1-2)^2/3}
+\draw[ ->] (-0.4,0)--(2,0) node[right]{$x$};
+\draw[ ->] (-0.3,-0.2)--(-0.3,1.9) node[left]{$f(x)$};
+\draw[thick, domain=0:2.3] plot (\x,{\funcao{\x}});
+\coordinate (P) at (0.3,{\funcao{0.3}});
+\coordinate (Q) at (1.8,{\funcao{1.8}});
+\draw[dashed] (P)--(1.8,{\funcao{0.3}}) node[midway, below]{$\Delta
+x$}--(Q)node[midway, right]{$\Delta f$};
+\fill (P) circle (0.45mm);
+\fill (Q) circle (0.45mm);
+\draw (0.3,0) node[below]{$a$}--(P);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+%\vspace{-1cm}
+\end{wrapfigure}
+Veremos mais tarde que a derivada deve ser interpretada como \emph{taxa local de
+\index{taxa!de variação}
+crescimento da função}: $f'(a)$ dá a taxa com a qual $f(x)$ cresce em relação a $x$, na
+vizinhança de $a$. Considerando o gráfico na forma de uma curva $y=f(x)$, e
+chamando $\Delta x\pardef x-a$ e $\Delta f\pardef
+f(x)-f(a)$, vemos que uma notação natural para a derivada, bastante
+usada na literatura é:
+$${\frac{df}{dx}=\lim_{\Delta x\to
+0}\frac{\Delta f}{\Delta x}}
+$$
+%\end{obs}
+
+% \lipsum[1-4]
+% BUD
+% 
+%  \begin{wrapfigure}{r}{5cm}
+%     \centering
+%     \begin{bmlimage}\begin{tikzpicture}
+%       \draw[style=help lines] (0,0) grid (3,8);
+%     \end{tikzpicture}\end{bmlimage}
+% %    \caption{Tall and narrow figure}\label{fig:tnfigure}
+%   \end{wrapfigure}
+% DUB
+% \lipsum[5-7]
+
+\begin{obs}
+\index{indeterminação!do tipo ``$\frac00$''}
+Em geral, $f'(a)$ é um limite indeterminado da forma
+$\frac00$. De fato, se $f$ é contínua em $a$ então quando $x\to a$,
+o numerador $f(x)-f(a)\to 0$ e o denominador $x-a\to 0$.
+Por isso, os métodos estudados no último capítulo serão usados constantemente
+para calcular derivadas.
+\end{obs}
+
+\begin{obs}
+Observe que com a mudança de variável $h\pardef x-a$, $x\to a$ implica $h\to
+0$, logo a derivada pode ser escrita também como
+\eq{\boxed{
+f'(a)\pardef \lim_{h\to 0}\frac{f(a+h)-f(a)}{h}\,,}}
+\end{obs}
+
+
+\begin{exo}
+Considere  $f(x)\pardef x^2-x$. Esboce o gráfico de $f$.
+Usando a definição de derivada, calcule a derivada de $f$ nos pontos
+$a=0$, $a=\frac12$, $a=1$. 
+Interprete o seu resultado graficamente.
+\begin{sol} 
+Como $x^2-x=(x-\frac12)^2-\frac14$, o gráfico obtém-se a partir do gráfico de
+$x\mapsto x^2$ por duas translações.
+Usando a definição de derivada, podemos calcular para todo $a$:
+$$f'(a)=\lim_{x\to a}\frac{f(x)-f(a)}{x-a}
+=\lim_{x\to a}\frac{(x^2-x)-(a^2-a)}{x-a}=
+\lim_{x\to a}\Bigl\{\frac{x^2-a^2}{x-a}-1\Bigr\}=2a-1\,.$$
+Aplicando essa fórmula para $a=0,\frac12,1$, obtemos $f'(0)=-1$,
+$f'(\frac12)=0$, $f'(1)=+1$. 
+Esses valores correspondem às inclinações das retas
+tangentes ao gráfico nos pontos $(0,f(0))=(0,0)$,
+$(\frac12,f(\frac12))=(\frac12,-\frac14)$ e $(1,f(1))=(1,0)$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.7]
+\newcommand{\funcao}[1]{((#1)^2-(#1))}
+\newcommand{\dfuncao}[2]{ ((\funcao{#1+#2})/(#2)-(\funcao{#1})/(#2)) }
+\draw[ ->] (0,-0.2)--(0,1)node[right]{$\scriptstyle{x^2-x}$};
+\draw[ ->] (-0.5,0)--(1.5,0);
+\draw[thick, domain=-0.5:1.5] plot (\x,{\funcao{\x}});
+\foreach \a in {0,0.5,1} {
+\draw[thick,  domain={\a-0.3}:{\a+0.3}] plot
+(\x,{(\dfuncao{\a}{0.01})*(\x-\a)+\funcao{\a}});
+\fill (\a,{\funcao{\a}}) circle (0.40mm);
+}
+\draw[dotted]
+(0.5,{\funcao{0.5}})--(0.5,0)node[above]{$\scriptstyle{\tfrac12}$};
+
+\draw (1,0) node[above]{$\scriptstyle{1}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{sol}
+\end{exo}
+
+
+
+
+\begin{exo}
+Usando a {definição}, calcule a derivada de $f$ no ponto
+dado.
+\begin{multicols}{2}
+\begin{enumerate}
+\item\label{itderivelem11} $f(x)=\sqrt{x}$,  $a=1$
+\item\label{itderivelem1} $f(x)=\sqrt{1+x}$, $a=0$
+\item\label{itderivelem2} $f(x)=\frac{x}{x+1}$, $a=0$
+\item\label{itderivelem3} $f(x)=x^4$, $a=-1$
+\item\label{itderivelem4} $f(x)=\frac{1}{x}$, $a=2$.
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itderivelem11} $f'(1)=\half$,
+\eqref{itderivelem1} $f'(0)=\half$ (a mesma do item anterior, pois o
+gráfico de $\sqrt{1+x}$ é o de $\sqrt{x}$ transladado de $1$ para a esquerda!),
+\eqref{itderivelem2} $f'(0)=1$,
+\eqref{itderivelem3} $f'(-1)=-4$,
+\eqref{itderivelem4} $f'(2)=-\frac{1}{4}$.
+\end{sol}
+\end{exo}
+
+
+\begin{exo}
+Dê a equação da reta tangente ao gráfico da função no(s)
+ponto(s) dado(s):
+\begin{multicols}{2}
+\begin{enumerate}
+\item\label{iteqretang1} $3x+9$, $(4,21)$
+\item\label{iteqretang2} $x-x^2$, $(\half,\frac{1}{4})$
+\item\label{iteqretang3} $\sqrt{1+x}$, $(0,1)$
+\item\label{iteqretang4} $\frac{1}{x}$, $(-1,-1)$, $(1,1)$
+\item\label{iteqretang5} $\sqrt{1-x^2}$, $(-1,0)$, $(1,-1)$
+$(0,1)$, $(1,0)$
+\item\label{iteqretang6} $\sen x$, $(0,0)$, $(\frac{\pi}{2},1)$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{iteqretang1} $y=3x+9$,
+\eqref{iteqretang2} $y=\frac{1}{4}$,
+\eqref{iteqretang3} $y=\half x+1$,
+\eqref{iteqretang4} $y=-x-2$, $y=-x+2$
+\eqref{iteqretang5} Observe que a função descreve a metade superior de um
+circulo de raio $1$ centrado na origem. As retas tangentes são, em $(-1,0)$:
+$x=-1$, em $(1,-1)$: não existe (o ponto nem pertence ao círculo!), em $(0,1)$:
+$y=1$, e em $(1,0)$: $x=1$.
+\eqref{iteqretang6} Mesmo sem saber ainda como calcular a derivada da
+função seno: $y=x$, $y=1$.
+\end{sol}
+\end{exo}
+
+\begin{exo}\label{Exo:tangenteaucercle}
+\index{círculo}
+Calcule a equação da reta tangente ao círculo $x^2+y^2=25$ nos pontos
+$P_1=(3,4)$, $P_2=(3,-4)$, $P_3=(5,0)$.
+\begin{sol}
+Primeiro é preciso ter uma função para representar o círculo na vizinhança de
+$P_1$: $f(x)\pardef \sqrt{25-x^2}$. A inclinação da tangente em $P_1$ é dada por
+\begin{align*}
+f'(3)=\lim_{x\to 3}\frac{f(x)-f(3)}{x-3}&=
+\lim_{x\to 3}\frac{\sqrt{25-x^2}-\sqrt{16}}{x-3}\\
+&=\lim_{x\to 3}\frac{(25-x^2)-{16}}{(x-3)(\sqrt{25-x^2}+\sqrt{16})}
+=\lim_{x\to 3}\frac{-(3+x)}{\sqrt{25-x^2}+\sqrt{16}}=-\tfrac34\,.
+\end{align*}
+(Essa inclinação poderia ter sido obtido observando que a reta
+procurada é perpendicular ao segmento $OP$, cuja inclinação é
+$\frac43$...)
+Portanto, a equação da reta tangente em $P_1$ é $y=-\frac34
+x+\frac{25}{4}$.  No ponto $P_2$, é preciso tomar a função 
+$f(x)\pardef -\sqrt{25-x^2}$. Contas parecidas dão a equação
+da tangente ao círculo em $P_2$: $y=\frac34 x-\frac{25}{4}$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1]
+\draw[ ->] (0,-1.2)--(0,1.2);
+\draw[ ->] (-1.2,0)--(1.2,0);
+\draw[dotted]
+(0.6,0)node[below]{$\scriptstyle{3}$} -- (0.6,0.8) -- (0,0.8)node[left]
+{$\scriptstyle{4}$};
+\pgfmathsetmacro{\a}{0.6};
+\draw[very thick, domain={\a-0.4}:{\a+0.4}] plot
+(\x,{-0.75*(\x-\a)+0.8});
+\draw[very thick,  domain={\a-0.4}:{\a+0.4}] plot
+(\x,{+0.75*(\x-\a)-0.8});
+\draw (0,0) circle (1cm);
+\fill (0.6,0.8) circle (0.40mm);
+\fill (0.6,-0.8) circle (0.40mm);
+\draw (0.6,0.8) node[above right]{$P_1$};
+\draw (0.6,-0.8) node[below right]{$P_2$};
+\draw[very thick] (1,-0.4)--(1,0.4);
+\fill (1,0) circle (0.40mm);
+\draw (1,0) node[above right]{$P_3$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+A reta tangente ao círculo no ponto $P_3$ é vertical, e tem equação $x=5$.
+Aqui podemos observar que a derivada de $f$ em $a=5$ \emph{não existe}, porqué
+a inclinação de uma reta vertical não é definida (o que não impede achar a sua
+equação...)!
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Determine o ponto $P$ da curva $y = \sqrt{x}$, $x\geq 0$, no qual a reta
+tangente
+$r_P$ \`a curva \'e paralela \`a 
+reta $r$ de equa\c c\~ao 
+$8x-y- 1 = 0$. Esboce a curva e as duas retas $r_P$, $r$.
+\begin{sol}
+Se $f(x)=\sqrt{x}$, temos que para todo $a>0$,
+$f'(a)=\frac{1}{2\sqrt{a}}$.
+Como a reta $8x-y- 1 = 0$ tem inclinação $8$, precisamos achar um $a$ tal que
+$f'(a)=8$, isto é, tal que $\frac{1}{2\sqrt{a}}=8$: $a=\frac{1}{256}$.
+Logo, o ponto procurado é $P=(a,f(a))=(\frac{1}{256},\frac{1}{16})$.
+\end{sol}
+\end{exo}
+
+
+\begin{exo}
+Calcule o valor do parâmetro $\beta$ para que a reta $y=x-1$ seja tangente
+ao gráfico da função $f(x)=x^2-2x+\beta$. Em seguida, faça o esboço de 
+$f$ e da reta.
+\begin{sol}
+Para a reta $y=x-1$ (cuja inclinação é $1$) poder ser tangente ao gráfico de
+$f$ em algum ponto $(a,f(a))$, esse $a$ deve satisfazer $f'(a)=1$. Ora, é fácil
+ver que para um $a$ qualquer, $f'(a)=2a-2$. Logo, $a$ deve satisfazer $2a-2=1$,
+isto é: $a=\frac32$. Ora, a reta e a função devem ambas passar pelo ponto
+$(a,f(a))$, logo $f(a)=a-1$, isto é:
+$(\frac32)^2-2\cdot\frac32+\beta=\frac32-1$. Isolando:
+$\beta=\frac{5}{4}$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{(#1)^2-2*(#1)+1.25}
+\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/(#2)-(\funcao{#1})/(#2)}
+\draw[ ->] (0,-0.2)--(0,2.5) node[right]{$y$};
+\draw[ ->] (-1,0)--(3,0) node[right]{$x$};
+\draw[thick, domain=-0.5:2.5] plot (\x,{\funcao{\x}})
+node[right]{$y=x^2-2x+\frac54$};
+\pgfmathsetmacro{\a}{1.5};
+\draw[thick,  domain={\a-1}:{\a+1}] plot
+(\x,{(\dfuncao{\a}{0.01})*(\x-\a)+\funcao{\a}}) node[right]{$y=x-1$};
+\fill (\a,{\funcao{\a}}) circle (0.40mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Esse problema pode ser resolvido sem usar derivada:
+para a parábola $y=x^2-2x+\beta$ ter $y=x-1$ como reta tangente, a única
+possibilidade é que as duas se intersectem em um ponto só, isto é, que a
+equação $x^2-2x+\beta=x-1$ possua uma única solução. Rearranjando:
+$x^2-3x+\beta+1=0$. Para essa equação ter uma única solução, é preciso que o
+seu $\Delta=5-4\beta=0$. Isso implica $\beta=\frac{5}{4}$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Considere o gráfico de $f(x)=\frac{1}{x}$. Existe um ponto $P$ do gráfico
+de $f$ no qual a reta tangente ao gráfico
+passa pelo ponto $(0,3)$?
+\begin{sol}
+Seja $P=(a,\frac1a)$ um ponto qualquer do gráfico. Como 
+$f'(a)=-\frac{1}{a^2}$, a reta tangente ao gráfico em $P$ é 
+$y=f'(a)(x-a)+f(a)=-\frac{1}{a^2}(x-a)+\frac1a$. Para essa reta passar pelo
+ponto $(0,3)$, temos $3=-\frac{1}{a^2}(0-a)+\frac1a$, o que
+significa que $a=\frac{2}{3}$.
+Logo, a reta tangente ao gráfico de $\frac1x$ no ponto $P=(\frac23,\frac32)$
+passa pelo ponto $(0,3)$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Determine o ponto $P$ do gráfico da função $f(x)=x^3-2x+1$ 
+no qual a equação da tangente é $y=x+3$.
+\begin{sol}
+$P=(-1,2)$.
+\end{sol}
+\end{exo}
+
+
+\subsection{Pontos de não-diferenciabilidade}
+A derivada nem sempre existe, por razões geométricas particulares: a reta
+tangente não é sempre bem definida. Vejamos alguns exemplos:
+\begin{ex}\label{Ex:derivracine}
+Considere $f(x)\pardef x^{1/3}$, definida para todo $x\in \bR$ (veja Seção
+\ref{Sec:InversoPotencias}).
+Para um $a\neq 0$ qualquer, calculemos (com a mudança $t=x^{1/3}$)
+$$f'(a)=\lim_{x\to a}\frac{x^{1/3}-a^{1/3}}{x-a}=
+\lim_{t\to a^{1/3}}\frac{t-a^{1/3}}{t^3-a}=\lim_{t\to
+a^{1/3}}\frac{1}{t^2+a^{1/3}t+a^{2/3}}=\frac{1}{3a^{2/3}}\,.
+$$
+Se $a=0$, é preciso calcular:
+$$
+f'(0)=\lim_{x\to 0}\frac{x^{1/3}-0^{1/3}}{x-0}=
+\lim_{x\to 0}\frac{1}{x^{2/3}}=+\infty\,.
+$$
+De fato, a reta tangente ao gráfico em $(0,0)$ é vertical:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw[->] (-2.5,0)--(2.5,0)node[right]{$x$};
+\draw[->] (0,-1)--(0,1)node[left]{$x^{1/3}$};
+\draw[thick, domain=-1.2:1.2] plot ({\x^3},\x); 
+\draw[very thick] (0,-0.8)--(0,0.8);
+\fill (0,0) circle (0.40mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center} 
+Assim, $x^{1/3}$ é derivável em qualquer $a\neq 0$, mas não em $a=0$. 
+\end{ex}
+
+
+
+\begin{ex}
+Considere agora $f(x)=|x|$, também definida para todo $x\in \bR$. Se $a>0$,
+então
+$$f'(a)=\lim_{x\to a}\frac{|x|-|a|}{x-a}=
+\lim_{x\to a}\frac{x-a}{x-a}=+1\,.$$
+Por outro lado, se $a<0$,
+$$f'(a)=\lim_{x\to a}\frac{|x|-|a|}{x-a}=
+\lim_{x\to a}\frac{-x-(-a)}{x-a}=-1\,.$$
+Então $|x|$ é derivável em qualquer $a\neq 0$.
+Mas observe que em $a=0$, 
+$$\lim_{x\to 0^+}\frac{|x|-|0|}{x-0}=+1\,,\quad \quad
+\lim_{x\to 0^-}\frac{|x|-|0|}{x-0}=-1\,.$$
+Como os limites laterais não coincidem, o limite bilateral não existe, o que
+significa que $f(x)=|x|$ \emph{não é derivável (apesar de ser contínua) em
+$a=0$.} De fato, o gráfico mostra que na origem $(0,0)$, a reta tangente não é
+bem definida:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.5]
+\draw[->] (-1.4,0)--(1.4,0)node[right]{$x$};
+\draw[->] (0,-0.3)--(0,1)node[right]{$|x|$};
+\draw[thick] (-1,1)--(0,0)--(1,1); 
+\pgfmathsetmacro{\r}{0.8};
+\foreach \alf in {-30, 15, 35} {
+\coordinate (A) at ({\r*cos(\alf)},{\r*sin(\alf)});
+\coordinate (B) at ({-\r*cos(\alf)},{-\r*sin(\alf)});
+\draw (A) node[right]{$?$}--(B);
+}
+\fill (0,0) circle (0.40mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\end{ex}
+
+\begin{exo}
+ Dê um exemplo de uma função contínua $f:\bR\to \bR$ que seja
+derivável em qualquer ponto da reta, menos em $-1,0,1$.
+\begin{sol}
+Por exemplo, $f(x)\pardef |x+1|/2-|x|+|x-1|$.
+Mais explicitamente,
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw (-8,0.8) node{$\displaystyle{
+f(x)=
+\begin{cases}
+\frac{1-x}{2}&\text{ se }x\leq -1\\
+\frac{x+3}{2}&\text{ se }-1\leq x\leq 0\\
+\frac{3-3x}{2}&\text{ se }0\leq x\leq 1\\
+\frac{x-1}{2}&\text{ se }x\geq 1\,.
+\end{cases}
+}$};
+\draw [thick, domain=-2:2, samples=200]plot
+(\x,{abs(\x+1)/2-abs(\x)+abs(\x-1)});
+\draw [->](-2,0)--(2,0) ;
+\draw (2.2,0) node {$x$};
+\draw [->](0,-0.5)--(0,2);
+\draw (-0.5,1.8) node {$f(x)$};
+\draw (-1,0) node {$\shortmid$};
+\draw (-1,-0.4) node {$-1$};
+\draw (1,0) node {$\shortmid$};
+\draw (1,-0.4) node {$1$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+$f$ não é derivável em $x=1$, porqué 
+$\lim_{x\to 1^+}\frac{f(x)-f(1)}{x-1}=\lim_{x\to
+1^+}\frac{\frac{x-1}{2}-0}{x-1}=\frac12$,
+enquanto 
+$\lim_{x\to 1^-}\frac{f(x)-f(1)}{x-1}=\lim_{x\to
+1^-}\frac{\frac{3-3x}{2}-0}{x-1}=-\frac32\neq \frac12$.
+A não-derivabilidade nos pontos $-1$ e $0$ obtem-se da mesma maneira.
+\end{sol}
+\end{exo}
+
+
+Apesar da função $|x|$ não ser derivável em $a=0$, vimos que é possível 
+``derivar pela esquerda ou pela direita'', usando limites laterais.
+Para uma função $f$, as
+\grasA{derivadas laterais em $a$}, $f'_+(a)$ e $f'_-(a)$,
+\index{derivada!lateral}
+são definidas pelos limites (quando eles existem)
+\eq{f'_\pm(a)\pardef \lim_{x\to a^\pm}\frac{f(x)-f(a)}{x-a}=
+\lim_{h\to 0^\pm}\frac{f(a+h)-f(a)}{h}\,.}
+
+
+
+\subsection{Derivabilidade e continuidade}
+\index{diferenciabilidade! e continuidade}
+Vimos casos (como $|x|$ ou $x^{1/3}$ em $a=0$) em que uma função pode ser
+contínua num ponto sem ser derivável nesse ponto. 
+Mas o contrário sempre vale:
+
+\begin{teo}\label{Teo:derivimplicacontin}
+ Se $f$ é derivável em $a$, então ela é contínua em $a$.
+\end{teo}
+\begin{proof}
+ De fato, dizer que $f$ é derivável em $a$ implica que o limite $f'(a)=\lim_{x\to
+a}\frac{f(x)-f(a)}{x-a}$ existe e é finito. Logo, 
+\begin{align*}
+\lim_{x\to a}(f(x)-f(a))&=
+\lim_{x\to a}\Bigl\{\frac{f(x)-f(a)}{x-a}(x-a)
+\Bigr\}\\
+&=
+\Bigl\{\lim_{x\to a}\frac{f(x)-f(a)}{x-a}
+\Bigr\}\cdot \{\lim_{x\to a}(x-a)\}=0\,,
+\end{align*}
+o que implica $f(x)\to f(a)$ quando $x\to a$. Isto é: $f$ é contínua em $a$.
+\end{proof}
+
+\section{A derivada como função}
+\index{derivada!como função}
+
+\begin{ex}
+\emph{Será que existe um ponto $P$ da parábola $f(x)=x^2$ em que a
+reta tangente tem inclinação igual a $2975$?}
+
+O que sabemos fazer, até agora, é fixar um ponto, por exemplo $a=1$, e calcular a inclinação da reta
+tangente à parábola no ponto $(1,f(1))$, que é dada por $f'(1)$.
+Para responder à pergunta acima, poderíamos calcular a derivada em vários 
+pontos da reta, um a um, até achar um
+em que a inclinação à igual a $2975$.
+
+Mas é mais fácil reformular a pergunta acima diretamente em termos da derivada: \emph{Será
+que existe um ponto $a$ em que}
+\[ f'(a)=2975\quad ?
+\]
+Para isto, é preciso ter a \emph{função} $f'(\cdot)$, que associa a cada $a$ a inclinação
+da reta tangente ao gráfico de $f$ no ponto $(a,f(a))$.
+Logo, vamos supor que $a$ é um ponto fixo da reta, sem
+especificar o seu valor, e calcular
+\[ 
+f'(a)
+=\lim_{x\to a}\frac{f(x)-f(a)}{x-a}
+=\lim_{x\to a}\frac{x^2-a^2}{x-a}
+=\lim_{x\to a}\frac{(x-a)(x+a)}{x-a}
+=\lim_{x\to a}(x+a)
+=2a\,.
+\]
+Agora, a \emph{equação} que precisamos resolver, $f'(a)=2975$, é simplesmente
+\[ 
+2a=2975\,,\quad \Rightarrow \quad 
+a=1487.5\,.
+\]
+O ponto procurado é $P(1487.5,1487.5^2)$.
+\end{ex}
+
+O exemplo acima mostrou a utilidade de ver a derivada como uma \emph{função}
+$a\mapsto f'(a)$.
+Quando se fala em função, é mais
+natural a escrever usando a letra $x$ em
+vez da letra $a$: $$x\mapsto f'(x)\,.$$
+Assim, a derivada pode também ser vista como um jeito de definir, a partir de
+uma função $f$, uma outra função $f'$, chamada \grasA{derivada de $f$},
+definida (quando o limite existe) por 
+$$\boxed{f'(x)\pardef \lim_{h\to 0}\frac{f(x+h)-f(x)}{h}\,.}$$
+Observe que nessa expressão, $h$ tende a zero enquanto $x$ é \emph{fixo}.
+
+\begin{obs}
+É importante mencionar que o domínio de $f'$ é em geral menor que o de $f$.
+Por exemplo, $|x|$ é bem  definida para todo $x\in \bR$, mas
+vimos que a sua derivada é definida
+somente quando $x\neq 0$.
+\end{obs}
+
+\begin{exo}
+Se $f$ é par (resp. ímpar), derivável, mostre que a sua derivada é ímpar (resp.
+par).
+\begin{sol}
+De fato, se $f$ é par, 
+\begin{align*}
+f'(-x)=\lim_{h\to 0}\frac{f(-x+h)-f(-x)}{h}
+&=\lim_{h\to 0}\frac{f(x-h)-f(x)}{h}\\
+&=-\lim_{h'\to 0}\frac{f(x+h')-f(x)}{h'}=-f'(x)\,.
+\end{align*}
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Se $f$ é derivável em $a$, calcule o limite $\lim_{x\to
+a}\frac{af(x)-xf(a)}{x-a}$
+\begin{sol}
+$af'(a)-f(a)$
+\end{sol}
+\end{exo}
+
+Derivadas serão usadas extensivamente no resto do curso.
+Nas três próximas seções calcularemos as derivadas de algumas funções
+fundamentais. Em seguida provaremos as regras de derivação, que permitirão
+calcular a derivada de qualquer função a partir das derivadas das funções
+fundamentais. Em seguida comecaremos a usar derivadas na resolução de problemas
+concretos.
+
+\subsection{Derivar as potências inteiras: $x^{p}$}
+\index{derivada! de potências}
+Mostraremos aqui que para as potências inteiras de $x$, 
+$x^p$ com $p\in \bZ$,
+\eq{\label{eq:derivpotenciainteira}\boxed{(x^p)'=px^{p-1}\,.}}
+O caso $p=2$ já foi tratado no Exemplo
+\ref{Ex:primeiraretatangente} e no Exercício \ref{Exo:retatangxisdois}:
+$$(x^2)'=\lim_{h\to 0}\frac{(x+h)^2-x^2}{h}=\lim_{h\to 0}\frac{2xh+h^2}{h}=
+\lim_{h\to 0} (2x+h)=2x\,.
+$$
+Na verdade, para $x^n$ com $n\in \bN$ qualquer, já calculamos no Exercício 
+\ref{Exo:LimitescomDicas}:
+\eq{(x^n)'=\lim_{h\to 0}\frac{(x+h)^n-x^n}{h}=nx^{n-1}\,.}
+Por exemplo, $(x^4)'=4x^3$, $(x^{17})'=17x^{16}$.
+Daremos uma prova alternativa da fórmula 
+\eqref{eq:derivpotenciainteira} no Exercício \ref{exo_DERIV_potenciasalternat} abaixo.
+\begin{obs}
+ O caso $p=0$ corresponde a $x^0=1$. Ora, a derivada de qualquer constante
+$C\in \bR$ é zero (o seu gráfico corresponde a uma reta horizontal, portanto de
+inclinação $=0$!):
+$$\boxed{(C)'=0\,.}$$
+\end{obs}
+
+
+Para as potências negativas, $x^{-p}\equiv \frac{1}{x^q}$ obviamente não é
+derivável em $0$, mas se $x\neq 0$,
+$$
+\bigl(\tfrac{1}{x^q}\bigr)'=\lim_{h\to
+0}\frac{\frac{1}{(x+h)^q}-\frac{1}{x^q}}{h}=
+\lim_{h\to
+0}\frac{-1}{(x+h)^qx^q}\frac{(x+h)^q-x^q}{h}=
+\frac{-1}{x^qx^q}q x^{q-1}=-qx^{-q-1}\,.
+$$
+Isso prova \eqref{eq:derivpotenciainteira} para qualquer $p\in \bZ$.
+Veremos adiante que \eqref{eq:derivpotenciainteira} vale para
+qualquer $p$, \emph{mesmo não inteiro}. Por exemplo,
+$(x^{\sqrt{2}})'=\sqrt{2}x^{\sqrt{2}-1}$. Para alguns casos simples, uma conta
+explícita pode ser feita. Por exemplo, se $p=\pm \frac12$,
+\begin{exo}
+Calcule $(\sqrt{x})'$, $(\frac{1}{\sqrt{x}})'$.
+\begin{sol}
+$(\sqrt{x})'=\lim_{h\to 0}\frac{\sqrt{x+h}-\sqrt{x}}{h}=
+\lim_{h\to 0}\frac{1}{\sqrt{x+h}+\sqrt{x}}=\frac{1}{2\sqrt{x}}$.
+O outro limite se calcula de maneira parecida:
+$$(\frac{1}{\sqrt{x}})'=\lim_{h\to
+0}\frac{\frac{1}{\sqrt{x+h}}-\frac{1}{\sqrt{x}}}{h}=
+\lim_{h\to
+0}\frac{\sqrt{x}-\sqrt{x+h}}{h\sqrt{x}\sqrt{x+h}}=\cdots=-\frac{1}{2\sqrt{x^3}}
+\,.
+$$
+\end{sol}
+\end{exo}
+
+
+
+\subsection{Derivar as funções trigonométricas}
+\index{derivada! de funções trigonométricas}
+A derivada da função seno já foi calculada no Exercício
+\ref{Exo:LimitescomDicas}. Por definição,
+$$
+(\sen)'( x) 
+=\lim_{h\to 0}\frac{\sen (x+h)-\sen x}{h}\,.
+$$
+Usando a fórmula \eqref{eqsensoma}, $\sen (x+h)=\sen x\cos h+\sen h\cos x$,
+obtemos
+\begin{align*}
+\lim_{h\to 0}\frac{\sen (x+h)-\sen x}{h}
+&=\lim_{h\to 0}\frac{\sen x\cos h+\sen h\cos x-\sen x}{h}\\
+&=\sen x\Bigl\{\lim_{h\to 0}\frac{\cos h-1}{h}\Bigr\}+\cos x\Bigl\{\lim_{h\to
+0}\frac{\sen h}{h}\Bigr\}\,.
+\end{align*}
+Ora, sabemos que $\lim_{h\to 0}\frac{\sen h}{h}=1$, e que 
+$\lim_{h\to 0}\frac{\cos h-1}{h}=\lim_{h\to 0}h\frac{\cos h-1}{h^2}=0$ (lembre o
+item \eqref{itexosinxx5} do Exercício \ref{Exo:variantessinxsurx}).
+Portanto, provamos que
+\eq{\label{eq:derivseno}\boxed{(\sen)'( x) =\cos x}\,.}
+Pode ser provado (ver o exercício abaixo) que
+\eq{\label{eq:derivcosseno}\boxed{(\cos)'( x)=-\sen x\,.}}
+Para calcular a derivada da tangente, $\tan x=\frac{\sen x}{\cos x}$,
+precisaremos de uma regra de derivação que será provada na Seção
+\ref{Sec:regrasdederivacao}; obteremos 
+\eq{\label{eq:derivtan}\boxed{(\tan)'( x)
+=1+\tan^2x=\frac{1}{\cos^2x}\,.}}
+\begin{exo}\label{Exo:retastangentesseno}
+Calcule a equação da reta tangente ao gráfico da função $\sen x$, nos pontos 
+$P_1=(0,0)$, $P_2=(\pisobredois, 1)$, $P_3=(\pi,0)$. Confere no gráfico.
+\begin{sol}
+Como $(\sen)'(x)=\cos x$, a inclinação da reta tangente em $P_1$ é $\cos(0)=1$,
+em $P_2$ é $\cos(\pisobredois)=0$, e em $P_3$ é $\cos(\pi)=-1$. Logo, as
+equações das respectivas retas tangentes são $r_1$: $y=x$, $r_2$: $y=1$, $r_3$:
+$y=-(x-\pi)$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1]
+\newcommand{\funcao}[1]{sin(#1 r)}
+\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/{#2}-(\funcao{#1})/{#2} }
+\draw[ ->] (0,-0.2)--(0,1)node[left]{$\scriptstyle{\sen x}$};
+\draw[ ->] (-2,0)--(5,0);
+\draw[thick, domain=-1.8:4.8] plot (\x,{\funcao{\x}});
+
+\pgfmathsetmacro{\e}{0.75};
+\pgfmathsetmacro{\a}{0};
+\draw[thick,  domain={\a*1.5707-\e}:{\a*1.5707+\e}] plot
+(\x,{\x});
+\pgfmathsetmacro{\a}{1};
+\draw[thick,  domain={\a*1.5707-\e}:{\a*1.5707+\e}] plot
+(\x,{1});
+\pgfmathsetmacro{\a}{2};
+\draw[thick,  domain={\a*1.5707-\e}:{\a*1.5707+\e}] plot
+(\x,{3.1415-\x});
+
+\foreach \a in {0,1,2} {
+\fill ({\a*1.5707},{sin(\a*1.5707 r)}) circle (0.50mm);
+}
+% \draw[dotted]
+% (0.5,{\funcao{0.5}})--(0.5,0)node[above]{$\scriptstyle{\tfrac12}$};
+% 
+% \draw (1,0) node[above]{$\scriptstyle{1}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Prove \eqref{eq:derivcosseno}.
+\end{exo}
+
+\subsection{Derivar exponenciais e logaritmos}
+\index{derivada!de exponencial e logaritmo}
+Na Seção \ref{Sec:Fundam_numero_e} calculamos
+\eq{\label{Eq:derivexponenzerobis}\lim_{h\to 0}\frac{e^h-1}{h}=1\,,\quad\quad
+\lim_{h\to 0}\frac{\ln(1+h)}{h}=1\,.}
+Lembre que esses limites seguem diretamente da definição do número
+$e$, como o limite $e\pardef \lim_{n\to \infty}(1+\frac1n)^n$.
+Usaremos agora o primeiro desses limites para calcular
+a derivada de $e^x$: para $x\in \bR$,
+$$
+(e^x)'\pardef\lim_{h\to 0}\frac{e^{x+h}-e^x}{h}=
+\lim_{h\to 0}\frac{e^{x}e^h-e^x}{h}=
+e^{x}\Bigl\{\lim_{h\to 0}\frac{e^h-1}{h}\Big\}=e^x\,.
+$$
+Portanto, está provado que a função exponencial é igual a sua derivada!
+Por outro lado, para derivar o logaritmo, observe que 
+para todo $x>0$,
+$\ln(x+h)-\ln (x)=\ln(\frac{x+h}{x})=\ln(1+\frac{h}{x})$. Logo,
+$$(\ln x)'\pardef \lim_{h\to 0}\frac{\ln(x+h)-\ln(x)}{h}=\lim_{h\to
+0}\frac{\ln(1+\frac{h}{x})}{h}\,.$$
+Chamando $\alpha\pardef\frac{h}{x}$ temos, usando \eqref{Eq:derivexponenzerobis},
+$$(\ln x)'=\tfrac1x\Bigl\{\lim_{\alpha\to 
+0}\frac{\ln(1+\alpha)}{\alpha}\Bigr\}=\tfrac1x\,.
+$$
+Calculamos assim duas derivadas fundamentais:
+$$
+\boxed{
+(e^x)'=e^x\,,\quad\quad (\ln x)'=\frac{1}{x}\,.
+}
+$$
+
+\begin{obs}
+A interpretação geométrica dos limites em
+\eqref{Eq:derivexponenzerobis} é a seguinte: a inclinação da reta
+tangente ao gráfico de $e^x$ no ponto $(0,1)$ e a inclinação da reta
+tangente ao gráfico de $\ln x$ no ponto $(1,0)$ ambas valem $1$ (lembre que o
+gráfico do logaritmo é a reflexão do gráfico da exponencial pela bisetriz do
+primeiro quadrante):
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw[ ->] (-2,0)--(1.5,0);
+\draw[ ->] (0,-2)--(0,2);
+\draw[thick, domain=-1.8:1] plot (\x,{exp(\x)}) node[left]{$e^x$}; 
+\draw[thick,  domain=-0.8:1] plot (\x,{\x+1});
+\draw[thick, domain=-1.8:1] plot ({exp(\x)},\x) node[right]{$\ln x$};
+\draw[thick,  domain=1:-0.8] plot ({\x+1},\x);
+%\draw[<-] (0.1,1)--(1,0.7)node[right]{inclinação=$1$}; 
+\fill (0,1) circle (0.50mm);
+\fill (1,0) circle (0.50mm);
+\draw[dashed] (-1.5,-1.5)--(2,2);
+% 
+% \begin{scope}[xshift=5cm]
+% \draw[ ->] (-2,0)--(1.5,0);
+% \draw[ ->] (0,-0.2)--(0,2);
+% \end{scope}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Uma olhada nos esboços das funções $a^x$ na página
+\pageref{Fig:graficosdifbases} mostra que $e^x$ é a única com essa propriedade.
+Às vezes, livros \emph{definem} ``$e$'' como sendo a única base $a$ que
+satisfaz a essa propriedade: a inclinação da reta tangente a $a^x$ na origem é
+igual a $1$.
+\end{obs}
+
+\section{Regras de derivação}\label{Sec:regrasdederivacao}
+\index{regras de derivação}
+Antes de começar a usar derivadas, é necessário estabelecer algumas 
+\emph{regras
+de derivação}, que respondem essencialmente à seguinte pergunta: se $f$ e $g$
+sáo deriváveis, $f'$ e $g'$ conhecidas, como calcular $(f+g)'$, $(f\cdot 
+g)'$,
+$(\frac{f}{g})'$, $(f\circ g)'$? 
+Nesta seção, será sempre subentendido que as funções consideradas são
+deriváveis nos pontos considerados. Comecemos com o caso mais fácil:
+
+\begin{regra}
+$\boxed{(\lambda f(x))'=\lambda f'(x)}$ para toda constante $\lambda\in \bR$.
+\end{regra}
+\begin{proof} Usando a definição de $(\lambda f(x))'$  e colocando $\lambda$ em
+evidência,
+$$(\lambda f(x))'\pardef\lim_{h\to 0}\frac{\lambda f(x+h)-\lambda f(x)}{h}=
+\lambda\lim_{h\to 0}\frac{ f(x+h)-f(x)}{h}\equiv \lambda f'(x)\,.
+$$ 
+\end{proof}
+Por exemplo, $(2x^5)'=2(x^5)'=2\cdot 5x^4=10 x^4$.
+
+\begin{regra}
+ $\boxed{(f(x)+g(x))'=f'(x)+g'(x).}$
+\end{regra}
+\begin{proof}
+Aplicando a definição e rearranjando os termos,
+ \begin{align*}
+(f(x)+g(x))'&\pardef \lim_{h\to
+0}\frac{\bigl(f(x+h)+g(x+h)\bigr)-\bigl(f(x)+g(x)\bigr)}{h}\\
+&=\lim_{h\to
+0}\Bigl\{\frac{f(x+h)-f(x)}{h}+\frac{g(x+h)-g(x)}{h}\Bigr\}\\
+&=\lim_{h\to
+0}\frac{f(x+h)-f(x)}{h}+\lim_{h\to
+0}\frac{g(x+h)-g(x)}{h}=f'(x)+g'(x)\,.
+\end{align*}
+\end{proof}
+Por exemplo, $(2x^5+\sen x)'=(2x^5)'+(\sen x)'=10x^4+\cos x$.
+
+\begin{regra}
+ $\boxed{(f(x)g(x))'=f'(x)g(x)+f(x)g'(x)}$ (Regra do produto de Leibniz).
+\index{regra de Leibniz}
+\end{regra}
+\begin{proof}
+ Por definição, 
+\begin{align*}
+(f(x)g(x))'&\pardef \lim_{h\to
+0}\frac{f(x+h)g(x+h)-f(x)g(x)}{h}\,.
+\end{align*}
+Para fazer aparecer as derivadas respectivas de $f$ e $g$, escrevamos o
+quociente como
+\begin{align*}
+\frac{f(x+h)g(x+h)-f(x)g(x)}{h}
+={\frac{f(x+h)-f(x)}{h}}g(x+h)+f(x){\frac{g(x+h)-g(x)}{
+h}}
+\end{align*}
+Quando $h\to 0$, temos $\frac{f(x+h)-f(x)}{h}\to
+f'(x)$ e $\frac{g(x+h)-g(x)}{ h}\to g'(x)$.
+Como $g$ é derivável em $x$, ela é também contínua em $x$
+(Teorema \ref{Teo:derivimplicacontin}), logo $\lim_{h\to 0}g(x+h)=g(x)$. Assim,
+quando $h\to 0$, o quociente inteiro tende a $f'(x)g(x)+f(x)g'(x)$.
+\end{proof}
+Por exemplo, 
+\[(x^2\sen x)'=(x^2)'\sen x+x^2(\sen x)'=2x\sen x+x^2\cos x\,.\]
+
+\begin{exo}
+Dê contra-exemplos para mostrar que em geral, $(fg)'\neq f'g'$.
+\begin{sol}
+Por exemplo, se $f(x)=g(x)=x$, temos $(f(x)g(x))'=(x\cdot x)'=(x^2)'=2x$,
+e $f'(x)g'(x)=1\cdot 1=1$. Isto é, $(f(x)g(x))'\neq f'(x)g'(x)$.
+\end{sol}
+\end{exo}
+\index{regra!da cadeia}
+
+\begin{exo}\label{exo_DERIV_potenciasalternat}
+Mostre a fórmula $(x^n)'=nx^{n-1}$ usando indução e a regra de Leibniz. (Dica:
+$x^{n+1}=x\cdot x^{n}$.)
+\begin{sol}
+Já sabemos que $(x)'=1$, e que $(x^2)'=2x$, o que prova a fórmula para $n=1$ e $n=2$.
+Supondo que a fórmula foi provada para $n$, provaremos que ela vale para $n+1$
+também.
+De fato, usando a regra de Leibniz e a hipótese de indução,
+\[ 
+(x^{n+1})'=
+(x\cdot x^n)'=1\cdot x^n+x\cdot nx^{n-1}=x^n+nx^n=(n+1)x^n\,.
+\]
+\end{sol}
+\end{exo}
+
+Estudemos agora a derivação de funções \emph{compostas}:
+\begin{regra}
+\index{regra!da cadeia}
+ $\boxed{(f(g(x)))'=f'(g(x))g'(x)}$ (Regra da cadeia).
+\end{regra}
+\begin{proof} Fixemos um ponto $x$.
+Suporemos, para simplificar, que $g(x+h)-g(x)\neq 0$ para todo $h$ suficientemente
+pequeno~\footnote{Sem essa hipótese, a prova precisa ser ligeiramente modificada.}.
+Podemos escrever
+\begin{align}
+(f(g(x)))'&\pardef \lim_{h\to 0}\frac{f(g(x+h))-f(g(x))}{h}\nonumber\\
+&=\lim_{h\to
+0}\frac{f(g(x+h))-f(g(x))}{g(x+h)-g(x)}{\frac{g(x+h)-g(x)}{h}}\,.\label{multdivgzero}
+\end{align}
+Sabemos que o segundo 
+termo $\frac{g(x+h)-g(x)}{h}\to g'(x)$ quando $h\to 0$.
+Para o
+primeiro termo chamemos $a\pardef g(x)$ e $z\pardef g(x+h)$. Quando $h\to
+0$, $z\to a$, logo
+$$
+\lim_{h\to
+0}\frac{f(g(x+h))-f(g(x))}{g(x+h)-g(x)}=\lim_{z\to
+a}\frac{f(z)-f(a)}{z-a}\equiv f'(a)=f'(g(x))\,.
+$$
+\end{proof}
+
+Para aplicar a regra da cadeia, é importante saber identificar quais são as funções
+envolvidas, e em qual ordem elas são aplicadas (lembre do Exercício
+\ref{Exo_elem_decomp_compos}).
+
+\begin{ex}
+Suponha por exemplo que queira calcular a derivada da função $\sen(x^2)$, que é
+a composta de $f(x)=\sen x$ com $g(x)=x^2$: $\sen(x^2)=f(g(x))$. 
+Como $f'(x)=\cos x$ e $g'(x)=2x$ temos, pela regra da
+cadeia,
+$$(\sen(x^2))'=f(g(x))'=f'(g(x))g'(x)=\cos(x^2)\cdot
+(2x)=2x\cos (x^2)\,.$$
+Para calcular $e^{x^2}$, que é
+a composta de $f(x)=e^x$ com $g(x)=x^2$, e como $f'(x)=e^x$,
+temos
+$$(e^{x^2})'=e^{x^2}\cdot (x^2)'=2xe^{x^2}\,.$$
+\end{ex}
+
+\begin{ex}
+Para calcular a derivada de $\frac{1}{\cos x}$, que é a composta de
+$f(x)=\frac{1}{x}$ com $g(x)=\cos x$, e como $f'(x)=-\frac{1}{x^2}$,
+$g'(x)=-\sen x$, temos
+$$
+(\tfrac{1}{\cos x})'=-\frac{1}{(\cos x)^2}\cdot (-\sen x)=\frac{\sen x}{(\cos
+x)^2}\,.
+$$
+De modo geral, deixando $g(x)$ ser uma função qualquer, derivável e não-nula em
+$x$,
+\eq{\label{eq:derivumsobreg}
+\Big(\frac{1}{g(x)}\Big)'=-\frac{g'(x)}{g(x)^2}\,.}
+\end{ex}
+
+\begin{regra}\label{Regraquociente}
+$\boxed{\Bigl(\frac{f(x)}{g(x)}\Bigr)'=\frac{f'(x)g(x)-f(x)g'(x)}{g(x)^2}}$ (Regra do
+quociente).
+\end{regra}
+\begin{proof}
+Aplicando a Regra de Leibniz e \eqref{eq:derivumsobreg},
+$$
+\Big(\frac{f(x)}{g(x)}\Big)'=
+\Big(f(x)\cdot\frac{1}{g(x)}\Big)'=f'(x)\cdot\frac{1}{g(x)}+f(x)\cdot\Big(-\frac
+{ g'(x) } { g(x)^2 }\Big)
+=\frac{f'(x)g(x)-f(x)g'(x)}{g(x)^2}\,.
+$$ 
+\end{proof}
+\begin{ex}
+Usando a regra do quociente, podemos agora calcular:
+$$(\tan x)'=\Big(
+\frac{\sen x}{\cos x}\Big)'=\frac{(\sen x)'\cos x-\sen x(\cos x)'}{\cos^2x}
+=\frac{\cos^2x+\sen^2x}{\cos^2x}
+$$
+Essa última expressão pode ser escrita de dois jeitos:
+\[
+\boxed{
+(\tan x)'=
+\begin{cases}
+1+\tan^2x\,,\\
+\text{ ou }\frac{1}{\cos^2x}\,.\
+\end{cases}
+}
+\]
+\end{ex}
+
+\begin{exo}
+Use as regras de derivação para 
+calcular as derivadas das seguintes funções. Quando for possível,
+simplifique a expressão obtida.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itderivbas0} $-5x$
+\item\label{itderivbas1} $x^3-x^7$
+\item\label{itderivbas111} $1+x+\frac{x^2}{2}+\frac{x^3}{3}$
+\item\label{itderivbas2} $\frac{1}{1-x}$
+\item\label{itderivbas15} $x\sen x$
+\item\label{itderivbas151} $(x^2+1)\sen x\cos x$
+\item\label{itderivbas3} $\frac{\sen x}{x}$
+\item\label{itderivbas4} $\frac{x+1}{x^2-1}$
+\item\label{itderivbas1111} $(x+1)^5$
+\item\label{itderivbas6} $\big(3+\frac{1}{x}\big)^2$
+\item\label{itderivbas5} $\sqrt{1-x^2}$
+\item\label{itderivbas7} $\sen^3 x-\cos^7 x$
+\item\label{itderivbas8} $\frac{1}{1-\cos x}$
+\item\label{itderivbas8meio} $\frac{1}{\cos (2x-1)}$
+\item\label{itderivbas9} $\frac{1}{\sqrt{1+x^2}}$
+\item\label{itderivbas10} $\frac{(x^2-1)^2}{\sqrt{x^2-1}}$
+\item\label{itderivbas11} $\frac{x}{x+\sqrt{9+x^2}}$
+\item\label{itderivbas12} $\sqrt{1+\sqrt{x}}$
+\item\label{itderivbas16} $\frac{x}{\cos x}$
+\item\label{itderivbas17} $\cos\sqrt{1+x^2}$
+\item\label{itderivbas18} $\sen (\sen x)$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itderivbas0} $-5$
+\eqref{itderivbas1} $(x^3-x^7)'=(x^3)'-(x^7)'=3x^2-7x^6$.
+\eqref{itderivbas111}
+$(1+x+\frac{x^2}{2}+\frac{x^3}{3})'=(1)'+(x)'+(\frac{x^2}{2})'+(\frac{x^3}{3})'
+=1+x+x^2$.
+\eqref{itderivbas2}
+$(\frac{1}{1-x})'=-\frac{1}{(1-x)^2}\cdot(1-x)'=\frac{1}{(1-x)^2}$
+\eqref{itderivbas15} $\sen x+x\cos x$
+\eqref{itderivbas151} Usando duas vezes a regra de Leibniz: 
+$((x^2+1)\sen x\cos x)'=2x\sen x\cos x+(x^2+1)(\cos^2x-\sen^2x)$
+\eqref{itderivbas3} $\frac{x\cos x-\sen x}{x^2}$
+\eqref{itderivbas4} $(\frac{x+1}{x^2-1})'=(\frac{1}{x-1})'=\frac{-1}{(x-1)^2}$.
+\eqref{itderivbas1111} $(x+1)^5=f(g(x))$ com $f(x)=x^5$ e $g(x)=x+1$.
+Logo, $((x+1)^5)'=f'(g(x))g'(x)=5(x+1)^4$. Obs: poderia também expandir
+$(x+1)^5=x^5+\cdots$, derivar termo a termo, mas é muito mais longo, e a
+resposta não é fatorada.
+\eqref{itderivbas6} Como $(3+\frac{1}{x})^2=f(g(x))$ com
+$f(x)=x^2$ e $g(x)=3+\frac{1}{x}$, e que $f'(x)=2x$,
+$g'(x)=(3+\frac{1}{x})'=0-\frac{1}{x^2}$, temos
+$((3+\frac{1}{x})^2)'=2(3+\frac{1}{x})\cdot(\frac{-1}{x^2})=-2\frac{3+\frac{1}
+{x}}{x^2}$.
+\eqref{itderivbas5} Como $\sqrt{1-x^2}=f(g(x))$, com $f(x)=\sqrt{x}$,
+$g(x)=1-x^2$, e que $f'(x)=\frac{1}{2\sqrt{x}}$, $g'(x)=-2x$,
+temos $(\sqrt{1-x^2})'=\frac{-x}{\sqrt{1-x^2}}$-
+\eqref{itderivbas7} $3\sen^2x\cos x+7\cos^6x\sen x$
+\eqref{itderivbas8} $\frac{\sen x}{(1-\cos x)^2}$
+\eqref{itderivbas8meio} $\frac{2\sen (2x-1)}{(\cos(2x-1))^2}$
+\eqref{itderivbas9}
+$(\frac{1}{\sqrt{1+x^2}})'=((1+x^2)^{-\frac12})'=-\frac12(1+x^2)^{-\frac32}
+\cdot (2x)=-\frac{x}{(1+x^2)^{\frac32}}=\frac{-x}{\sqrt{(1+x^2)^3}}$. 
+\eqref{itderivbas10}
+$(\frac{(x^2-1)^2}{\sqrt{x^2-1}})'=((x^2-1)^{\frac32})'=\frac{3}{2}(x^2-1)^{
+\frac12}
+\cdot(2x)=3x\sqrt{x^2-1}$ Obs: vale a pena simplificar a fração antes de
+usar a regra do quociente!
+\eqref{itderivbas11} $\frac{9}{\sqrt{9+x^2}(x+\sqrt{9+x^2})^2}$
+\eqref{itderivbas12} $\frac{1}{4\sqrt{x}\sqrt{1+\sqrt{x}}}$
+\eqref{itderivbas16} $\frac{\cos x+x\sen x}{(\cos x)^2}$
+\eqref{itderivbas17} Usando duas vezes a regra da cadeia:
+$(\cos\sqrt{1+x^2})'=(-\sen \sqrt{1+x^2})(\sqrt{1+x^2})'=\frac{-x\sen
+\sqrt{1+x^2}}{\sqrt{1+x^2}}$ 
+\eqref{itderivbas18} $\cos(\sen x)\cdot\cos x$
+\end{sol}
+\end{exo}
+
+
+\begin{exo}
+Calcule a derivada da função dada.
+\begin{multicols}{4}
+\begin{enumerate}
+\item\label{itderivexpon1} $2e^{-x}$
+\item\label{itderivexpon2} $\ln (1+x)$
+\item\label{itderivexpon3} $\ln (e^{3x})$ 
+\item\label{itderivexpon61} $e^x\sen x$
+\item\label{itderivexpon4} $e^{\sen x}$
+\item\label{itderivexpon5} $e^{e^x}$
+\item\label{itderivexpon6} $\ln(1+e^{2x})$
+\item\label{itderivexpon7} $x\ln x$
+\item\label{itderivexpon8} $e^{\frac1x}$
+%\item\label{itderivexpon9} $\senh x$
+%\item\label{itderivexpon10} $\cosh x$
+%\item\label{itderivexpon11} $\tanh x$
+\item\label{itderivexpon12} $\ln(\cos x)$
+\item\label{itderivexpon13} $\ln(\frac{1+\cos x}{\sen x})$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itderivexpon1} $(2e^{-x})'=2(e^{-x})'=2(e^{-x}\cdot(-x)')=-2e^{-x}$.
+\eqref{itderivexpon2} $\frac{1}{x+1}$
+\eqref{itderivexpon3} $(\ln (e^{3x}))'=(3x)'=3$
+\eqref{itderivexpon61} $e^x(\sen x+\cos x)$
+\eqref{itderivexpon4} $\cos x \cdot e^{\sen x}$
+\eqref{itderivexpon5} $e^{e^x}\cdot e^x$
+\eqref{itderivexpon6} $\frac{2e^{2x}}{1+e^{2x}}$
+\eqref{itderivexpon7} $\ln x+x\frac{1}{x}=\ln x+1$
+\eqref{itderivexpon8} $\frac{-e^{\frac1x}}{x^2}$
+\eqref{itderivexpon12} $-\tan x$
+\eqref{itderivexpon13} $\frac{-1}{\sen x}$
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Verifique que as derivadas das funções trigonométricas hiperbólicas são
+dadas por 
+\[
+\boxed{(\senh x)'=\cosh x\,,\quad (\cosh x)'=\senh x\,,\quad (\tanh x)'=
+\begin{cases}
+1-\tanh^2 x\,,\\
+\text{ou }\frac{1}{\cosh^2 x}\,.
+\end{cases}
+}
+\]
+\begin{sol}
+$(\senh
+x)'=(\frac{e^x-e^{-x}}{2})'=\frac{e^x+e^{-x}}{2}\equiv \cosh x$.
+Do mesmo jeito, $(\cosh x)'=\senh x$.
+Para $\tanh$, basta usar a regra do quociente.
+Observe as semelhanças entre as derivadas das funções trigonométricas
+hiperbólicas e as funções trigonométricas.
+\end{sol}
+\end{exo}
+
+Às vezes, um limite pode ser calculado uma vez que interpretado como uma
+derivada.
+\begin{ex}
+Considere o limite $\lim_{x\to 1}\frac{\ln x}{x-1}$, que é indeterminado da
+forma $\frac00$.
+Como $\frac{\ln x}{x-1}=\frac{\ln x-\ln 1}{x-1}$, vemos que o limite pode ser
+interpretado como a derivada da função $f(x)=\ln x$ no ponto $a=1$:
+$$\lim_{x\to 1}\frac{\ln x-\ln 1}{x-1}=\lim_{x\to 1}\frac{f(x)-f(1)}{x-1}\equiv
+f'(1)\,.$$ 
+Ora, como $f'(x)=\frac{1}{x}$, temos $f'(1)=1$. Isto é: $\lim_{x\to 1}\frac{\ln
+x}{x-1}=1$.
+\end{ex}
+
+\begin{exo}
+Calcule os seguintes limites, interpretando-os como derivadas.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itlimbargeaotviaderiv1} $\lim_{x\to 1}\frac{x^{999}-1}{x-1}$
+\item\label{itlimbargeaotviaderiv2} $\lim_{x\to \pi}\frac{\cos x+1}{x-\pi}$
+\item\label{itlimbargeaotviaderiv3} $\lim_{x\to \pi}\frac{\sen (x^2)-\sen
+(\pi^2)}{x-\pi}$
+\item\label{itlimbargeaotviaderiv4} $\lim_{x\to 2}\frac{\ln x-\ln 2}{x-2}$
+\item\label{itlimbargeaotviaderiv5} $\lim_{t\to 0}\frac{e^{\lambda t}-1}{t}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itlimbargeaotviaderiv1}
+Sabemos que o limite $\lim_{x\to 1}\frac{x^{999}-1}{x-1}$ dá a inclinação da
+reta tangente ao gráfico da função $f(x)=x^{999}$ no ponto $a=1$, isto é:
+$\lim_{x\to 1}\frac{x^{999}-1}{x-1}=f'(1)$. Mas como 
+$f'(x)=999x^{998}$, temos $f'(1)=999$.
+\eqref{itlimbargeaotviaderiv2}
+Da mesma maneira, $\lim_{x\to \pi}\frac{\cos x+1}{x-\pi}=
+\lim_{x\to \pi}\frac{\cos x-\cos(\pi)}{x-\pi}$ dá a inclinação da reta tangente
+ao gráfico do $\cos$ no ponto $\pi$. Como $(\cos x)'=-\sen x$, o limite vale
+$0$.
+\eqref{itlimbargeaotviaderiv3} $2\pi \cos(\pi^2)$
+\eqref{itlimbargeaotviaderiv4} $\frac12$
+\eqref{itlimbargeaotviaderiv5} $\lambda$
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Considere as funções 
+$$
+f(x)\pardef
+\begin{cases}
+x\sen \frac1x &\text{ se } x\neq 0\,,\\
+0  & \text{ se }x=0\,,
+\end{cases}
+\quad\quad
+g(x)\pardef
+\begin{cases}
+x^2\sen \frac1x &\text{ se } x\neq 0\,,\\
+0  & \text{ se }x=0\,.
+\end{cases}
+$$
+Mostre que $g$ é derivável (logo, contínua) em todo $x\in \bR$.
+Mostre que $f$ é contínua em todo $x\in \bR$ e derivável em todo $x\in
+\bR\setminus\{0\}$, mas não é derivável em $x=0$.
+\begin{sol}
+Fora de $x=0$, $g$ é derivável e a sua derivada se calcula facilmente:
+$g'(x)=(x^2\sen \frac1x)'=2x\sen \frac1x-\cos\frac1x$. 
+Do mesmo jeito $f$ é derivável fora de $x=0$.
+Em $x=0$, 
+$$
+g'(0)=\lim_{h\to 0}\frac{g(h)-g(0)}{h}=\lim_{h\to 0} h\sen \tfrac1h=0\,.
+$$
+(O último limite pode ser calculado como no Exemplo \ref{Ex:sanduicheseno},
+escrevendo
+$-h\leq h\sen \tfrac1h\leq +h$.)
+Assim, $g$ é derivável também em $x=0$. No entanto, como
+$$\lim_{h\to 0}\frac{f(h)-f(0)}{h}=\lim_{h\to 0} \sen \tfrac1h\,,$$
+$f'(0)$ não existe: $f$ não é derivável em $x=0$.
+\end{sol}
+\end{exo}
+
+\subsection{Derivar as potências $x^\alpha$; exponenciação}
+\index{exponenciação}
+Definir uma potência $x^p$ para $p\in \bZ$ é imediato. Por exemplo,
+$x^3\pardef x\cdot x\cdot x$. Mas como definir $x^\alpha$ para uma potência
+não-inteira, por exemplo $x^{\sqrt{2}}=x^{1,414...}$? \\
+
+Um jeito de fazer é de se lembrar que qualquer $x>0$ pode ser
+\emph{exponenciado}: $x=e^{\ln x}$. Como $(e^{\ln x})^\alpha=e^{\alpha \ln x}$,
+é natural definir
+\eq{\boxed{x^\alpha\pardef e^{\alpha \ln x}\,.}}
+Observe que com essa definição, as regras habituais são satisfeitas. Por
+exemplo, para qualquer $\alpha, \beta\in \bR$,
+$$
+x^\alpha x^\beta=e^{\alpha \ln x}e^{\beta \ln x}=e^{\alpha \ln x+\beta \ln x}
+=e^{(\alpha+\beta)\ln x}=x^{\alpha+\beta}\,.
+$$
+Mas a definição dada acima permite também derivar $x^\alpha$, usando
+simplesmente a regra da cadeia:
+$$(x^\alpha)'=(e^{\alpha \ln x})'=(\alpha \ln x)'e^{\alpha \ln
+x}=\frac{\alpha}{x}x^\alpha=\alpha x^{\alpha-1}\,.$$
+Assim foi provado que a fórmula $(x^p)'=px^{p-1}$, inicialmente provada para 
+$p\in \bZ$, vale também para expoentes não-inteiros.\\
+
+O que foi usado acima é que
+se $g$ é derivável, então pela regra da cadeia,
+\eq{\label{eq:derivexponcadeia}(e^{g(x)})'=e^{g(x)}g'(x)\,.}
+
+\begin{ex}
+Considere uma exponencial numa base qualquer, $a^x$, $a>0$. Exponenciando
+a base $a=e^{\ln a}$, temos $a^x=e^{x\ln a}$. Logo, 
+\eq{\boxed{(a^x)'=(e^{x\ln a})'=(x\ln a)'e^{x\ln a}=(\ln a)a^x\,.}}
+\end{ex}
+
+Essa expressão permite calcular as derivadas das funções da forma 
+$f(x)^{g(x)}$. De fato, se $f(x)$, sempre podemos escrever
+$f(x)=e^{\ln f(x)}$, transformando $f(x)^{g(x)}=e^{g(x)\ln f(x)}$. 
+Por exemplo, 
+
+\begin{ex} Considere $x^x$, com $x>0$.
+Escrevendo o $x$ (de baixo) como $x=e^{\ln x}$, temos $x^x=(e^{\ln
+x})^x=e^{x\ln x}$, logo
+$$(x^x)'=(e^{x\ln x})'=(x\ln x)'e^{x\ln x}=(\ln x+1)x^x\,.$$
+\end{ex}
+
+\begin{exo}
+Derive as seguintes funções (supondo sempre que $x>0$).
+\begin{multicols}{4}
+\begin{enumerate}
+\item\label{itderivfelevg1} $x^{\sqrt{x}}$
+\item\label{itderivfelevg3} $(\sen x)^x$
+\item\label{itderivfelevg4} $x^{\sen x}$
+\item\label{itderivfelevg2} $x^{x^x}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itderivfelevg1} 
+$(x^{\sqrt{x}})'=(e^{\sqrt{x}\ln x})'=(\frac{\ln x}{2}+1){
+x^{\sqrt{x}-\frac12}}$.
+\eqref{itderivfelevg3} $((\sen x)^x)'=(\ln \sen x+x\cot x)(\sen x)^x$.
+\eqref{itderivfelevg4} $(x^{\sen x})'=(\cos x\ln x+\frac{\sen x}{x})x^{\sen x}$.
+\eqref{itderivfelevg2} $(x^{x^x})'=\bigl((\ln x+1)\ln
+x+\frac1x\bigr)x^xx^{x^x}$.
+\end{sol}
+\end{exo}
+
+\subsection{Derivadas logarítmicas}
+\index{derivada!logarítmica}
+Vimos que derivar uma soma é mais simples do que derivar um produto: a derivada da
+soma se calcula termo a termo, enquanto para derivar o produto, é necessário
+usar a regra de Leibniz repetitivamente.
+Ora, lembramos que \emph{o logaritmo transforma produtos em soma}, e que esse
+fato pode ser usado para simplificar as contas que aparecem para derivar um
+produto. \\
+
+Considere uma função $f$ definida como o produto de $n$ funções, que suporemos
+todas positivas e deriváveis: 
+$$f(x)=h_1(x)h_2(x)\dots h_n(x)\equiv \prod_{k=1}^nh_k(x)\,.$$ 
+Para calcular $f'(x)$, calculemos
+primeiro
+$$\ln f(x)=\ln h_1(x)+\ln h_2(x)+\dots+\ln h_n(x)\equiv \sum_{k=1}^n\ln
+h_k(x)\,,$$ 
+e derivamos ambos lados
+com respeito a $x$. Do lado esquerdo, usando a regra da cadeia, $(\ln
+f(x))'=\frac{f'(x)}{f(x)}$. Derivando termo a termo do lado direito, obtemos
+\begin{align*}
+\frac{f'(x)}{f(x)}&=(\ln h_1(x)+\ln h_2(x)+\dots+\ln h_n(x))'\\
+&=(\ln h_1(x))'+(\ln h_2(x))'+\dots+(\ln h_n(x))'\\
+&=\frac{h_1'(x)}{h_1(x)}+\frac{h_2'(x)}{h_2(x)}+\dots+\frac{h_n'(x)}{h_n(x)}\,.
+\end{align*}
+Logo, obtemos uma fórmula
+$$
+f'(x)=f(x)\Bigl(
+\frac{h_1'(x)}{h_1(x)}+\frac{h_2'(x)}{h_2(x)}+\dots+\frac{h_n'(x)}{h_n(x)}
+\Bigr)
+$$
+
+\begin{exo}
+Derive, usando o método sugerido acima:
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itderitruclog1} $\frac{(x+1)(x+2)(x+3)}{(x+4)(x+5)(x+6)}$
+\item\label{itderitruclog2} $\frac{x\sen^3x}{\sqrt{1+\cos^2x}}$
+\item\label{itderitruclog3} $\prod_{k=1}^n(1+x^k)$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol} As derivadas são dadas por:
+\eqref{itderitruclog1}
+$\frac{(x+1)(x+2)(x+3)}{(x+4)(x+5)(x+6)}
+(\frac{1}{x+1}+\frac{1}{x+2}+\frac{1}{x+3}-\frac{1}{x+4}-\frac{1}{x+5}-\frac{1}{
+x+6})$
+\eqref{itderitruclog2}
+$\frac{x\sen^3x}{\sqrt{1+\cos^2x}}\bigl(\frac{1}{x}+3\cot x+\frac{\sen 
+x\cos x}{{1+\cos^2x}}\bigr)$
+\eqref{itderitruclog3}
+$\bigl(\prod_{k=1}^n(1+x^k)\bigr)\sum_{k=1}^n\frac{kx^{k-1}}{1+x^k}$
+\end{sol}
+\end{exo}
+
+
+\subsection{Derivar uma função inversa}\label{Sec:DerivInversa}
+Sabemos que $(\sen x)'=\cos x$ e $(a^x)'=(\ln a)a^x$, mas como derivar as suas
+respectivas funções inversas, isto é, $(\arcsen x)'$ e $(\log_ax)'$?\\
+ 
+Vimos que o inverso de uma função $f$, quando é bem definido, satisfaz às
+relações:
+$$\forall x,\quad (f(f^{-1}(x))=x\,.$$
+Logo, derivando em ambos lados com respeito a $x$, e usando a regra da cadeia
+do lado esquerdo,
+$$
+f'(f^{-1}(x))\cdot (f^{-1})'(x)=1
+$$
+Logo,
+$$\boxed{(f^{-1})'(x)=\frac{1}{f'(f^{-1}(x))}\,.}$$
+
+\begin{ex}
+Calculemos a derivada do $\arcsen x$, que é por definição a inversa da
+função $f(x)=\sen x$, e bem definida para $x\in [-1,1]$. Como $f'(x)=\cos x$, a
+fórmula acima dá
+$$
+(\arcsen x)'=\frac{1}{f'(f^{-1}(x))}=\frac{1}{\cos(\arcsen
+x)}\,.$$
+Usando a identidade provada no Exemplo
+\ref{Ex:identidadesenoinverso}: $\cos(\arcsen
+x)=\sqrt{1-x^2}$, obtemos
+\eq{\boxed{(\arcsen x)'=\frac{1}{\sqrt{1-x^2}}\,.}}
+Observe que, como pode ser visto no gráfico da Seção
+\ref{Sec:Functriginversas}, as retas tangentes ao gráfico de $\arcsen x$ são
+verticais nos pontos $x=\pm 1$, o que se traduz pelo fato de $(\arcsen x)'$ não
+existir nesses pontos.
+\end{ex}
+
+\begin{exo}
+Mostre que 
+\eq{\boxed{(\log_ax)'=\frac{1}{(\ln a)x}\,,\quad\quad(\arcos
+x)'=\frac{-1}{\sqrt{1-x^2}}\,,\quad\quad (\arctan
+x)'=\frac{1}{1+x^2}\,.}}
+\vspace{0.01cm}
+\end{exo}
+
+\begin{exo}
+ Calcule as derivadas das funções abaixo.
+\begin{multicols}{2}
+\begin{enumerate}
+\item\label{itderivfuncinv1} $\log_a(1-x^2)$
+\item\label{itderivfuncinv2} $\arcsen(1-x^2)$
+\item\label{itderivfuncinv3} $\arctan (\tan x)$, $-\pisobredois<x<\pisobredois$
+\item\label{itderivfuncinv4} $\arcsen(\cos x)$, $0<x<\pisobredois$
+\item\label{itderivfuncinv5} $\cos(\arcsen x)$, $-1<x<1$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itderivfuncinv1} $\frac{-2x}{(\ln a)(1-x^2)}$
+\eqref{itderivfuncinv2} $\frac{-2x}{\sqrt{1-(1-x^2)^2}}$
+\eqref{itderivfuncinv3} $1$
+\eqref{itderivfuncinv4} $-1$
+\eqref{itderivfuncinv5} $\frac{-x}{\sqrt{1-x^2}}$
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Seja $f(x)=\arcos(\frac{1-x^2}{1+x^2})$. Mostre que a reta 
+de equação $y=-\frac{3}{2}(x+\frac{1}{\sqrt{3}})+\frac{\pi}{3}$
+é tangente ao gráfico de $f$ em algum ponto $P$.
+\end{exo}
+
+\section{O Teorema de Rolle}
+\index{Teorema!de Rolle}
+A seguinte afirmação geométrica é intuitiva:
+se $A$ e $B$ são dois pontos de mesma altura (isto é: com a mesma segunda
+coordenada) no gráfico de
+uma função diferenciável $f$, então existe pelo menos um ponto $C$ no gráfico
+de $f$, entre $A$ e $B$, tal que a reta tangente ao gráfico 
+em $C$ seja horizontal.
+Em outras palavras: 
+\begin{teo}\label{Teo:Rolle}
+Seja $f$ uma função contínua em $[a,b]$ e derivável em $(a,b)$. Se
+$f(a)=f(b)$, então
+existe $c\in (a,b)$ tal que $$f'(c)=0\,.$$
+\end{teo}
+
+\begin{ex}
+Considere $f(x)=\sen x$, e $a=0$, $b=\pi$. Então $f(a)=f(b)$. Nesse caso, o
+ponto $c$ cuja existência é garantida pelo teorema é
+$c=\pisobredois$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+%\newcommand{\funcao}[1]{(#1)^2}
+%\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/{#2}-(\funcao{#1})/{#2}}
+\draw[ ->, thin] (-0.3,0)--(3.5,0);
+\draw[ ->, thin] (0,0)--(0,1.2);
+\draw (0,0) node[below]{$\scriptstyle{0}$};
+\draw (0,0) node[above left]{$A$};
+\draw[dotted] (1.57,0)--(1.57,1);
+\draw (1.57,0) node[below]{$\scriptstyle{\tfrac{\pi}{2}}$};
+\draw (1.57,1) node[above]{$C$};
+\draw (3.1415,0) node[below]{$\scriptstyle{{\pi}}$};
+\draw (3.1415,0) node[above right]{$B$};
+\draw[color=gray, domain=-0.2:3.4] plot (\x,{sin(\x r)});
+\draw[thick, domain=0:3.1415] plot (\x,{sin(\x r)});
+\draw[thick] ({1.57-0.4},1)--({1.57+0.4},1);
+\fill (1.57,1) circle (0.40mm);
+\fill (3.1415,0) circle (0.40mm);
+\fill (3.1415,0) circle (0.40mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+De fato, $f'(x)=\cos x$, logo $f'(\pisobredois)=0$.
+\end{ex}
+
+\begin{exo}
+Em cada um dos casos a seguir, mostre que a afirmação do Teorema de Rolle é
+verificada, achando explicitamente o ponto $c$.
+\begin{multicols}{2}
+\begin{enumerate}
+\item\label{itRolleA1} $f(x)=x^2+x$, $a=-2$, $b=1$.
+\item\label{itRolleA2} $f(x)=\cos x$, $a=-\frac{3\pi}{2}$, $b=\frac{3\pi}{2}$
+\item\label{itRolleA3} $f(x)=x^4+x$, $a=-1$, $b=0$.
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+(O gráfico da função pode ser usado para interpretar o resultado.)
+\eqref{itRolleA1} Temos $f(-2)=f(1)$, e como $f'(x)=2x+1$, vemos que a derivada
+se anula em $c=-\frac{1}{2}\in (-2,1)$.
+\eqref{itRolleA2} Aqui são três pontos possíveis: $c=-\pi$, $c=0$ e $c=+\pi$.
+\eqref{itRolleA3} Temos $f(-1)=f(0)$ e $f'(x)=4x^3+1$, cuja raiz é 
+$-(\frac14)^{1/3}\in (-1,0)$.
+\end{sol}
+\end{exo}
+
+Como consequência do Teorema de Rolle,
+\index{Teorema!do valor intermediário para derivada}
+\begin{cor}\label{Corol:ValorIntermDeriv}
+  Seja $f$ uma função contínua em $[a,b]$, derivável em $(a,b)$. Então
+existe $c\in (a,b)$ tal que
+$$\frac{f(b)-f(a)}{b-a}=f'(c)\,.$$
+\end{cor}
+\begin{proof}
+ Defina $\tilde{f}(x)\pardef f(x)-\frac{f(b)-f(a)}{b-a}(x-a)$. 
+Então $\tilde{f}$ é diferenciável, e 
+como $\tilde{f}(a)=\tilde{f}(b)=f(a)$, pelo Teorema de Rolle existe um
+$c\in [a,b]$ tal que $\tilde{f}'(c)=0$.
+Mas como $\tilde{f}'(x)=f'(x)-\frac{f(b)-f(a)}{b-a}$, temos 
+$f'(c)-\frac{f(b)-f(a)}{b-a}=0$.
+\end{proof}
+
+\begin{wrapfigure}{r}{5cm}
+\vspace{-30pt}
+\begin{center}
+\parbox{5cm}{
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\al}{2.5};
+\pgfmathsetmacro{\bl}{2};
+\newcommand{\funcao}[1]{(\bl-(#1-\al)^2)}
+\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/(#2)-(\funcao{#1})/(#2)}
+\pgfmathsetmacro{\a}{1.2};
+\pgfmathsetmacro{\b}{3.4};
+\pgfmathsetmacro{\c}{\al-(\funcao{\b}-\funcao{\a})/(2*(\b-\a))};
+\draw[ ->] (0,0)--(4,0); 
+\draw[ ->] (0,0)--(0,2); 
+\draw[thick, domain=\a:\b] plot (\x,{\funcao{\x}}); 
+\coordinate (A) at (\a,{\funcao{\a}});
+\coordinate (B) at (\b,{\funcao{\b}});
+\coordinate (C) at (\c,{\funcao{\c}});
+\fill (A) circle (0.4mm);
+\fill (B) circle (0.4mm);
+\draw[dotted] (\a,0) node[below]{$\scriptstyle{a}$}--(A);
+\draw[dotted] (\c,0) node[below]{$\scriptstyle{c}$}--(C);
+\draw[dotted] (\b,0) node[below]{$\scriptstyle{b}$}--(B);
+\pgfmathsetmacro{\m}{\dfuncao{\c}{0.01}};
+\draw[thick,  domain={\c-0.5}:{\c+0.5}] plot
+(\x,{\funcao{\c}+\m*(\x-\c)});
+\draw (A) node[left]{$A$};
+\draw (B) node[right]{$B$};
+\draw (C) node[above]{$C$};
+\fill (C) circle (0.4mm);
+\draw[dashed] (A)--(B);
+\end{tikzpicture}\end{bmlimage}
+}
+\end{center}
+\end{wrapfigure}
+Geometricamente, o Corolário \ref{Corol:ValorIntermDeriv}
+representa um \emph{Teorema do valor intermediário} para a derivada: se
+$A\pardef (a,f(a))$, $B\pardef (b,f(b))$,
+o corolário afirma  \emph{que existe um ponto $C$ no gráfico de $f$, entre $A$
+e $B$, em que a inclinação da reta tangente em $C$ ($f'(c)$) 
+é igual à inclinação do segmento $AB$ ($\frac{f(b)-f(a)}{b-a}$)}. 
+
+\vspace{1mm}
+\begin{ex}
+Considere por exemplo $f(x)=x^2$ no intervalo $[0,2]$.
+%\begin{wrapfigure}{r}{5cm}
+%\vspace{-30pt}
+\begin{center}
+%\parbox{5cm}{
+%\begin{minipage}[l]{5cm}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\pgfmathsetmacro{\al}{2.5};
+\pgfmathsetmacro{\bl}{2};
+\newcommand{\funcao}[1]{(#1)^2}
+\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/(#2)-(\funcao{#1})/(#2)}
+\pgfmathsetmacro{\a}{0};
+\pgfmathsetmacro{\b}{2};
+\pgfmathsetmacro{\c}{(\funcao{\b}-\funcao{\a})/(2*(\b-\a))};
+\draw[ ->] (-0.2,0)--(2.5,0); 
+\draw[ ->] (0,-0.2)--(0,4); 
+\draw[thick, domain=\a:\b] plot (\x,{\funcao{\x}}); 
+\coordinate (A) at (\a,{\funcao{\a}});
+\coordinate (B) at (\b,{\funcao{\b}});
+\coordinate (C) at (\c,{\funcao{\c}});
+\draw (A) node[above left]{$A$};
+\draw (B) node[right]{$B$};
+\draw (C) node[right]{$C$};
+\fill (A) circle (0.4mm);
+\fill (B) circle (0.4mm);
+%\draw[dotted] (\a,0) node[below]{$\scriptstyle{a}$}--(A);
+\draw[dotted] (\c,0) node[below]{$\scriptstyle{c}$}--(C);
+\draw[dotted] (\b,0) node[below]{$\scriptstyle{2}$}--(B);
+\pgfmathsetmacro{\m}{\dfuncao{\c}{0.01}};
+\draw[thick,  domain={\c-0.35}:{\c+0.35}] plot
+(\x,{\funcao{\c}+\m*(\x-\c)});
+%\draw (A) node[left]{$A$};
+%\draw (B) node[right]{$B$};
+%\draw (C) node[above]{$C$};
+\fill (C) circle (0.4mm);
+\draw[dashed] (A)--(B);
+\end{tikzpicture}\end{bmlimage}
+%}
+%\end{minipage}
+\end{center}
+%\end{wrapfigure}
+A construção geométrica de $C$ é clara: traçamos a reta paralela a $AB$,
+tangente à parábola.
+Neste caso a posição do ponto $C=(c,f(c))$ pode ser {calculada} explicitamente: 
+como $f'(x)=2x$, e como $c$ satisfaz $f'(c)=\frac{2^2-0^2}{2-0}=2$, temos
+$2c=2$, isto é: $c=1$.
+\end{ex}
+
+\begin{exo}
+Considere $f(x)=\sen x$, com $a=-\pisobredois$, $b=\pisobredois$. Ache
+graficamente o ponto $C$ e em seguida, calcule-o usando uma calculadora.
+\begin{sol}
+Vemos que existem dois pontos $C$ em que a inclinação é igual à inclinação do
+segmento $AB$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{sin(#1 r)}
+\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/{#2}-(\funcao{#1})/{#2}}
+\pgfmathsetmacro{\a}{-1.57};
+\pgfmathsetmacro{\b}{1.57};
+\pgfmathsetmacro{\c}{0.8};
+\pgfmathsetmacro{\cc}{-\c};
+\draw[ ->] (-2,0)--(2,0); 
+\draw[ ->] (0,-1)--(0,1); 
+% \draw[color=gray, domain=\a-1.3:\b+1.3] plot (\x,{\funcao{\x}}); 
+\draw[thick, domain=\a:\b] plot (\x,{\funcao{\x}}); 
+\coordinate (A) at (\a,{\funcao{\a}});
+\coordinate (B) at (\b,{\funcao{\b}});
+\coordinate (C) at (\c,{\funcao{\c}});
+\coordinate (Cc) at (\cc,{\funcao{\cc}});
+\fill (A) circle (0.4mm);
+\fill (B) circle (0.4mm);
+\pgfmathsetmacro{\m}{2/3.1415};
+\draw[thick,  domain={\c-0.5}:{\c+0.5}] plot
+(\x,{\funcao{\c}+\m*(\x-\c)});
+\draw[thick,  domain={\cc-0.5}:{\cc+0.5}] plot
+(\x,{\funcao{\cc}+\m*(\x-\cc)});
+\draw (A) node[left]{$A$};
+\draw (B) node[right]{$B$};
+\draw (C) node[above]{$C$};
+\fill (C) circle (0.4mm);
+\draw (Cc) node[below]{$C'$};
+\fill (Cc) circle (0.4mm);
+\draw[dashed] (A)--(B);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+O ponto $c\in [-\pisobredois,\pisobredois]$ é tal que
+$f'(c)=\frac{f(b)-f(a)}{b-a}=\frac{\sen
+(\pisobredois)-\sen(0)}{\pisobredois-0}=\frac{2}{\pi}$. Como $f'(x)=\cos x$, $c$
+é solução de $\cos c=\frac{2}{\pi}$. Com a calculadora obtemos duas
+soluções: $c=\pm \arcos(\frac{2}{\pi})\simeq \pm 0.69$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Considere a função $f$ definida por $f(x)=\frac{x}{2}$ se $x\leq 2$, $f(x)=x-1$
+se $x>2$, e $A=(0,f(0))$, $B=(3,f(3))$. Existe um
+ponto $C$ no gráfico de $f$, entre $A$ e $B$, tal que a reta tangente ao
+gráfico em $C$ seja paralela ao segmento $AB$?
+Explique.
+\begin{sol}
+Como $f$ não é derivável no ponto $2\in [0,3]$, o teorema não se aplica. Não
+existe ponto $C$ com as desejadas propriedades:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+\draw[->] (-0.5,0)--(3.5,0);
+\draw[->] (0,-0.2)--(0,2.3);
+\coordinate (A) at (0,0);
+\coordinate (B) at (3,2);
+\draw (-0.3,-0.15)--(2,1)--(3.3,2.3);
+\draw[thick] (A)--(2,1)--(B);
+\fill (A) circle (0.45mm);
+\fill (B) circle (0.45mm);
+\draw (A)node[above left]{$A$};
+\draw (B)node[below right]{$B$};
+\draw[dotted] (2,1)--(2,0) node[below]{$\scriptstyle{2}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\end{sol}
+\end{exo}
+
+\begin{exo}\label{exo_DERIV_senoLipschitz}
+Mostre que para todo par de pontos $x_1,x_2$, 
+vale a seguinte desigualdade:
+\begin{equation}\label{eq_DERIV_sinussLipshh} 
+|\sen x_2-\sen x_1|\leq |x_2-x_1|\,.
+\end{equation}
+Use esse fato para mostrar que $\sen x$ é uma função contínua.
+Faça a mesma coisa com $\cos x$.
+\begin{sol}
+Sejam $x_1<x_2$. Pelo Corolário \ref{Corol:ValorIntermDeriv}, existe $c\in
+(x_2,x_2)$ tal que
+\[
+\frac{\sen x_2-\sen x_1}{x_2-x_1}=\cos(c)\,.
+\]
+Como $|\cos (c)|\leq 1$, isso dá \eqref{eq_DERIV_sinussLipshh}.
+Por ser derivável, já sabemos que $\sen x$ é contínua, mas \eqref{eq_DERIV_sinussLipshh} 
+permite ver continuidade de uma maneira mais concreta. De fato, 
+seja $a$ um ponto qualquer da reta. Para mostrar que $\sen x$ é contínua em
+$a$, precisamos escolher um $\epsilon>0$ qualquer, e mostrar que se $x$ for
+suficientemente perto de $a$, $|x-a|\leq \delta$ (para um certo $\delta$) então 
+\[ 
+|\sen x-\sen a|\leq \epsilon\,.
+\]
+Mas, usando \eqref{eq_DERIV_sinussLipshh}, vemos que a condição acima
+vale se $\delta\equiv \epsilon$.
+\end{sol}
+\end{exo}
+
+\section{Derivada e Variação}
+\index{derivada!e variação}
+Voltemos agora ao significado geométrico da derivada, e do seu uso no estudo de
+funções.
+Sabemos que para um ponto $x$ do domínio de uma função $f$,
+a derivada $f'(x)$ (se existir) dá o valor da inclinação da reta tangente
+ao gráfico de $f$ no ponto $(x,f(x))$.\\
+
+A observação importante para ser feita aqui é que os valores
+de $f'$ fornecem uma informação importante sobre a \emph{variação} de $f$, isto
+é, sobre os intervalos em que ela cresce ou decresce (veja Seção \ref{sec_Funcoes_variacao}).
+\index{variação}
+
+\begin{ex}
+Considere $f(x)=x^2$. 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{(#1)^2}
+\draw[ ->, thin] (-1.3,0)--(1.3,0);
+\draw[ ->, thin] (0,-0.2)--(0,1.8);
+\draw[thick, domain=-1.2:1.2] plot (\x,{\funcao{\x}});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Vemos que $f$ \emph{decresce} no intervalo
+$(-\infty,0]$, e \emph{cresce} no intervalo
+$[0,+\infty)$. Esses fatos se refletem nos valores da
+inclinação da reta tangente: de fato, quando a função decresce, a
+\emph{inclinação da sua reta tangente é negativa}, $f'(x)<0$, e 
+quando a função cresce, a
+\emph{inclinação da sua reta tangente é positiva}, $f'(x)>0$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.3]
+\newcommand{\funcao}[1]{(#1)^2}
+\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/(#2)-(\funcao{#1})/(#2)}
+\draw[ ->, thin] (-1.3,0)--(1.3,0);
+\draw[ ->, thin] (0,-0.2)--(0,1.8);
+\draw[color=gray, domain=-1.2:1.2] plot (\x,{\funcao{\x}});
+\pgfmathsetmacro{\e}{0.2};
+\foreach \a in {-1,-0.7,-0.3, 1,0.7,0.3} {
+\pgfmathsetmacro{\r}{\dfuncao{\a}{0.01}};
+\pgfmathsetmacro{\i}{\e/(sqrt(1+\r*\r))};
+%\pgfmathsetmacro{\i}{0.1};
+\draw[thick,  domain={\a-\i}:{\a+\i}] plot
+(\x,{(\dfuncao{\a}{0.01})*(\x-\a)+\funcao{\a}});
+\fill (\a,{\funcao{\a}}) circle (0.35mm);
+}
+%\draw[dotted] (\e,0)--(\e,{\funcao{\e}});
+\draw [decorate, decoration=brace] (-0.05,-0.1)--(-1.3,-0.1) node[midway,
+below]{$\scriptstyle{f'(x)<0}$};
+\draw [decorate, decoration=brace] (1.3,-0.1)--(0.05,-0.1) node[midway,
+below]{$\scriptstyle{f'(x)>0}$};
+%\draw (-1,{\funcao{-1}}) node[below left]{$\scriptstyle{f'(x)<0}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Como $f'(x)=2x$, 
+montemos uma \emph{tabela de variação}, relacionando o sinal de $f'(x)$ com a
+variação de $f$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6, $f'(x)$ /.6, Variaç. de $f$ /1.2}%
+{,$0$, }%
+\tkzTabLine{,-,z,+,}
+\tkzTabVar{+/,-/,+/}
+%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+em que ``$\searrow$'' significa que $f$ decresce e ``$\nearrow$'' que ela
+cresce no intervalo.
+Vemos também que em $x=0$, como a derivada muda de negativa para positiva, a
+função atinge o seu valor mínimo, e nesse ponto $f'(0)=0$.
+\end{ex}
+
+No exemplo anterior, começamos com uma função conhecida ($x^2$), e observamos
+que a sua variação é diretamente ligada \emph{ao sinal da
+sua derivada}.
+Nesse capítulo faremos o contrário: a partir de uma função dada $f$,
+estudaremos o sinal da sua derivada, deduzindo a variação de $f$ de maneira
+\emph{analítica}. Junto com outras propriedades básicas de $f$,
+como o seu sinal e as suas assíntotas, isto permitirá esboçar o gráfico de $f$
+com bastante precisão.
+
+Vejamos agora, de maneira precisa, como a 
+variação de uma função diferenciável pode ser obtida estudando o sinal da sua
+derivada:
+
+\begin{pro}\label{Prop:variacaosinalflinha}
+Seja $f$ uma função derivável em $I$.
+\index{derivada!e variação}
+\begin{itemize}
+\item Se $f'(z)\geq  0$ para todo $z\in
+I$, então $f$ é crescente em $I$.
+\item Se $f'(z)> 0$ para todo $z\in
+I$, então $f$ é estritamente crescente em $I$.
+\item Se $f'(z)\leq  0$ para todo $z\in
+I$, então $f$ é decrescente em $I$.
+\item Se $f'(z)< 0$ para todo $z\in
+I$, então $f$ é estritamente decrescente em $I$.
+\end{itemize}
+\end{pro}
+
+\begin{proof}
+Provaremos somente a primeira afirmação (as outras se provam da mesma maneira).
+Suponha que $f'(z)\geq 0$ para todo $z\in I$. Sejam $x,x'$ dois pontos
+quaisquer em $I$, tais que
+$x<x'$. Pelo Corolário \ref{Corol:ValorIntermDeriv}, existe $c\in [x,x']$ tal
+\index{Teorema!do valor intermediário para derivada}
+que
+$$\frac{f(x')-f(x)}{x'-x}=f'(c)\,.$$
+Como $f'(c)\geq 0$ por hipótese, temos $f(x')-f(x)=f'(c)(x'-x)\geq 0$, isto é,
+$f(x')\geq f(x)$. Isso implica que $f$ é crescente em $I$.
+\end{proof}
+
+\begin{ex}
+Estudemos a variação de $f(x)=\frac{x^3}{3}-x$, usando a proposição acima.
+A derivada de $f$ é dada por $f'(x)=x^2-1$, seu sinal é fácil de se estudar, e 
+permite determinar a variação de $f$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6, $f'(x)$ /.6, Variaç. de $f$ /1.2}%
+{,$-1$, $+1$,}%
+\tkzTabLine{,+,z,-,z,+,}
+\tkzTabVar{-/,+/,-/,+/}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Isto é: $f$
+cresce em $(-\infty,-1]$ até o ponto de coordenadas $(-1,f(-1))=(-1,\tfrac23)$,
+depois decresce em $[-1,+1]$ até o ponto de coordenadas
+$(1,f(1))=(1,-\tfrac23)$, e depois cresce de novo em $[+1,\infty)$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.2]
+\draw[ ->, thin] (-2.2,0)--(2.2,0);
+\draw[ ->, thin] (0,-1)--(0,1);
+\draw[thick, domain=-2:2, samples=50] plot (\x,{\x^3/3-\x});
+\fill (-1.73,0) circle (0.40mm);
+\fill (1.73,0) circle (0.40mm);
+\fill (0,0) circle (0.40mm);
+\fill (-1,0.66) circle (0.40mm);
+\fill (1,-0.66) circle (0.40mm);
+\draw (-1,0.66) node[above]{$\scriptstyle{(-1,\tfrac{2}{3})}$};
+\draw (1,-0.66) node[below]{$\scriptstyle{(+1,-\tfrac{2}{3})}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Observe que em geral, o estudo da derivada não dá informações sobre os zeros da função. 
+No entanto, neste caso,
+os zeros de $f$ podem ser calculados:
+$\frac{x^3}{3}-x=x(\frac{x^2}{3}-1)=0$. Isto é: $S=\{-\sqrt{3},0,\sqrt{3}\}$.
+Logo, o sinal de $f$ (que não tem nada a ver com o sinal de $f'$) obtém-se facilmente:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6, $f(x)$ /.7}%
+{,$-\sqrt{3}$, $0$, $+\sqrt{3}$,}%
+\tkzTabLine{,-,z,+,z,-,z,+}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+\end{ex}
+
+\begin{ex}
+Considere as potências $f(x)=x^p$, com $p\in \bZ$ (lembre os esboços da Seção
+\ref{Sec:GraficosPotencias}). Temos que $(x^p)'=px^{p-1}$ se $p>0$,
+$(\frac{1}{x^q})'=-qx^{-q-1}$ se $p=-q<0$.
+\begin{itemize}
+\item Se $p>0$ é par, então $p-1$ é ímpar, e $(x^p)'<0$ se $x<0$,
+$(x^p)'>0$ se $x>0$. Logo, $x^p$ é decrescente em $(-\infty, 0]$,
+crescente em $[0,\infty)$. (Por exemplo: $x^2$.)
+\item Se $p>0$ é ímpar, então $p-1$ é par, e $(x^p)'\geq 0$ para todo
+$x$. Logo, $x^p$ é crescente em todo $\bR$. (Por exemplo: $x^3$.)
+\item Se $p=-q<0$ é par, então $-q-1$ é ímpar, e $(\frac{1}{x^q})'>0$
+se $x<0$, $(\frac{1}{x^q})'<0$ se $x>0$. 
+Logo, $\frac{1}{x^q}$ é crescente em $(-\infty, 0)$, e decrescente em
+$(0,\infty)$. (Por exemplo: $\frac{1}{x^2}$.)
+\item Se $p=-q<0$ é ímpar, então $-q-1$ é par, e $(\frac{1}{x^q})'<0$
+para todo $x\neq 0$.
+Logo, $\frac{1}{x^q}$ é decrescente em $(-\infty, 0)$, e decrescente também em
+$(0,\infty)$. (Por exemplo: $\frac{1}{x}$ ou $\frac{1}{x^3}$.)
+\end{itemize}
+\end{ex}
+
+
+\begin{ex}
+Considere a função exponencial na base $a>0$, $a^x$ (lembre os esboços da Seção
+\ref{Sec:Exponencial}). Como $(a^x)'=(\ln a)a^x$, temos que
+\begin{itemize}
+ \item se $a>1$, então $\ln a>0$, e $(a^x)'>0$ para todo $x$. Logo, $a^x$ é
+sempre crescente.
+ \item se $0<a<1$, então $\ln a<0$, e $(a^x)'<0$ para todo $x$. Logo, $a^x$ é
+sempre decrescente.
+\end{itemize}
+Por outro lado, a função logaritmo na base $a>0$, $\log_ax$, é tal que
+$(\log_ax)'=\frac{1}{x\ln a}$. 
+\begin{itemize}
+ \item Se $a>1$, então $\log_ax$ é crescente em $(0,\infty)$, e
+ \item se $0<a<1$, então $\log_ax$ é decrescente em $(0,\infty)$.
+\end{itemize}
+\end{ex}
+
+
+
+\begin{exo}\label{Ex:variacoesbasicas}
+Estude a variação de $f$, usando a sua derivada, quando for possível.
+Em seguida, junto com outras informações (p.ex. zeros, sinal de $f$), 
+monte o gráfico de $f$.
+\begin{multicols}{3}
+\begin{enumerate}
+%\item\label{itestudfunceleme1} $f(x)=\frac{x^3}{3}-x$
+\item\label{itestudfunceleme2} $f(x)=\frac{x^4}{4}-\frac{x^2}{2}$
+\item\label{itestudfunceleme21} $f(x)=\scriptstyle{2x^3-3x^2-12x+1}$
+\item\label{itestudfunceleme22} $f(x)=|x+1|$
+\item\label{itestudfunceleme3} $f(x)=||x|-1|$
+\item\label{itestudfunceleme4} $f(x)=\sen x$
+\item\label{itestudfunceleme5} $f(x)=\sqrt{x^2-1}$ 
+\item\label{itestudfunceleme6} $f(x)=\frac{x+1}{x+2}$
+\item\label{itestudfunceleme61} $f(x)=\frac{x-1}{1-2x}$
+\item\label{itestudfunceleme7} $f(x)=e^{-\frac{x^2}{2}}$
+\item\label{itestudfunceleme9} $f(x)=\ln(x^2)$
+\item\label{itestudfunceleme10} $f(x)=\tan x$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+
+\eqref{itestudfunceleme2}: Como $f'(x)=x^3-x=x(x^2-1)$,
+$f(x)$ é crescente em $[-1,0]\cup [1,\infty)$,
+decrescente em $(-\infty,-1]\cup[0,1]$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.2]
+\draw[ ->, thin] (-2.2,0)--(2.2,0);
+\draw[ ->, thin] (0,-0.6)--(0,1);
+\draw[thick, domain=-1.8:1.8, samples=50] plot (\x,{(\x)^4/4-(\x)^2/2});
+ \fill (-1.414,0) circle (0.40mm);
+ \fill (1.414,0) circle (0.40mm);
+ \fill (0,0) circle (0.40mm);
+ \fill (-1,-0.25) circle (0.40mm);
+ \fill (1,-0.25) circle (0.40mm);
+ \draw (-1,-0.25) node[below]{$\scriptstyle{(-1,-\tfrac{1}{4})}$};
+ \draw (1,-0.25) node[below]{$\scriptstyle{(+1,-\tfrac{1}{4})}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itestudfunceleme21}: $f(x)=2x^3-3x^2-12x+1$ é 
+crescente em $(-\infty,-1]\cup[2,\infty)$, decrescente em $[-1,2]$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\newcommand{\funcao}[1]{(2*(#1)^3-3*(#1)^2-12*(#1)+1)/10}
+\draw[ ->, thin] (-2.2,0)--(4.2,0);
+\draw[ ->, thin] (0,-1)--(0,1);
+\draw[thick, domain=-2.5:3.5, samples=50] plot (\x,{\funcao{\x}});
+\fill (-1,{0.8}) circle (0.5mm);
+\draw (-1,0.8) node[above]{$\scriptstyle{(-1,8)}$};
+\draw (2,-1.9) node[below]{$\scriptstyle{(2,-19)}$};
+\fill (2,{-1.9}) circle (0.5mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Observe que nesse caso, a identificação dos pontos em que o gráfico corta o
+eixo $x$ é mais difícil (precisa resolver uma equação do terceiro grau).
+\eqref{itestudfunceleme22}: $f$ decresce em $(-\infty,-1]$, cresce em
+$[-1,\infty)$. Observe que $f$ não é derivável em $x=-1$.
+\eqref{itestudfunceleme3}: Já encontramos o gráfico dessa função no Exercício
+\ref{Ex:graficosbasicos}. Observe que 
+$f(x)=||x|-1|$ não é derivável em $x=-1,0,+1$, então é melhor estudar a variação
+sem a derivada: $f$ é decrescente em $(-\infty,-1]$ e em $[0,1]$,
+crescente em $[-1,0]$ e em $[1,\infty)$.
+\eqref{itestudfunceleme4} Como $(\sen x)'=\cos x$, vemos que o seno é crescente
+em cada intervalo em que o cosseno é positivo, e decrescente em cada intervalo
+em que o cosseno é negativo. Por exemplo, no intervalo $[-\pisobredois,
+\pisobredois]$, $\cos x>0$, logo $\sen x$ é crescente:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+\draw[thin,  ->] (-6.2,0)--(6.2,0);
+\draw[thin,  ->] (0,-1.2)--(0,1.3);
+\draw[color=gray, domain=-6:6, samples=50] plot (\x,{cos(\x r)});
+\draw[thick, domain=-6:6, samples=50] plot (\x,{sin(\x r)});
+\draw[dotted] (-1.57,-1.1)
+node[below]{$\scriptstyle{-\tfrac{\pi}{2}}$}--(-1.57,1.1);
+\draw[dotted]
+(1.57,-1.1)node[below]{$\scriptstyle{\tfrac{\pi}{2}}$}--(1.57,1.1);
+\end{tikzpicture}\end{bmlimage}
+\end{center} 
+\eqref{itestudfunceleme5}:
+$f(x)=\sqrt{x^2-1}$ tem domínio $(-\infty,-1]\cup[1,\infty)$, é sempre
+não-negativa, e $f(-1)=f(1)=0$. Temos $f'(x)=\frac{x}{\sqrt{x^2-1}}$. Logo,
+a variação de $f$ é dada por:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6, $f'(x)$ /.9, Variaç. de $f$ /1.5}%
+{,$-1$, $+1$,}%
+%\tkzTabLine{+,z,h,z,+}
+\tkzTabLine{,-,t,h,t,+,}
+\tkzTabVar{+/,-H/,-/,+/,}
+%\tkzTabLine{,\searrow,\text{mín.},h,\text{mín.},\nearrow,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Assim, o gráfico é do tipo:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\func}[1]{sqrt((#1)^2-1)}
+\draw[ ->] (-2.5,0)--(2.5,0);
+\draw[ ->] (0,-0.2)--(0,1.5);
+\draw[thick, domain=-2:-1] plot (\x,{\func{\x}});
+\draw[thick, domain=1:2] plot (\x,{\func{\x}});
+\foreach \k in {-1,+1} {
+\draw (\k,0) node[below]{$\k$};
+}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Observe que $\lim_{x\to -1^-}f'(x)=-\infty$, $\lim_{x\to +1^+}f'(x)=+\infty$
+\eqref{itestudfunceleme5}:
+Considere $f(x)=\frac{x+1}{x+2}$. Como
+$\lim_{x\to \pm\infty}f(x)=1$, $y=1$ é assíntota horizontal, e como $\lim_{x\to
+-2^-}f(x)=+\infty$, $\lim_{x\to -2^+}f(x)=-\infty$, $x=-2$ é assíntota vertical.
+Como $f'(x)=\frac{1}{(x+2)^2}>0$ para todo $x\neq 2$, $f$ é crescente em
+$(-\infty,-2)$ e em $(-2,\infty)$. Isso permite montar o gráfico:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+\draw[ ->] (-5,0)--(4,0);
+\draw[dashed] (-2,-1)node[left]{$\scriptstyle{x=-2}$}--(-2,3);
+\draw[dashed] (-5,1)--(4,1) node[above]{$\scriptstyle{y=1}$};
+\draw[ ->] (0,-1)--(0,2.5);
+\pgfmathsetmacro{\e}{0.5};
+\draw[thick, domain=-5:{-2-\e}, samples=50] plot (\x,{(\x+1)/(\x+2)});
+\draw[thick, domain={-2+\e}:4, samples=50] plot (\x,{(\x+1)/(\x+2)});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itestudfunceleme61}: Um estudo parecido dá
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+\draw[ ->] (-4,0)--(4,0);
+\draw[dashed] (0.5,-2)node[right]{$\scriptstyle{x=\tfrac{1}{2}}$}--(0.5,1.5);
+\draw[dashed] (-4,-0.5)--(4,-0.5) node[below]{$\scriptstyle{y=\tfrac{1}{2}}$};
+\draw[ ->] (0,-2)--(0,1.5);
+\pgfmathsetmacro{\e}{0.16};
+\draw[thick, domain=-4:{0.5-\e}, samples=50] plot (\x,{(\x-1)/(1-2*\x)});
+\draw[thick, domain={0.5+\e}:4, samples=50] plot (\x,{(\x-1)/(1-2*\x)});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itestudfunceleme7}: Como $f'(x)=-xe^{-\frac{x^2}{2}}$, 
+$f$ é crescente em $(-\infty,0]$, decrescente em $[0,\infty)$.
+Como $f(x)\to 0$ quando $x\to \pm \infty$, temos:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+\draw[ ->] (-4,0)--(4,0);
+\draw[ ->] (0,-0.2)--(0,1.3);
+\draw[thick, domain=-4:4, samples=50] plot (\x,{exp(-\x*\x*0.5)});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itestudfunceleme9}: Observe que $\ln(x^2)$ tem domínio
+$D=\bR\setminus\{0\}$, e $(\ln(x^2))'=\frac{2}{x}$. Logo, $\ln(x^2)$ é
+decrescente em $(-\infty,0)$, crescente em $(0,\infty)$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.5]
+\draw[ ->] (-4,0)--(4,0);
+\draw[ ->] (0,-2.5)--(0,2);
+\draw[thick, domain=0.3:4, samples=50] plot (\x,{2*ln(\x)});
+\draw[thick, domain=0.3:4, samples=50] plot (-\x,{2*ln(\x)});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itestudfunceleme10} 
+Lembre que o domínio da tangente é formado pela união dos intervalos da forma
+$I_k=]-\pisobredois+k\pi,\pisobredois+k\pi[$. 
+Como $(\tan x)'=1+\tan^2x>0$ para todo $x\in I_k$, $\tan x$ é crescente em cada
+intervalo do seu domínio (veja o esboço na Seção \ref{Sec:GraficosTrigo}).
+\end{sol}
+\end{exo}
+
+\section{Velocidade, aceleração, taxa de
+variação}\label{sec:taxavariacao}
+\index{taxa de variação}
+Sabemos que o \emph{sinal} da derivada (quando ela existe)
+permite caracterizar o {crescimento de uma função}.
+Mais especificamente, a derivada deve ser entendida como
+\emph{taxa de variação}.
+O exemplo mais importante do significado da derivada como taxa
+de variação é em
+mecânica, estudando o movimento de uma partícula.\\
+
+Considere uma partícula que evolui na reta, durante um intervalo de tempo
+$[t_1,t_2]$. 
+Suponha que a sua posição no tempo $t_1$ seja $x(t_1)$,
+que no tempo $t_2$ a sua posição seja $x(t_2)$, e que para
+$t\in [t_1,t_2]$, a posição seja dada por uma função $x(t)$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\a}{0};
+\pgfmathsetmacro{\b}{5};
+\pgfmathsetmacro{\c}{2};
+\pgfmathsetmacro{\r}{1};
+\pgfmathsetmacro{\h}{0.3};
+\draw[thick] ({\a-1},0)--(\b+1,0);
+\draw (\a,0)node{$\shortmid$} node[below]{$x(t_1)$};
+\draw (\b,0)node{$\shortmid$} node[below]{$x(t_2)$};
+\draw (\c,0)node{$\shortmid$} node[below]{$x(t)$};
+\draw[color=gray!20, dotted] (\a,\h)--(\c,\h);
+\fill[color=gray!35] (\a,\h) circle (\r mm);
+\fill[color=gray!35] (\b,\h) circle (\r mm);
+\fill (\c,\h) circle (\r mm);
+\draw[->] (\c,\h)--(\c+0.5,\h);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+A função
+$t\mapsto x(t)$, para $t\geq 0$, representa a \grasA{trajetória} da partícula.
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{(#1)^2/8+0.3}
+\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/{#2}-(\funcao{#1})/{#2}}
+\pgfmathsetmacro{\a}{1.5};
+\coordinate (P) at (\a,{\funcao{\a}});
+\pgfmathsetmacro{\l}{3.5};
+\coordinate (Q) at (\l,{\funcao{\l}});
+\draw[->] (0,0)--({\l+1},0)node[right]{$t$};
+\draw[->] (0,-0.7)--(0,2)node[left]{$x(t)$};
+\draw[thick, domain=\a:\l] plot (\x,{\funcao{\x}});
+\draw[dashed] (P)--(Q);
+\draw (P) node[left]{$x(t_1)$};
+\fill (P) circle (0.50mm);
+\draw (Q) node[right]{$x(t_2)$};
+\fill (Q) circle (0.50mm);
+\draw[dotted] (\a,0)node[below]{$t_1$}--(\a,{\funcao{\a}});
+\draw[dotted] (\l,0)node[below]{$t_2$}--(\l,{\funcao{\l}});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Uma informação útil pode ser extraida da trajetória, 
+olhando somente para o deslocamento entre o ponto inicial e o ponto final:
+definimos a \grasA{velocidade média ao longo de $[t_1,t_2]$}, 
+\index{velocidade !média}
+$$
+\overline{v}=\frac{x(t_2)-x(t_1)}{t_2-t_1}\,.
+$$ 
+A interpretação de $\overline{v}$ é a seguinte: se uma segunda partícula sair de
+$x(t_1)$ no tempo $t_1$, se movendo a velocidade \emph{constante}
+$\overline{v}$, então ela chegará em $x(t_1)$ no tempo $t_2$, junto com a
+primeira partícula. A trajetória dessa segunda partícula de velocidade
+constante $\overline{v}$ é representada pela linha pontilhada do desenho
+acima.\\
+
+Mas a primeira partícula não anda necessariamente com uma velocidade
+constante. Podemos então perguntar: como calcular a sua \emph{velocidade
+instantânea} \index{velocidade!instantânea}
+num determinado instante $t_1<t<t_2$? 
+Para isso, é necessário olhar as posições em dois instantes próximos. Se
+a partícula se
+encontra na posição $x(t)$ no tempo $t$, então logo depois, no instante
+$t+\Delta t>t$, ela se encontrará na posição $x(t+\Delta t)$. Logo, a sua
+velocidade média no intervalo $[t,t+\Delta t]$ é dada por $\frac{x(t+\Delta
+t)-x(t)}{\Delta t}$. Calcular a \emph{velocidade instantânea} significa
+calcular a velocidade média em intervalos de tempo $[t,t+\Delta t]$
+infinitesimais:
+$$v(t)=\lim_{\Delta t\to 0}\frac{x(t+\Delta
+t)-x(t)}{\Delta t}\equiv x'(t)\,, $$
+isto é, a derivada de $x(t)$ com respeito a $t$.\\
+
+Vemos assim como a derivada aparece no estudo da cinemática: se $x(t)$
+(em metros) é a posição da partícula no tempo $t$ (em
+segundos), então a sua velocidade instantânea neste instante é $v(t)=x'(t)$
+metros/segundo. 
+
+\begin{obs}
+Existe uma relação interessante entre 
+velocidade instantânea e média. 
+Como consequência do Teorema de Rolle
+(e o seu Corolário \ref{Corol:ValorIntermDeriv}), se $x(t)$ for contínua
+e derivável num intervalo $[t_1,t_2]$, então deve existir um instante
+$t_*\in (t_1,t_2)$ tal que
+\[\overline{v}=
+\frac{x(t_2)-x(t_1)}{t_2-t_1}=x'(t_*)=v(t_*)\,.
+\]
+Isso implica que ao longo da sua trajetória entre $t_1$ e $t_2$, existe
+pelo menos um instante $t_1<t_*<t_2$ em que a velocidade instantânea é igual à
+velocidade média.
+\end{obs}
+
+\begin{ex}
+Considere uma partícula cuja trajetória é dada por 
+\begin{equation}\label{eq:trajhomog}
+x(t)=v_0t+x_0\,,\quad t\geq 0
+\end{equation}
+em que $x_0$ e $v_0$ são constantes.
+Como $x(0)=x_0$, $x_0$ é a posição inicial da partícula.
+A velocidade instantânea é dada por 
+\[
+x'(t)=v_0\,,
+\]
+o que significa que a partícula se move com uma velocidade constante
+$v_0$ ao longo da sua trajetória. Diz-se que apartícula segue um 
+\emph{movimento retilíneo uniforme}\index{movimento!retilíneo uniforme}.
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{(#1)^2/8+0.3}
+\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/{#2}-(\funcao{#1})/{#2}}
+\pgfmathsetmacro{\a}{0};
+\coordinate (P) at (\a,{\funcao{\a}});
+\pgfmathsetmacro{\l}{3.5};
+\coordinate (Q) at (\l,{\funcao{\l}});
+\draw[->] (0,0)--({\l+1},0)node[right]{$t$};
+\draw[->] (0,-0.7)--(0,2)node[left]{$x(t)$};
+%\draw[color=gray, domain=\a:\l] plot (\x,{\funcao{\x}});
+\draw[thick] (P)--(Q);
+\draw (P) node[left]{$x_0$};
+\fill (P) circle (0.50mm);
+%\draw (Q) node[right]{$x(t_2)$};
+%\fill (Q) circle (0.50mm);
+%\draw[dotted] (\a,0)node[below]{$t_1$}--(\a,{\funcao{\a}});
+%\draw[dotted] (\l,0)node[below]{$t_2$}--(\l,{\funcao{\l}});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Observe que nesse caso, a velocidade média ao longo de um intervalo é 
+igual à velocidade instantânea: $\overline{v}=v_0$. 
+\end{ex}
+
+É natural considerar também a \emph{taxa de variação instantânea de
+velocidade}, chamada\index{aceleração} \grasA{aceleração}:
+$$a(t)=\lim_{\Delta t\to 0}\frac{v(t+\Delta
+t)-v(t)}{\Delta t}\equiv v'(t)\,.$$
+Por $a(t)$ ser a derivada da derivada de $x(t)$, é a \grasA{derivada segunda}
+de $x$ com respeito a $t$, denotada: $a(t)=x''(t)$.\\
+
+No exemplo anterior, em que uma partícula se movia com velocidade
+constante $v_0$, a aceleração é igual a zero:
+\[
+x''(t)=(v_0t+x_0)''=(v_0)'=0\,.
+\]
+
+\begin{ex}
+Uma partícula que sai da origem no tempo $t=0$ com uma velocidade inicial
+$v_0>0$ e evolui sob o efeito de uma força constante $-F<0$ (tende a
+freiar a partícula) tem uma trajetória dada por
+\[x(t)=-\frac{F}{2m}t^2+v_0t+x_0\,,\quad t\geq 0\,,\] 
+onde $m$ é a massa da partícula. Então a velocidade não é mais
+constante, e decresce com $t$:
+\[v(t)=x'(t)=-\frac{F}{m}t+v_0\,.\] 
+A aceleração, por sua vez,
+é constante: 
+\[a(t)=v'(t)=-\frac{F}{m}\,.\] 
+%Veja também o Exercício \ref{Exo:TrajetPartic}.
+\end{ex}
+
+\begin{exo}
+Considere uma partícula cuja trajetória é dada por:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw[->] (0,0)--(10,0) node[right]{$t$};
+\draw[->] (0,-1)--(0,2.5) node[left]{$x(t)$};
+\pgfmathsetmacro{\r}{1};
+\pgfmathsetmacro{\s}{1.5};
+\pgfmathsetmacro{\t}{4};
+\pgfmathsetmacro{\h}{1.5};
+\pgfmathsetmacro{\k}{-0.9};
+\pgfmathsetmacro{\u}{6};
+\pgfmathsetmacro{\v}{7};
+\pgfmathsetmacro{\w}{8};
+\draw[thick] (0,0)--(\r,0)--(\s,\h)--(\t,\h)--(\u,\k)--(\v,\k);
+\draw[thick, domain=\v:\w] plot (\x,{2*(\x-\v)^2+\k});
+\draw (\r,0) node[below]{$t_1$};
+\draw[dotted] (\s,0) node[below]{$t_2$}--(\s,\h);
+\draw[dotted] (\t,0) node[below]{$t_3$}--(\t,\h);
+\draw[dotted] (\u,0) node[above]{$t_4$}--(\u,\k);
+\draw[dotted] (\v,0) node[above]{$t_5$}--(\v,\k);
+\draw[dotted] (\w,0) node[below]{$t_6$}--(\w,{2*(\w-\v)^2+\k});
+\fill (\w,{2*(\w-\v)^2+\k}) circle (0.45mm);
+\draw[dotted] (0,\h) node[left]{$d_1$}--(\s,\h);
+\draw[dotted] (0,\k) node[left]{$d_2$}--(\u,\k);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Descreva qualitativamente a evolução da partícula em cada um dos intervalos $[0,t_1]$,
+$[t_2,t_3]$, etc., em termos de velocidade instantânea e aceleração.
+\begin{sol}  Em $t=0$, a partícula está na origem, onde ela fica até o instante
+$t_1$. Durante $[t_1,t_2]$, ela anda em direção ao ponto $x=d_1$, com
+velocidade constante $v=\frac{d_1}{t_2-t_1}$ e aceleração $a=0$. No tempo $t_2$
+ela chega em $d_1$
+e fica lá até o tempo $t_3$. No tempo $t_3$ ela começa a andar em direção ao
+ponto $x=d_2$ (isto é, ela \emph{recua}), com velocidade constante
+$v=\frac{d_2-d_1}{t_4-t_3}<0$. Quando chegar em $d_1$ no tempo $t_4$, para, fica
+lá até $t_5$. No tempo $t_5$, começa a acelerar com uma aceleração $a>0$, até
+o tempo $t_6$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Considere uma partícula se movendo ao longo da trajetória
+$x(t)=\frac{t^2}{2}-t$ (medida em metros), $t\geq 0$.
+Calcule a velocidade instântânea nos instantes $t_0=0$, $t_1=1$,
+$t_2=2$, $t_3=10$. O que acontece com a velocidade instantânea $v(t)$ quando
+$t\to \infty$? Descreva o que seria visto por um observador imóvel
+posicionado em $x=0$, olhando para a partícula, em particular nos instantes
+$t_0,\dots,t_3$.
+Calcule a aceleração $a(t)$.
+\begin{sol}
+Como $v(t)=t-1$, temos $v(0)=-1<0$, $v(1)=0$, $v(2)=1>0$, $v(10)=9$.
+Quando $t\to \infty$, $v(t)\to\infty$.
+Observando a partícula, significa que no tempo $t=0$ ela está em
+$x(0)=0$, recuando com uma velocidade de $-1$ metros por segundo. No instante
+$t=1$, ela está com velocidade nula em $x(1)=-\frac12$. No instante $t=2$ ela
+está de volta em $x(2)=0$, mas dessa vez com uma velocidade de $+1$ metro por
+segundo.
+A aceleração é \emph{constante}: $a(t)=v'(t)=+1$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+O movimento oscilatório \index{movimento oscilatório}
+genérico é descrito por uma trajetória do tipo
+$$x(t)=A\sen (\omega t)\,,$$ em que $A$ é a amplitude máxima e $\omega$ uma
+velocidade angular.
+Estude $x(t)$, $v(t)$ e $a(t)$. Em particular, estude os instantes em que
+$v(t)$ e $a(t)$ são nulos ou atingem os seus valores extremos, e onde que a
+partícula se encontra nesses instantes.
+\begin{sol}
+Temos $v(t)=x'(t)=A\omega \cos(\omega t)$, e $a(t)=v'(t)=-A\omega^2\sen (\omega
+t)\equiv -\omega^2 x(t)$. 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\pgfmathsetmacro{\o}{1};
+\pgfmathsetmacro{\A}{1};
+\pgfmathsetmacro{\l}{12.7};
+\pgfmathsetmacro{\omeg}{1};
+\draw[ ->] (0,0)--(\l,0);
+\draw[ ->] (0,-\A-0.2)--(0,\A+0.3);
+\draw[thick, domain=0:\l-1.8, samples=80] plot (\x,{\A*sin(\omeg*\x r)})
+node[right]{$x(t)$};
+\draw[dashed, domain=0:\l-0.5, samples=80] plot (\x,{\A*\omeg*cos(\omeg*\x r)})
+node[right]{$v(t)$};
+\draw[dotted, domain=0:\l-2, samples=80] plot (\x,{-\A*\omeg^2*sin(\omeg*\x
+r)})
+node[right]{$a(t)$};
+\foreach \k in {1,2,3} {
+\draw ({\k*3.1414/\omeg},0) node{$\shortmid$} node[above]{$\frac{\k
+\pi}{\omega}$};
+}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Observe que $v(t)$ é máxima quando $x(t)=0$, e é mínima quando $x(t)=\pm A$.
+Por sua vez, $a(t)$ é nula quando $x(t)=0$ e máxima quando $x(t)=\pm A$.
+\end{sol}
+\end{exo}
+
+Na prática, a derivada deve sempre ser interpretada como
+taxa de variação.
+Considere alguma quantidade $N(t)$, 
+por exemplo o número de indivíduos numa população, que depende
+de um parâmetro $t\geq 0$ que interpretaremos aqui como o
+tempo.
+A \emph{taxa de variação instantânea de $N(t)$} é
+definida medindo de quanto que $N(t)$ cresce entre dois instantes
+consecutivos, arbitrariamente próximos: 
+$$\text{Taxa de variação de $N$ no 
+instante }t=\lim_{\Delta t\to 0}\frac{N(t+\Delta
+t)-N(t)}{\Delta t}\equiv N'(t)\,.
+$$
+
+\begin{exo}
+Calcula-se que, daqui a $t$ meses, 
+a população de uma certa comunidade será de
+$P(t) = t^2 + 20t + 8000$ habitantes.
+\begin{enumerate}
+\item Qual é a taxa de variação da população da comunidade hoje?
+\item Qual será a taxa de variação da população 
+desta comunidade daqui a 15 meses ?
+\item Qual será a variação real da população durante o $16^o$ 
+mês?
+\end{enumerate}
+\begin{sol}
+A taxa de variação no mês $t$ é dada por $P'(t)=2t+20$. Logo, hoje,
+$P'(0)=+20$ hab./mês, o que significa que a população hoje cresce a medida de
+$20$ habitantes por mês. Daqui a $15$ meses, $P'(15)=+50$ hab./mês. A
+variação real da população durante o $16$-ésimo mês será $P(16)-P(15)=+51$
+habitantes.
+\end{sol}
+\end{exo}
+
+% \begin{ex}
+% Considere \emph{uma população de
+% bactérias que cresce com uma taxa de $100'000$ indivíduos/dia}. Isto é, se 
+% $N_n$ representa o tamanho da população total no dia $n$, 
+% então de um dia $n$ para o próximo $n+1$, $N_n$ passa para 
+% $N_{n+1}=N_{n}+100'000$. Em termos da diferença: $N_{n+1}-N_n=100'000$.
+% \end{ex}
+\subsection{Taxas relacionadas}
+\index{taxas relacionadas}
+Em vários problemas, uma quantidade $X$ depende de uma quantidade $Y$:
+$X=f(Y)$. 
+Ora, se $Y$ por sua vez depende de um parâmetro por exemplo o tempo $t$,
+então $X$ depende de $t$ também: $X(t)=f(Y(t))$. A taxa de variação de $X$
+com respeito a $t$ pode ser obtida usando a regra da
+cadeia: 
+\[
+X'(t)=f'(Y(t))Y'(t)\,.
+\]
+Essa expressão mostra como as taxas de variação de $X(t)$ e $Y(t)$, 
+isto é $X'(t)$ e $Y')(t)$, são relacionadas.
+
+\begin{ex}
+Considere um quadrado de comprimento linear $L$, medido em
+metros. Outras quantidades associadas ao 
+quadrado podem ser expressas em função de $L$.
+Por exemplo, o comprimento da sua diagonal, o seu perímetro (ambos em metros), e
+a sua área (em metros quadrados):
+$$D=\sqrt{2}L\,,\quad P=4L\,,\quad A=L^2\,.$$
+Suponha agora que $L$ depende do tempo: $L=L(t)$ ($t$ é medido em segundos).
+Então $D$, $P$ e $A$ também dependem do tempo
+$$D(t)=\sqrt{2}L(t)\,,\quad P(t)=4L(t)\,,\quad A(t)=L(t)^2\,,$$ 
+e como a taxa de variação de $L(t)$ é $L'(t)$ metros/segundo,
+as taxas de variação
+de $D$, $P$ e $A$ são obtidas derivando com respeito a $t$:
+$$D'(t)=\sqrt{2} L'(t)\,,\quad P'(t)=4L'(t)\,,\quad
+A'(t)=2L(t)L'(t)\,.$$
+(Para $A'(t)$ usamos a regra da cadeia.)
+Suponhamos, por exemplo, que \emph{o quadrado se expande de modo tal que o seu
+lado cresça a razão constante de $6$ $m/s$}, isto é: $L'(t)=6$.
+Logo, 
+$$D'(t)=6\sqrt{2}\,,\quad P'(t)=24\,,\quad
+A'(t)=12L(t)\,.$$
+Isto é, a diagonal e o perímetro crescem com uma taxa constante, mas a taxa
+de variação da área depende do tamanho do quadrado: quanto maior o quadrado,
+maior a taxa $A'(t)$.
+Por exemplo, no instante $t_ 1$ em que $L(t_1)=1$, $A'(t_1)=12$ $m^2/s$, e no
+instante $t_2$ em que $L(t_2)=10$, $A'(t_2)=120$ $m^2/s$.
+\end{ex}
+
+\begin{exo}
+Os lados de um cubo crescem a uma taxa de $0.5$ metros por segundo.
+Determine a taxa de variação do volume do cubo no instante em que os lados
+medem 1) $10$ metro 2) $20$ metros.
+\begin{sol}
+Como $V=L^3$, $V'=3L^2L'=\frac32 L^2$.
+Logo, quando $L=10$, $V'=150$ $m^3/s$, e quando 
+$L=20$, $V'=600$ $m^3/s$.
+\end{sol}
+\end{exo}
+
+\begin{exo} (Segunda prova, 27 de maio de 2011)
+Um balão esférico se enche de ar a uma taxa de $2$ metros
+cúbicos por segundo.  Calcule
+a taxa com a qual o raio do balão cresce no instante em que o seu volume 
+atingiu $\frac{4\pi}{3}$ metros cúbicos.
+\begin{sol}
+O volume do balão no tempo $t$ é dado por $V(t)=\tfrac43 \pi R(t)^3$. 
+Logo, $R(t)=(\frac{3}{4\pi}V(t))^{1/3}$, e pela regra da cadeia, 
+$R'(t)=\tfrac13(\frac{3}{4\pi}V(t))^{-2/3}\frac{3}{4\pi}V'(t)$.
+No instante $t_*$ que interessa, $V(t_*)=\frac{4\pi}{3}m^3$, e como
+$V'(t)=2m^3/s$ para todo $t$, obtemos
+$$
+R'(t_*)=\tfrac13(\frac{3}{4\pi}\frac{4\pi}{3})^{-2/3}\frac{3}{4\pi}2\,m/s=\frac{
+1}{2\pi}m/s\,.
+$$
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Uma vassoura de $2$ metros está apoiada numa parede. Seja $I$
+seu ponto de contato com o chão, $S$ seu ponto de contato com
+a parede. A vassoura começa a
+escorregar, $I$ se afastando da parede a
+uma velocidade de $0.8\, m/s$. 1) Com qual velocidade $S$ se
+aproxima do chão no instante em que $I$ está a $1\,m$ da
+parede? 2) O que acontece com a
+velocidade de $S$ quando a distância de $I$ à parede se aproxima de $2$?
+\begin{sol}
+Seja $x$ a distância de $I$ até a parede, e $y$ a distância de $S$ até o chão:
+$x^2+y^2=4$. Quando a vassoura começa a escorregar, $x$ e $y$ ambos se
+tornam funções do tempo: $x=x(t)$ com $x'(t)=0.8\,m/s$, e $y=y(t)$. Derivando
+implicitamente com respeito a $t$,
+$2xx'+2yy'=0$. Portanto, 
+$y'=-\frac{xx'}{y}=-0.8\frac{x}{y}=-\frac{0.8x}{\sqrt{4-x^2}}$.
+1) Quando $x=1\,m$, $y'=-0.46\,m/s$ (da onde vém esse sinal ``-''?)
+2) Quando $x\to 2^-$, $y'\searrow -\infty$.
+Obs: Quando $I$ estiver a $2-7.11\cdot 10^{-22}\,m$ da parede,
+$S$ ultrapassa a velocidade da luz.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Um laser em rotação ($0.5$ rad/s.) está a $10$ metros de uma parede
+reta. Seja $P$ a posição da marca do laser na parede, $A$ o ponto da parede
+mais perto do laser.
+Calcule a velocidade do ponto $P$ no instante em que $P$ está 1) em $A$ 2) a
+$10$ metros de $A$, 3) a $100$ metros de $A$.
+\begin{sol}
+Definamos $\theta$ e $x$ da seguinte maneira:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw (-5,0)--(5,0);
+\pgfmathsetmacro{\teta}{60};
+\pgfmathsetmacro{\h}{2};
+\pgfmathsetmacro{\p}{-\h*tan(\teta)};
+\fill (\p,0) circle (0.50mm);
+\draw (\p,0) node[above]{$P$};
+\draw[thick, ->] (\p,0)--(\p-0.4,0);
+\draw[dotted] (0,0)--(0,\h) node[right]{$L$};
+\draw[dashed] (\p,0)--(0,\h);
+\draw[->] (0,\h-0.8) arc (270:270-\teta:0.8); 
+\draw (-0.5,1.05) node{$\theta$};
+\draw[decorate, decoration=brace] (0,-0.2)--(\p,-0.2) node[midway, below]{$x$};
+\pgfmathsetmacro{\e}{0.2};
+\draw (0,0) node[above right]{$A$};
+\pgfmathsetmacro{\f}{\e*sin(\teta)};
+\pgfmathsetmacro{\g}{\e*cos(\teta)};
+\draw[line width=4pt] (-\f,\h-\g)--(\f,\h+\g);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Temos $\tan \theta=\frac{x}{10}$ e como $\theta'=0.5$ rad/s, temos
+$x'=10(1+\tan^2\theta)\theta'=5(1+\tan^2\theta)$.
+1) Se $P=A$, então $\tan \theta=0$, logo $x'=5$ m/s. 2) Se $x=10\,m$, então
+$\tan \theta=1$ e $x'=10\,m/s$.
+3) Se  $x=100\,m$, então $\tan \theta=10$ e $x'=505\,m/s$ (mais rápido que a
+velocidade do som, que fica em torno de $343\, m/s$).
+\end{sol}
+\end{exo}
+
+
+
+\begin{exo}
+Um balão cheio de hidrogênio é soltado, e sobe verticalmente a 
+uma velocidade de $5m/s$. Um observador está a $50m$ do ponto de onde 
+o balão foi largado. calcule a taxa de variação do ângulo sob o qual o
+observador vê o balão subir, no instante em que este se encontra a 1) $30$
+metros de
+altura, 2) $1000$ metros de altura.
+\begin{sol}
+Seja $H$ a altura do balão e $\theta$ o ângulo sob o qual o observador vê o
+balão. Temos $H'=5$, e $\tan \theta=\frac{H}{50}$. Como ambos $H$ e
+$\theta$ dependem do tempo, ao derivar com respeito a $t$ dá 
+$(1+\tan^2\theta)\theta'=\frac{H'}{50}=\frac{1}{10}$, isto é:
+$\theta'=\frac{1}{10(1+\tan^2\theta)}$.
+1) No instante em que o balão estiver a $30$ metros do chão, $\tan
+\theta=\frac{30}{50}=\tfrac35$, assim $\theta'=\frac{5}{68}\simeq 0.0735$
+rad/s. 
+2) No instante em que o balão estiver a $1000$ metros do chão, $\tan
+\theta=\frac{1000}{50}=20$, assim $\theta'=\frac{1}{4010}\simeq 0.0025$ rad/s.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+A pressão $P$ de um gás ideal de temperatura fixa $T$ contido num container de
+volume $V$ satisfaz à equação $PV=nkT$, em que $n$ e $k$ são constantes (que
+dependem do gás). Suponha que, mantendo $T$ fixo, o gás tenha um
+volume inicial de $V_1$, e que ele comece a diminuir com uma
+taxa de $0.01$ $m^3/s$. Calcule a taxa de variação da pressão no instante em que
+o volume vale $V_0<V_1$.
+\begin{sol}
+Como $P=\frac{nkT}{V}$, $P'=-\frac{nkT}{V^2}V'$. Logo,
+no instante em que $V=V_0$,
+$P'=-\frac{3nkT}{V_0^2}$.
+\end{sol}
+\end{exo}
+
+
+\section{Linearização}
+\index{linearização}
+
+A derivada fornece um jeito eficiente de aproximar funções.
+De fato, ao olhar \emph{localmente} o gráfico de uma função $f$ derivável 
+em torno de um
+ponto $P=(a,f(a))$, vemos que este é quase indistinguível da sua reta
+tangente:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{(#1)^2/4+1}
+\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/(#2)-(\funcao{#1})/(#2)}
+\pgfmathsetmacro{\a}{1.5};
+\begin{scope}
+\draw[ ->] (\a-1,0)--(\a+1,0);
+\draw[thick, domain=\a-1:\a+1] plot (\x,{\funcao{\x}});
+\coordinate (P) at (\a,{\funcao{\a}});
+\draw[ thick, domain={\a-0.5}:{\a+0.5}] plot
+(\x,{(\dfuncao{\a}{0.03})*(\x-\a)+\funcao{\a}});
+%node[right]{$y=f(a)+f'(a)(x-a)$};
+\draw (P) node[above]{$P$};
+\fill (P) circle (0.50mm);
+\draw (P) circle (5mm);
+\draw[dotted] (\a,0)node[below]{$a$}--(\a,{\funcao{\a}});
+\draw (\a+1,{\funcao{\a}}) node[right]{$\Rightarrow$};
+
+\end{scope}
+
+\begin{scope}[xshift=2.2cm, yshift=-1.5cm, scale=2]
+\clip (\a,{\funcao{\a}}) circle (5mm);
+\pgfmathsetmacro{\a}{1.5};
+\draw[ ->] (\a-1,0)--(\a+1,0);
+\draw[thick, domain=\a-1:\a+1] plot (\x,{\funcao{\x}});
+\coordinate (P) at (\a,{\funcao{\a}});
+\draw[ thick, domain={\a-0.5}:{\a+0.5}] plot
+(\x,{(\dfuncao{\a}{0.03})*(\x-\a)+\funcao{\a}});
+\draw (P) node[above]{$P$};
+\fill (P) circle (0.35mm);
+\draw (P) circle (4.9mm);
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Tornemos essa observação mais quantitativa.
+A reta tangente tem inclinação dada pela derivada de $f$ em $a$:
+$$f'(a)=\lim_{x\to a}\frac{f(x)-f(a)}{x-a}\,.$$
+A existência do limite acima significa que quando $x$ fica
+suficientemente perto de $a$, então o quociente 
+$\frac{f(x)-f(a)}{x-a}$ pode ser aproximado pelo número 
+$f'(a)$, o que pode ser escrito informalmente
+\[\frac{f(x)-f(a)}{x-a}\simeq f'(a)\,.\]
+Rerranjando obtemos
+\eq{\label{eq:linearizacaodef}
+f(x)\simeq \underbrace{f(a)+f'(a)(x-a)}_{\text{reta tangente em $P$}}\,.}
+\index{reta!tangente}
+Em função da variável $x$, o lado direito dessa expressão
+representa a reta tangente ao gráfico de $f$ no ponto $(a,f(a))$. 
+Assim, \eqref{eq:linearizacaodef} dá uma aproximação de $f(x)$ para $x$ numa 
+vizinhança de $a$; a reta $y=f(a)+f'(a)(x-a)$ é chamada \grasA{linearização de
+$f$ em torno $a$}.
+
+\begin{ex} Já vimos que a linearização de $f(x)=x^2$ em torno de $x=-1$ é dada
+por $f(x)\simeq -2x-1$. 
+\end{ex}
+
+\begin{ex} Para seno e cosseno, temos (lembre do Exercício
+\ref{Exo:retastangentesseno}):
+\begin{itemize}
+ \item 
+Em torno de $a=0$: $\sen x\simeq x $,  $\cos x\simeq 1$.
+\item Em torno de $a=\pisobredois$:
+$\sen x\simeq 1$, $\cos x\simeq -(x-\pisobredois)$.
+\item Em torno de $a=\pi$: $\sen x\simeq -(x-\pi)$, $\cos x \simeq -1$.
+\end{itemize}
+\end{ex}
+
+\begin{exo}
+Calcule a linearização de $f$ em torno de $a$.
+\begin{multicols}{2}
+\begin{enumerate}
+\item\label{itexolinearizac1} $f(x)=e^x$, $a=0,-1$.
+\item\label{itexolinearizac2} $f(x)=\ln(1+x)$, $a=0$.
+\item\label{itexolinearizac3} $f(x)=\frac{x}{x-1}$, $a=0$.
+\item\label{itexolinearizac4} $f(x)=e^{-\frac{x^2}{2}}$, $a=0$.
+\item\label{itexolinearizac5} $f(x)=\sen x$, $a=0,\pisobredois, \pi$.
+\item\label{itexolinearizac6} $f(x)=\sqrt{1+x}$, $a=0$.
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itexolinearizac1} $f(x)\simeq x+1$, $f(x)\simeq e^{-1}x+2e{^-1}$
+\eqref{itexolinearizac2} $f(x)\simeq x$,
+\eqref{itexolinearizac3} $f(x)\simeq -x$,
+\eqref{itexolinearizac4} $f(x)\simeq 1$,
+\eqref{itexolinearizac5} $f(x)\simeq x$, $f(x)\simeq 1$, $f(x)\simeq -x+\pi$
+\eqref{itexolinearizac6} $f(x)\simeq 1+\frac{x}{2}$.
+\end{sol}
+\end{exo}
+
+Linearização é usada em muitas situações práticas, com o intuito de
+\emph{simplificar} a complexidade de uma função perto de um ponto. Ela pode
+também ser usada como um simples método de cálculo, como no seguinte exemplo.
+
+\begin{ex}
+Como calcular $\sqrt{9.12}$, \emph{sem calculadora}?
+Observe que $\sqrt{9}=3$, então o número procurado deve ser perto de $3$. Se
+$f(x)=\sqrt{x}$, temos $f(9)=3$, e queremos $f(9.12)$. Como $9.12$ é próximo de
+$9$, façamos uma linearização de $f$ em o de $9$: como
+$f'(x)=\frac{1}{2\sqrt{x}}$, temos para $x\simeq 9$:
+$$f(x)\simeq f(9)+f'(9)(x-9)=3+\tfrac16(x-9)\,.$$
+Logo, $f(9.12)\simeq 3.02$. 
+Esse número é uma aproximação boa do verdadeiro valor, que pode ser obtido com
+uma calculadora: $\sqrt{9.12}=3.019933...$
+\end{ex}
+
+\begin{exo}
+Dê um valor aproximado de $\sqrt{3.99}$, 
+$\ln(1.0123)$, $\sqrt{101}$.
+\begin{sol}
+Como $\sqrt{4+x}\simeq 2+\frac{x}{4}$, temos $\sqrt{3.99}=\sqrt{4-0.01}\simeq
+2+\frac{-0.01}{4}=1.9975$ (HP: $\sqrt{3.99}=1.997498...$).
+Como $\ln (1+x)\simeq x$, temos $\ln(1.0123)=\ln(1+0.123)\simeq 0.123$ (HP:
+$\ln(1.123)=0.1160...$).
+Como $\sqrt{101}=10\sqrt{1+\frac{1}{100}}$ e que $\sqrt{1+x}\simeq
+1+\frac{x}{2}$, temos $\sqrt{101}\simeq 10\cdot(1+\frac{1/100}{2})=10.05$ (HP:
+$\sqrt{101}=10.04987...$).
+\end{sol}
+\end{exo}
+
+\begin{obs}
+Em Cálculo II serão estudadas aproximações de uma função $f$ em torno
+de um ponto $a$, que vão além da aproximação linear. Por exemplo, uma
+aproximação de $f$ de ordem dois é da forma:
+$$f(x)\simeq f(a)+f'(a)(x-a)+\tfrac12 f''(a)(x-a)^2\,,$$
+onde $f''(a)$ é a \emph{segunda derivada} de $f$ em $a$.
+\end{obs}
+
+\section{Derivação implícita}
+\index{derivada!implícita}
+
+A maioria das funções encontradas até agora eram dadas 
+ \emph{explicitamente}, o que significa que os seus valores
+$f(x)$ eram calculáveis facilmente. Por exemplo, se $$f(x)\pardef
+x^2-x\,,$$ então $f(x)$ pode ser calculado para qualquer valor de
+$x$: $f(0)=0^2-0=0$, $f(2)=2^2-2=2$, etc. 
+Além disso, $f(x)$ pode ser derivada aplicando simplesmente as
+regras de derivação: 
+$$f'(x)=(x^2-x)'=(x^2)'-(x)'=2x-1\,.$$
+
+Mas às vezes, uma função pode ser definida de maneira
+\emph{implícita}. Vejamos exemplos.
+
+\begin{ex}
+Fixe um $x$ e considere o número $y$ solução da seguinte equação:
+\begin{equation}\label{eq:eximpliss}
+x=y^3+1\,.
+\end{equation}
+Por exemplo, se $x=1$, então $y=0$. Se $x=9$ então $y=2$.
+A cada $x$ escolhido corresponde um único $y$ que
+satisfaça a relação acima. Os pares $(x,y)$ definem uma curva $\gamma$ no plano.
+Essa curva é definida pela relação \eqref{eq:eximpliss}.
+
+Quando $x$ varia, o $y$ correspondente varia também, logo $y$ é
+\emph{função} de $x$: $y=f(x)$. Na verdade, 
+$f$ pode ser obtida isolando $y$ em \eqref{eq:eximpliss}:
+\begin{equation}\label{eq:exexpliss}
+y=\sqrt[3]{x-1}\,,
+\end{equation}
+o que significa que $f(x)=\sqrt[3]{x-1}$.
+A relação \eqref{eq:exexpliss} dá a relação \emph{explícita} entre $x$ e
+$y$, enquanto em \eqref{eq:eximpliss} a relação era só \emph{implícita}.
+Com a relação explícita em mão, pode-se estudar mais propriedades da
+curva $\gamma$, usando por exemplo a derivada de $f$.
+\end{ex}
+
+\begin{ex}
+Considere agora a seguinte relação implícita
+%Considere a função $f$ definida
+%da seguinte maneira: para um $x\in \bR$, $y=f(x)$ é 
+%definido como a solução da equação 
+\begin{equation}\label{eq:isolarydificil}
+\sen y=y+x\,.
+\end{equation}
+Não o faremos aqui, mas pode ser provado que a cada $x\in \bR$
+corresponde um único $y=f(x)$ que resolve a última equação. 
+Ora, apesar disso permitir {definir} a função $f$
+\emph{implicitamente}, 
+os seus \emph{valores} são difíceis de se
+calcular explicitamente.
+Por exemplo, é fácil ver que $f(0)=0$, $f(\pm \pi)=\mp\pi$,
+etc., mas outros valores, como $f(1)$ ou $f(7)$ não podem ser escritos de
+maneira elementar. 
+A dificuldade de conhecer os valores exatos de $f(x)$ é devida
+ao problema de isolar $y$ em \eqref{eq:isolarydificil}.
+\end{ex}
+
+Se os valores de uma função já são complicados de se calcular,
+parece mais difícil ainda estudar a sua derivada.
+No entanto, veremos agora que em certos casos, informações úteis
+podem ser extraidas sobre a derivada de uma função, mesmo esta
+sendo definida de maneira implícita.
+
+\begin{ex}
+Considere o círculo $\gamma$ de raio $5$ centrado na origem. 
+\index{círculo}
+Suponha, como no Exercício \ref{Exo:tangenteaucercle}, que se queira 
+calcular a
+inclinação da reta tangente a $\gamma$ no ponto $P=(3,-4)$. 
+Na sua forma implícita, a equação de $\gamma$  é dada por
+$$x^2+y^2=25\,.$$ 
+Para calcular a inclinação da reta tangente, 
+é preciso ter uma {função} que
+represente o círculo na vizinhança de $P$, e em seguida calcular
+a sua derivada neste ponto. 
+Neste caso, ao invés de \eqref{eq:isolarydificil}, é 
+possível \emph{isolar} $y$ na equação do círculo. 
+Lembrando que $P=(3,-4)$ pertence à metade \emph{inferior} do círculo, 
+obtemos $y=f(x)=-\sqrt{25-x^2}$.
+Logo, como a função é dada explicitamente, ela pode ser derivada, e 
+a inclinação procurada é dada por 
+$$f'(3)=\frac{x}{\sqrt{25-x^2}}\Bigr|_{x=3}=\tfrac{3}{4}\,.$$
+Essa inclinação foi obtida \emph{explicitamente}, pois foi calculada a partir
+de uma expressão explícita para $f$.
+
+Vamos apresentar agora um jeito de fazer que \emph{não passa pela 
+determinação
+precisa da função $f$}. De fato, \emph{suponha} que a função que descreve o
+círculo na vizinhança de $P$ seja bem definida: $y=y(x)$ (ou $y=f(x)$). 
+Já que o gráfico
+de $f$ passa por $P$, temos $y(3)=-4$. Mas também, 
+como a função $y(x)$ representa o círculo numa vizinhança de $3$, ela 
+satisfaz 
+$$x^2+y(x)^2=25\,.$$
+(Estamos assumindo que a última expressão \emph{define} $y(x)$, mas não a
+calculamos expliciamente.) Derivamos ambos lados dessa expressão
+com respeito a $x$: como 
+$(x^2)'=2x$, $(y(x)^2)'=2y(x)y'(x)$ (regra da cadeia) e
+$(25)'=0$, obtemos
+\eq{\label{eq:derivimplic100}2x+2y(x)y'(x)=0\,.}
+Isolando $y'(x)$ obtemos 
+\eq{\label{eq:bidddul}y'(x)=-\frac{x}{y(x)}\,.}
+Assim, não conhecemos $y(x)$ explicitamente, somente 
+\emph{implicitamente}, mas já temos uma informação a respeito da sua 
+derivada.
+Como o nosso objetivo é calcular a inclinação da reta tangente em $P$,
+precisamos calcular 
+$y'(3)$. Como $y(3)=-4$, a fórmula \eqref{eq:bidddul} dá:
+$$y'(3)
+=-\frac{x}{y(x)}\Big|_{x=3}=
+-\frac{3}{-4}=\frac34\,.$$ 
+\end{ex}
+
+Em \eqref{eq:derivimplic100} derivamos \emph{implicitamente} com respeito a
+$x$. Isto é, calculamos formalmente a derivada de $y(x)$ supondo que ela 
+existe. Vejamos um outro exemplo.
+
+\begin{ex}
+Considere a curva $\gamma$ do plano definida pelo conjunto dos pontos $(x,y)$
+que satisfazem à condição
+\eq{\label{eq:chachakshtil}x^3+y^3=4\,.}
+Observe que o ponto $P=(1,\sqrt[3]{3})$ pertence a essa curva. Qual é a equação
+da reta tangente à curva em $P$?
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\draw[ ->] (-2,0)--(2,0);
+\draw[ ->] (0,-0.3)--(0,2);
+\draw[thick, domain=1.5874:-2.2, samples=100] plot
+(\x,{exp(0.3333*ln(4-\x*\x*\x))}) node[left]{$\gamma$};
+% \draw[thick, domain=2.3:1.5874, samples=50] plot
+% (\x,{-exp(0.3333*ln(1*abs(4-\x*\x*\x)))}) ;
+\draw[ domain=0.6:1.4, samples=10] plot
+(\x,{1.4422-0.48*(\x-1)});
+\draw[dotted] (1,1.4422)--(1,0)node[below]{$\scriptstyle{1}$};
+\fill (1,1.4422) node[above]{$P$} circle (0.45mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Supondo que a curva pode ser descrita por uma função $y(x)$ na vizinança de
+$P$ e derivando \eqref{eq:chachakshtil} com respeito a $x$,
+$$3x^2+3y^2y'=0\,,\quad \text{ isto é:, }\quad
+y'=-\frac{x^2}{y^2}\,.$$
+Logo, a inclinação da reta tangente em $P$ vale
+$-\frac{(1)^2}{(\sqrt[3]{3})^2}=-\tfrac{1}{\sqrt[3]{9}}$, e
+a sua equação é
+$y=-\tfrac{1}{\sqrt[3]{9}}x+\sqrt[3]{3}+\frac{1}{\sqrt[3]{9}}$.
+\end{ex}
+
+Lembre que quando 
+calculamos $(f^{-1})'(x)$, na Seção \ref{Sec:DerivInversa}, derivamos ambos
+lados da expressão $f(f^{-1}(x))=x$, que contém \emph{implicitamente} a função
+$f^{-1}(x)$. Nesta seção voltaremos a usar esse método.
+\begin{exo}
+Calcule $y'$ quando $y$ é definido implicitamente pela equação dada.
+\begin{multicols}{2}
+\begin{enumerate}
+\item\label{itderivimplicit1} $y=\sen (3x+y)$
+\item\label{itderivimplicit2} $y=x^2y^3+x^3y^2$
+\item\label{itderivimplicit3} $x=\sqrt{x^2+y^2}$
+\item\label{itderivimplicit4} $\frac{x-y^3}{y+x^2}=x+2$
+\item\label{itderivimplicit5} $x\sen x+y\cos y=0$
+\item\label{itderivimplicit6} $x\cos y=\sen (x+y)$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itderivimplicit1} $y'=\frac{3\cos(3x+y)}{1-\cos(3x+y)}$.
+\eqref{itderivimplicit2} $y'=\frac{2xy^3+3x^2y^2}{1-3x^2y^2-2x^3y}$
+\eqref{itderivimplicit3} Atenção: o único par $(x,y)$ solução da 
+equação $x=\sqrt{x^2+y^2}$ é $(0,0)$! Logo, não há jeito de escrever $y$ como 
+\emph{função} de $x$, assim não faz sentido derivar com respeito a $x$. 
+\eqref{itderivimplicit4} $y'=\frac{1-3x^2-4x-y}{3y^2+x+2}$
+\eqref{itderivimplicit5} $y'=\frac{-\sen x-x\cos x}{\cos y-y\sen y}$
+\eqref{itderivimplicit6} $y'=\frac{\cos y-\cos(x+y)}{x\sen y+\cos(x+y)}$ 
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Calcule a equação da reta tangente à curva no ponto dado.
+\begin{multicols}{1}
+\begin{enumerate}
+\item\label{itderivimplicitB1} $x^2+(y-x)^3=9$, $P=(1,3)$.
+\item\label{itderivimplicitB2} $x^2y+y^4=4+2x$, $P=(-1,1)$.
+\item\label{itderivimplicitB3} $\sqrt{xy}\cos (\pi xy)+1=0$, $P=(1,1)$.
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itderivimplicitB1} Com $y'=1-\frac{2x}{3(y-x)^2}$,  $y=\frac56
+x+\frac{13}{6}$.
+\eqref{itderivimplicitB2} Com $y'=\frac{2-2xy}{x^2+4y^3}$, $y=\frac45
+x+\frac95$.
+\eqref{itderivimplicitB3} $y=-x+2$.
+Obs: curvas definidas implicitamente por equações do tipo acima podem ser
+representadas usando qualquer programa simples de esboço de funções, por exemplo
+\verb|kmplot|.
+\end{sol}
+\end{exo}
+
+
+% Mais merde ca fait chier\footnote{Chier=faire caca.}.
+% 
+% \begin{minipage}{10cm}
+% \begin{center}
+% Salut Gordim\footnotemark, ça va?
+% \end{center}
+%  \end{minipage}
+% \footnotetext{Ela se chama Gordim na verdade.}
+% Et puis ca continue a me faire chier\footnote{Chier=aller aux toilettes.}
+
+
+\section{Convexidade, concavidade}\label{Sec:Segundaderivada}
+
+Vimos na Seção~\ref{sec:taxavariacao} que a segunda derivada de uma
+função aparece naturalmente ao estudar a aceleração (taxa de variação
+instantânea da
+velocidade) de uma partícula. Nesta seção veremos qual é a
+\emph{interpretação geométrica} da segunda derivada.  Comecemos com
+uma definição.
+
+\begin{defin} Seja $I\subset \bR$ um intervalo, $f:I\to \bR$ uma função.
+\begin{enumerate}
+\index{função!convexa}
+\item $f$ é \grasA{convexa} em $I$ se para todo $x,y\in I$, $x\leq
+y$,
+\eq{\label{eq:defconvexidade}
+f\bigl(\frac{x+y}{2}\bigr)\leq\frac{f(x)+f(y)}{2}\,.}
+\item 
+\index{função!côncava}
+$f$ é \grasA{côncava} em $I$ se $-f$ é convexa em $I$, isto é,
+se para todo $x,y\in I$, $x\leq y$,
+\eq{\label{eq:defconcavidade}f\bigl(\frac{x+y}{2}\bigr)\geq
+\frac{f(x)+f(y)}{2}\,.}
+\end{enumerate}
+\end{defin}
+
+\begin{obs}\label{obs:convconc}
+Observe que $f$ é concava se e somente se $-f$ é convexa.
+\end{obs}
+
+\grasA{Estudar a convexidade~\footnote{A 
+terminologia a respeito da convexidade pode variar,
+dependendo dos livros. Às vezes, uma função \emph{côncava} é chamada de
+``convexa para baixo'', e uma função \emph{convexa} é chamada de ``côncava
+para cima''...
+} de uma função $f$} será entendido como
+\emph{determinar os intervalos em que $f$ é convexa/côncava}.
+
+\begin{ex}\label{ex:xoisconvexa}
+A função $f(x)=x^2$ é convexa em $\bR$, isto é:
+$(\frac{x+y}{2})^2\leq \frac{x^2+y^2}{2}$.  
+De fato, desenvolvendo o quadrado 
+$(\frac{x+y}{2})^2=\frac{x^2+2xy+y^2}{4}$, assim a desigualdade
+pode ser reescrita 
+$0\leq \frac{x^2-2xy+y^2}{4}$, que é equivalente a $0\leq  \frac{(x-y)^2}{4}$. 
+Mas essa desigualdade é sempre satisfeita, já que $(x-y)^2\geq 0$ para qualquer
+par $x,y$.
+\end{ex}
+
+\begin{exo}
+Usando as definições acima, mostre que 
+\begin{enumerate}
+% \item $f(x)=x^3$ é convexa em $\bR_+$, côncava
+% em $\bR_-$,
+\item\label{itfonctionsconvexes1} $g(x)=\sqrt{x}$ é côncava em $\bR_+$,
+\item\label{itfonctionsconvexes2} $h(x)=\frac{1}{x}$ é convexa em $\bR_+$,
+côncava em $\bR_-$.
+\end{enumerate}
+\begin{sol}
+\eqref{itfonctionsconvexes1} Queremos verificar que $\sqrt{\frac{x+y}{2}}\geq
+\frac{\sqrt{x}+\sqrt{y}}{2}$ para todo $x,y\geq 2$.
+Elevando ambos lados ao quadrado (essa operação é permitida, já que ambos
+lados são positivos), $\frac{x+y}{2}\geq
+(\frac{\sqrt{x}+\sqrt{y}}{2})^2
+=\frac{x+2\sqrt{x}\sqrt{y}+y}{4}$, e rearranjando os termos obtemos $0\leq
+\frac{(\sqrt{x}-\sqrt{y})^2}{4}$, que é sempre verdadeira.
+\eqref{itfonctionsconvexes2}
+Se $x,y>0$, $\frac{1}{\frac{x+y}{2}}\leq \frac{\frac{1}{x}+\frac{1}{y}}{2}$ é
+equivalente a $4xy\leq (x+y)^2$, que por sua vez é equivalente a $0\leq
+(x-y)^2$, que é sempre verdadeira. Logo, $\frac1x$ é convexa em $(0,\infty)$.
+Como $\frac1x$ é ímpar, a concavidade em $(-\infty,0)$ segue imediatamente.
+\end{sol}
+\end{exo}
+
+Geometricamente, \eqref{eq:defconvexidade} pode ser interpretado da seguinte
+maneira:
+$f$ é \grasA{convexa} se o gráfico de $f$ entre dois pontos quaisquer
+$A=(x,f(x))$, $B=(y,f(y))$, fica \emph{abaixo} do segmento $AB$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{((#1)^2/3+1)}
+\draw[ ->] (-1.6,0)--(2.5,0);
+%\draw[ ->] (0,-0.5)--(0,2.5);
+\draw[thick, domain=-1:1.9] plot (\x,{\funcao{\x}});
+\pgfmathsetmacro{\a}{-0.5};
+\coordinate (A) at (\a,{\funcao{\a}});
+\pgfmathsetmacro{\b}{1.4};
+\coordinate (B) at (\b,{\funcao{\b}});
+\pgfmathsetmacro{\c}{(\a+\b)/2};
+\coordinate (C) at (\c,{\funcao{\c}});
+\coordinate (Cc) at (\c,{(\funcao{\a}+\funcao{\b})/2});
+%\draw[dashed, domain=-1.6:\l+0.4] plot (\x,{(\l-1)*\x+\l});
+\draw[ thick] (A)--(B);
+\fill (A) circle (0.50mm);
+\fill (B) circle (0.50mm);
+\fill (Cc) circle (0.50mm);
+\fill (C) circle (0.50mm);
+\draw[dotted] (\a,0)node[below]{$x$}--(A);
+\draw (A) node[above]{$A$};
+\draw[dotted] (\b,0)node[below]{$y$}--(B);
+\draw (B) node[above]{$B$};
+%\draw[ thick] (A)--(B);
+\draw[dotted] (\c,0)node[below]{$\scriptstyle{\frac{x+y}{2}}$}--(Cc);
+%\draw (Cc) node[above]{$C$};
+\coordinate (U) at (2,1.4);
+\coordinate (Cmc) at ($(Cc)!0.1!(U)$);
+\coordinate (V) at (2,0.5);
+\coordinate (Cm) at ($(C)!0.1!(V)$);
+%\coordinate (Cm) at ($(Cc)!(current)!(\x,10)$);
+\draw[<-] (Cmc)--(U) node[right]{$\scriptstyle{\frac{f(x)+f(y)}{2}}$};
+\draw[<-] (Cm)--(V) node[right]{$\scriptstyle{f(\frac{x+y}{2})}$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Por exemplo, 
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\begin{scope}
+\newcommand{\funcao}[1]{(#1)^2}
+ \draw[ ->] (-2,0)--(2,0);
+\draw[ ->] (0,-0.1)--(0,2);
+\draw[thick, domain=-1.3:1.3] plot (\x,{\funcao{\x}}) node[right]{$x^2$};
+\pgfmathsetmacro{\a}{-0.6};
+\pgfmathsetmacro{\b}{1};
+\coordinate (A) at (\a,{\funcao{\a}});
+\coordinate (B) at (\b,{\funcao{\b}});
+\draw[ thick] (A)--(B);
+\fill (A) circle (0.40mm); 
+\fill (B) circle (0.40mm); 
+\end{scope}
+
+\begin{scope}[xshift=5cm]
+\newcommand{\funcao}[1]{exp(#1)}
+ \draw[ ->] (-2,0)--(2,0);
+\draw[ ->] (0,-0.1)--(0,2);
+\draw[thick, domain=-1.3:1] plot (\x,{\funcao{\x}}) node[right]{$e^x$};
+\pgfmathsetmacro{\a}{-0.7};
+\pgfmathsetmacro{\b}{0.6};
+\coordinate (A) at (\a,{\funcao{\a}});
+\coordinate (B) at (\b,{\funcao{\b}});
+\draw[ thick] (A)--(B);
+\fill (A) circle (0.40mm); 
+\fill (B) circle (0.40mm); 
+\end{scope}
+
+\begin{scope}[xshift=10cm]
+\newcommand{\funcao}[1]{abs(#1)}
+ \draw[ ->] (-2,0)--(2,0);
+\draw[ ->] (0,-0.1)--(0,2);
+\draw[thick, domain=-1.3:1.3, samples=17] plot (\x,{\funcao{\x}})
+node[right]{$|x|$};
+\pgfmathsetmacro{\a}{-0.5};
+\pgfmathsetmacro{\b}{0.3};
+\coordinate (A) at (\a,{\funcao{\a}});
+\coordinate (B) at (\b,{\funcao{\b}});
+\draw[ thick] (A)--(B);
+\fill (A) circle (0.40mm); 
+\fill (B) circle (0.40mm); 
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\captionof{figure}{Exemplos de funções convexas.}\label{Fig:exemplosconvexas}
+\end{center}
+
+Por outro lado, $f$ é \grasA{côncava} se o gráfico de $f$ entre dois pontos
+quaisquer $A$ e $B$ fica \emph{acima} do segmento $AB$. Por exemplo,
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+
+\begin{scope}[yshift=-0.5cm, scale=1.2]
+\newcommand{\funcao}[1]{-1*(#1)*ln(#1)}
+ \draw[ ->] (-0.2,0)--(2,0);
+\draw[ ->] (0,-0.1)--(0,1);
+\draw[thick, domain=0.01:1.5] plot (\x,{\funcao{\x}}) node[right]{$-x\ln x$};
+\pgfmathsetmacro{\a}{0.2};
+\pgfmathsetmacro{\b}{0.8};
+\coordinate (A) at (\a,{\funcao{\a}});
+\coordinate (B) at (\b,{\funcao{\b}});
+\draw[color=gray, thick] (A)--(B);
+\fill (A) circle (0.40mm); 
+\fill (B) circle (0.40mm); 
+\end{scope}
+
+\begin{scope}[xshift=4cm]
+\newcommand{\funcao}[1]{ln(#1)}
+ \draw[ ->] (0,-1.5)--(0,1.3);
+\draw[ ->] (-0.1,0)--(2,0);
+\draw[thick, domain=-1.3:1] plot ({exp(\x)},\x) node[right]{$\ln x$};
+\pgfmathsetmacro{\a}{0.5};
+\pgfmathsetmacro{\b}{1.8};
+\coordinate (A) at (\a,{\funcao{\a}});
+\coordinate (B) at (\b,{\funcao{\b}});
+\draw[color=gray, thick] (A)--(B);
+\fill (A) circle (0.40mm); 
+\fill (B) circle (0.40mm); 
+\end{scope}
+
+\begin{scope}[xshift=11cm, yshift=-1cm]
+\newcommand{\funcao}[1]{1-(#1)^2}
+ \draw[ ->] (-2,0)--(1.2,0);
+\draw[ ->] (0,-0.2)--(0,1.5);
+\draw[thick, domain=0:1.5] plot ({\funcao{\x}},\x) node[left]{$\sqrt{1-x}$};
+\pgfmathsetmacro{\a}{0.5};
+\pgfmathsetmacro{\b}{1.3};
+\coordinate (A) at ({\funcao{\a}},\a);
+\coordinate (B) at ({\funcao{\b}},\b);
+\draw[color=gray, thick] (A)--(B);
+\fill (A) circle (0.40mm); 
+\fill (B) circle (0.40mm);
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\captionof{figure}{Exemplos de funções côncavas.}\label{Fig:exemplosconcavas}
+\end{center}
+
+Façamos agora uma observação importante a respeito do comportamento da
+derivada em relação a convexidade.
+Primeiro, vemos na Figura \ref{Fig:exemplosconvexas} que para qualquer uma das
+funções, se $x<y$ são dois pontos que pertencem a um intervalo 
+em que a derivada existe, então $f'(x)\leq
+f'(y)$. Isto é, \emph{a derivada de cada uma das funções convexas da 
+Figura \ref{Fig:exemplosconvexas} é crescente.} 
+Do mesmo jeito, vemos que
+\emph{a derivada de cada uma das funções côncavas da 
+Figura \ref{Fig:exemplosconcavas} é decrescente}.
+Como a variação de 
+$f'$ é determinada a partir do estudo do sinal da derivada
+de $f'$ (quando ela existe), isto é, $(f')'$,
+vemos que a concavidade/convexidade de $f$ pode ser obtida a partir do estudo
+do sinal da \grasA{segunda derivada de $f$}, $f''\pardef (f')'$:
+
+\begin{teo}\label{Teo:Sinalfseconde}
+Seja $f$ tal que $f'(x)$ e $f''(x)$ ambas existam em todo ponto $x\in
+I$ ($I$ um intervalo).
+\begin{enumerate}
+ \item Se $f''(x)\geq 0$ para todo $x\in I$, então $f$ é convexa em $I$.
+ \item Se $f''(x)\leq 0$ para todo $x\in I$, então $f$ é côncava em $I$.
+\end{enumerate}
+\end{teo}
+\begin{proof}
+Provemos a primeira afirmação (pela Observação \ref{obs:convconc}, a
+segunda segue por uma simples mudança de sinal).
+Para mostrar que $f$ é convexa, é preciso mostrar que
+\eq{\label{eq:equivconvvvv} f(z)\leq 
+\frac{f(x)+f(y)}{2}\,,} 
+em que 
+$x<y$ são dois pontos quaisquer de $I$, e $z\pardef \frac{x+y}{2}$ é o
+ponto médio entre $x$ e $y$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\newcommand{\funcao}[1]{(#1)^2/3+1}
+\newcommand{\dfuncao}[2]{ (\funcao{#1+#2})/(#2)-(\funcao{#1})/(#2)}
+%ESPERANDO:%%%%%%%%%%%
+% \draw[thick,  domain={\a-0.4}:{\l+0.4}] plot
+% (\x,{(\dfuncao{\a}{0.03})*(\x-\a)+\funcao{\a}});
+% \draw[dashed, domain={\a-0.4}:{\l+0.4}] plot
+% (\x,{(\dfuncao{\a}{(\l-\a)})*(\x-\a)+\funcao{\a}}) node[above]{$r$};
+%%%%%%%%%%%%%%%%%%%%%%%
+\draw[ ->] (-1.6,0)--(2.5,0);
+%\draw[ ->] (0,-0.5)--(0,2.5);
+\draw[thick, domain=-1:1.9] plot (\x,{\funcao{\x}});
+\pgfmathsetmacro{\a}{-0.5};
+\coordinate (A) at (\a,{\funcao{\a}});
+\pgfmathsetmacro{\b}{1.4};
+\coordinate (B) at (\b,{\funcao{\b}});
+\pgfmathsetmacro{\c}{(\a+\b)/2};
+\coordinate (C) at (\c,{\funcao{\c}});
+\coordinate (Cc) at (\c,{(\funcao{\a}+\funcao{\b})/2});
+%\draw[dashed, domain=-1.6:\l+0.4] plot (\x,{(\l-1)*\x+\l});
+%\draw[ thick] (A)--(B);
+\fill (A) circle (0.50mm);
+\fill (B) circle (0.50mm);
+%\fill (Cc) circle (0.50mm);
+\fill (C) circle (0.50mm);
+\draw[dotted] (\a,0)node[below]{$\scriptstyle{x}$}--(A);
+\draw (A) node[above]{$A$};
+\draw[dotted] (\b,0)node[below]{$\scriptstyle{y}$}--(B);
+\draw (B) node[above]{$B$};
+%\draw[ thick] (A)--(B);
+\draw[dotted] (\c,0)node[below]{$\scriptstyle{z}$}--(C);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\index{Teorema!do valor intermediário para derivada}
+Aplicaremos três vezes o Teorema do valor intermediário para a derivada 
+(Corolário \ref{Corol:ValorIntermDeriv}):
+1) Para $f$ no intervalo $[x,z]$: existe $c_1\in [x,z]$ tal que 
+$$f(z)-f(x)=f'(c_1)(z-x)\,.$$
+2) Para $f$ no intervalo $[z,y]$: existe $c_2\in [z,y]$ tal que 
+$$f(y)-f(z)=f'(c_2)(y-z)\equiv f'(c_2)(z-x)\,.$$
+Subtraindo as duas expressões acima, obtemos
+$2f(z)-(f(x)+f(y))=-(f'(c_2)-f'(c_1))(z-x)$.
+3) Para $f'$ no intervalo $[c_1,c_2]$: existe $\alpha\in [c_1,c_2]$ tal que
+$$f'(c_2)-f'(c_1)=f''(\alpha)(c_2-c_1)\,.$$
+Como $f''(\alpha)\geq 0$ por hipótese, temos $f'(c_2)-f'(c_1)\geq 0$, o que
+implica $2f(z)-(f(x)+f(y))\leq 0$, e prova \eqref{eq:equivconvvvv}.
+\end{proof}
+
+\begin{ex}
+Considere $f(x)=x^2$. Como $f'(x)=(x^2)'=2x$, e como $f''(x)=(2x)'=2>0$ para
+todo $x$, o Teorema \ref{Teo:Sinalfseconde} garante que $f$ é convexa em $\bR$,
+como já tinha sido provado no Exemplo \ref{ex:xoisconvexa}.
+
+Por outro lado, se $g(x)=x^3$, então $g''(x)=6x$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.8]
+\tkzTabInit[nocadre, espcl=2,  color, colorV=lightgray!5, colorL=gray!15,
+colorC=gray!15]
+{$x$ /.6, $g''(x)$ /.6, Conv. /1.2}%
+{,$0$, }%
+\tkzTabLine{,-,z,+,}
+\tkzTabLine{,\frown,z,\smile,}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Logo, (confere no gráfico visto
+no Capítulo \ref{Cap:Funcoes}) $x^3$ é côncava em $]-\infty,0]$, 
+convexa em $[0,\infty)$. O ponto $x=0$, em que a função passa de côncava para
+convexa, é chamado de \grasA{ponto de inflexão}.
+\end{ex}
+
+\begin{ex}
+Considere $f(x)=\ln x$ para $x>0$. Como $f'(x)=\frac{1}{x}$,
+$f''(x)=-\frac{1}{x^2}$, temos $f''(x)<0$ para todo $x$. Isto é, \emph{$\ln x$
+é uma função côncava}, como já foi observado na Figura
+\eqref{Fig:exemplosconcavas}.
+\end{ex}
+
+\begin{exo}
+Estude a convexidade das funções a seguir. Quando for possível, monte o gráfico.
+\begin{multicols}{4}
+\begin{enumerate}
+\item\label{itexconvexidadeA1} $\frac{x^3}{3}-x$
+\item\label{itexconvexidadeA2} $-x^3+5x^2-6x$
+\item\label{itexconvexidadeA3} $\scriptstyle{3x^4-10x^3-12x^2+10x}$
+\item\label{itexconvexidadeA4} $\frac{1}{x}$
+\item\label{itexconvexidadeA5} $xe^x$
+\item\label{itexconvexidadeA6} $\frac{x^2+9}{(x-3)^2}$
+\item\label{itexconvexidadeA7} $xe^{-3x}$
+%\item\label{itexconvexidadeA8} $4\sqrt{x+1}-\frac{1}{\sqrt{2}}x^2-1$
+%\item\label{itexconvexidadeA9} $e^{-x}\cos x$, $x\in [0,2\pi]$
+\item\label{itexconvexidadeA10} $|x|-x$ 
+\item\label{itexconvexidadeA11} $\arctan x$
+\item\label{itexconvexidadeA12} $e^{-\frac{x^2}{2}}$ 
+\item\label{itexconvexidadeA13} $\frac{1}{x^2+1}$ 
+\item\label{itexconvexidadeA14} $x+\frac{1}{x}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itexconvexidadeA1}
+$\frac{x^3}{3}-x$ é côncava em $(-\infty,0]$, convexa em $[0,\infty)$.
+O gráfico se encontra na solução do Exercício \ref{Ex:variacoesbasicas}.
+\eqref{itexconvexidadeA2} $-x^3+5x^2-6x$ é convexa em $(-\infty,\tfrac53]$,
+côncava em $[\frac53,\infty)$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.5]
+\draw[ ->] (-1,0)--(3.6,0);
+\draw[ ->] (0,-2)--(0,1.7);
+\newcommand{\funcao}[1]{-1*(#1)^3+5*(#1)^2-6*(#1)}
+\draw[thick, domain=-0.1:3.4] plot (\x,{\funcao{\x}});
+\pgfmathsetmacro{\a}{5/3};
+\coordinate (I) at (\a,{\funcao{\a}});
+\draw[dotted] (\a,0)node[above]{$\scriptstyle{\tfrac53}$}--(I);
+\fill (I) circle (0.70mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itexconvexidadeA3} Se $f(x)=3x^4-10x^3-12x^2+10x+9$, então 
+$f''(x)=12(3x^2-5x-2)$.
+Logo, $f(x)$ é convexa em $(-\infty,-\tfrac13]$ e em $[2,\infty)$,
+côncava em $[-\tfrac13,2]$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+\draw[ ->] (-1,0)--(3.6,0);
+\draw[ ->] (0,-1)--(0,1.7);
+\newcommand{\funcao}[1]{(3*(#1)^4-10*(#1)^3-12*(#1)^2+10*(#1)+9)/100}
+\draw[thick, domain=-2:4.5, samples=50] plot (\x,{\funcao{\x}});
+\pgfmathsetmacro{\a}{-0.333};
+\coordinate (I) at (\a,{\funcao{\a}});
+\draw[dotted] (\a,0)node[below]{$\scriptstyle{-\tfrac13}$}--(I);
+\fill (I) circle (0.70mm);
+\pgfmathsetmacro{\b}{2};
+\coordinate (J) at (\b,{\funcao{\b}});
+\draw[dotted] (\b,0)node[above]{$\scriptstyle{2}$}--(J);
+\fill (J) circle (0.70mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itexconvexidadeA4} Como $(\frac{1}{x})''=\frac{2}{x^3}$, $\frac{1}{x}$ é
+côncava em $(-\infty,0)$, convexa em $(0,\infty)$ (confere no gráfico do
+Capítulo \ref{Cap:Funcoes}).
+\eqref{itexconvexidadeA5}: Como $f''(x)=(x+2)e^x$, $f$ é côncava em
+$(-\infty, -2]$, convexa em $[-2,\infty)$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+\draw[ ->] (-4,0)--(2,0);
+\draw[ ->] (0,-0.6)--(0,1.7);
+\newcommand{\funcao}[1]{(#1)*exp(#1)}
+\draw[thick, domain=-4:0.8, samples=50] plot (\x,{\funcao{\x}});
+ \pgfmathsetmacro{\a}{-2};
+ \coordinate (I) at (\a,{\funcao{\a}});
+ \draw[dotted] (\a,0)node[above]{$\scriptstyle{-2}$}--(I);
+ \fill (I) circle (0.70mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itexconvexidadeA6}: 
+$f(x)=\frac{x^2+9}{(x-3)^2}$ é bem definida em $D=(-\infty,3)\cup
+(3,+\infty)$. Como $f''(x)=\frac{12(x+6)}{(x-3)^4}$, $f(x)$ é côncava em
+$(-\infty, -6]$, convexa em $(-6,3)$ e $(3,+\infty)$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.2]
+ \newcommand{\funcao}[1]{( (#1)^2+ 9 )/( ( (#1) - 3)^2 )}
+\draw[ ->] (-15,0)--(12,0);
+\draw[ ->] (0,-0.6)--(0,12);
+\draw[dashed] (3,0)node[below]{$\scriptstyle{3}$}--(3,12);
+\draw[dashed] (-15,1)node[left]{$\scriptstyle{y=1}$}--(12,1);
+\draw[thick, domain=-15:1.9, samples=50] plot (\x,{\funcao{\x}});
+\draw[thick, domain=4.4:12, samples=50] plot (\x,{\funcao{\x}});
+\pgfmathsetmacro{\a}{-6};
+\coordinate (I) at (\a,{\funcao{\a}});
+\draw[dotted] (\a,0)node[below]{$\scriptstyle{-6}$}--(I);
+\fill (I) circle (3mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itexconvexidadeA7} Com $f(x)=xe^{-3x}$ temos $f''(x)=(9x-6)e^{-3x}$.
+Logo, $f$ é côncava em $(-\infty,\tfrac23]$, convexa em $[\tfrac23,\infty)$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+ \newcommand{\funcao}[1]{ 5*(#1)*exp(-3*(#1))}
+\draw[ ->] (-2,0)--(3,0);
+\draw[ ->] (0,-0.6)--(0,2);
+% \draw[dashed] (3,0)node[below]{$\scriptstyle{3}$}--(3,12);
+% \draw[dashed] (-15,1)node[left]{$\scriptstyle{y=1}$}--(12,1);
+\draw[thick, domain=-0.1:2, samples=50] plot (\x,{\funcao{\x}});
+%\draw[thick, domain=4.4:12, samples=50] plot (\x,{\funcao{\x}});
+\pgfmathsetmacro{\a}{0.66666};
+\coordinate (I) at (\a,{\funcao{\a}});
+\draw[dotted] (\a,0)node[below]{$\scriptstyle{\tfrac23}$}--(I);
+\fill (I) circle (1mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\eqref{itexconvexidadeA10} $f(x)=|x|-x$ é $=0$ se $x\geq 0$, e $=-2x$ se
+$x\leq 0$. Logo, $f$ é convexa. Obs: como $|x|$ não é derivável em $x=0$, a
+convexidade não pode ser obtida com o Teorema \ref{Teo:Sinalfseconde}.
+\eqref{itexconvexidadeA11} Se $f(x)=\arctan x$, então $f'(x)=\frac{1}{x^2+1}$,
+e $f''(x)=\frac{-2x}{(x^2+1)^2}$. Logo, $\arctan x$ é convexa em $]-\infty,0]$,
+côncava em $[0,\infty)$ (confere no gráfico da Seção
+\ref{Sec:Functriginversas}).
+\eqref{itexconvexidadeA12} $f(x)=e^{-\frac{x^2}{2}}$ tem
+$f''(x)=(x^2-1)e^{-\frac{x^2}{2}}$. Logo, $f$ é convexa em $]-\infty,1]$ e
+$[1,\infty)$, e côncava em $[-1,1]$ (veja o gráfico do Exercício
+\ref{Ex:variacoesbasicas}).
+\eqref{itexconvexidadeA13} $f(x)=\frac{1}{x^2+1}$ é convexa em
+$(-\infty,-\frac{1}{\sqrt{3}}]$ e $[\frac{1}{\sqrt{3}},\infty)$, côncava em
+$[-\frac{1}{\sqrt{3}},\frac{1}{\sqrt{3}}]$.
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=0.7]
+ \newcommand{\funcao}[1]{ 1/( (#1)^2 +1)}
+\draw[ ->] (-3,0)--(3,0);
+\draw[ ->] (0,-0.6)--(0,1.3);
+% \draw[dashed] (3,0)node[below]{$\scriptstyle{3}$}--(3,12);
+% \draw[dashed] (-15,1)node[left]{$\scriptstyle{y=1}$}--(12,1);
+\draw[thick, domain=-2.5:2.5, samples=50] plot (\x,{\funcao{\x}});
+%\draw[thick, domain=4.4:12, samples=50] plot (\x,{\funcao{\x}});
+\pgfmathsetmacro{\a}{0.5777};
+\coordinate (I) at (\a,{\funcao{\a}});
+\draw[dotted] (\a,0)node[below]{$\scriptstyle{\tfrac{1}{\sqrt{3}}}$}--(I);
+\fill (I) circle (0.5mm);
+\coordinate (J) at (-\a,{\funcao{-\a}});
+\draw[dotted] (-\a,0)node[below]{$\scriptstyle{-\tfrac{1}{\sqrt{3}}}$}--(J);
+\fill (J) circle (0.5mm);
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+\end{sol}
+\end{exo}
+
+\section{A Regra de Bernoulli-l'Hôpital}
+\index{Regra de Bernoulli-l'Hôpital}
+%Guillaume François Antoine, marquis de L'Hôpital (1661 - 1704)
+%
+Vejamos agora como a derivada fornece uma ferramenta útil para
+calcular alguns limites 
+de formas indeterminados do tipo
+``$\frac00$'', ``$\frac{\pm \infty}{\pm \infty}$'', ``$1^{\infty}$'', tais como
+$$
+\lim_{x\to 0}\frac{e^x-1-x}{x^2}\,,\quad
+\lim_{x\to 0}\frac{\tan x-x}{x^3}\,,\quad
+%\lim_{x\to \infty}\frac{\ln x}{x}\,,\quad
+%\lim_{x\to \infty}\frac{x^5}{e^{2x}}\,,\quad 
+\lim_{x\to \infty}\Bigl(\frac{x+1}{x-1}\Bigr)^x\,.
+$$
+Os métodos apresentados até agora não permitem calcular esses
+limites.
+Nesta seção veremos como derivadas são úteis para estudar limites da forma
+$\lim_{x\to a}\frac{g(x)}{h(x)}$, quando $\lim_{x\to a}g(x)=0$, $\lim_{x\to
+a}h(x)=0$, ou quando $\lim_{x\to a}g(x)=\pm \infty$, $\lim_{x\to
+a}h(x)=\pm \infty$.
+A idéia principal é que \emph{limites indeterminados da forma $\tfrac00$ (ou
+$\frac{\pm \infty}{\pm \infty}$)
+podem, em geral, ser estudados via uma razão de duas derivadas}. 
+Os métodos que aproveitam dessa idéia,
+descritos abaixo, costumam ser chamados de \emph{Regra de
+Bernoulli-l'Hôpital}~\footnote{Johann Bernoulli, Basileia (Suiça) 1667-1748. 
+Guillaume François Antoine, marquis de
+L'Hôpital (1661 - 1704).} (denotado por B.-H. abaixo).
+Comecemos com um exemplo elementar.
+
+\begin{ex}
+Considere o limite
+$$\lim_{x\to 0}\frac{e^x-1}{\sen x}\,.$$
+Já que $\lim_{x\to 0}e^x-1=e^0-1=0$ e $\lim_{x\to 0}\sen x=\sen 0=0$, esse
+limite é indeterminado da forma $\tfrac00$. Mas observe que,
+dividindo o numerador e o denomindor por $x$, 
+$$\lim_{x\to 0}\frac{e^x-1}{\sen x}=\lim_{x\to
+0}\frac{\frac{e^x-1}{x}}{\frac{\sen x}{x}}=
+\lim_{x\to 0}\frac{\frac{e^x-e^0}{x}}{\frac{\sen x-\sen 0}{x}}\,.
+$$
+Dessa forma, aparecem dois quocientes bem comportados quando $x\to 0$. O
+numerador, $\frac{e^x-e^0}{x}$, tende à derivada da função $e^x$ em $x=0$, isto
+é, $1$. O denominador, $\frac{\sen x-\sen 0}{x}$ tende à derivada da função
+$\sen x$ em $x=0$, isto é: $1$, diferente de zero. Logo,
+$$\lim_{x\to 0}\frac{e^x-1}{\sen x}=\frac{\lim_{x\to
+0}\frac{e^x-e^0}{x}}{\lim_{x\to 0}\frac{\sen x-\sen 0}{x}}\equiv
+\frac{(e^x)'|_{x=0}}{(\sen x)'|_{x=0}}=\frac{1}{1}=1\,.
+$$
+\end{ex}
+
+A idéia do exemplo anterior pode ser generalizada:
+
+\begin{teo}[Regra de Bernoulli-l'Hôpital, Primeira versão]\label{Teo:BH1}
+Sejam $f$, $g$ duas funções deriváveis no ponto $a$, que se
+anulam em $a$, $f(a)=g(a)=0$, e
+tais que $\frac{f'(a)}{g'(a)}$ existe. Então 
+\eq{\lim_{x\to a}\frac{f(x)}{g(x)}=\frac{f'(a)}{g'(a)}\,.}
+\end{teo}
+\begin{proof}
+ Como antes, 
+$$
+\lim_{x\to a}\frac{f(x)}{g(x)}=
+\lim_{x\to a}\frac{f(x)-f(a)}{g(x)-g(a)}=
+\lim_{x\to a}\frac{\frac{f(x)-f(a)}{x-a}}{\frac{g(x)-g(a)}{x-a}}=
+\frac{f'(a)}{g'(a)}\,.
+$$
+\end{proof}
+
+
+\begin{exo}
+Calcule os limites:
+$$\lim_{s\to 0}\frac{\log(1+s)}{e^{2s}-1}\,,\quad
+\lim_{t\to \pi}\frac{\cos t+1}{\pi-t}\,,\quad 
+\lim_{\alpha\to
+0}\frac{1-\cos(\alpha)}{\sen(\alpha+\frac{\pi}{2})}\,,\quad
+\lim_{x\to 0}\frac{\sen x}{x^2+3x}
+\,.
+$$
+\begin{sol}
+Nos dois primeiros e último exemplos, as hipóteses do Teorema \ref{Teo:BH1} são
+verificadas, dando
+ $$\lim_{s\to 0}\frac{\log(1+s)}{e^{2s}-1}=
+\frac{(\log(1+s))'|_{s=0}}{(e^{2s})'|_{s=0}}
+=\frac{\frac{1}{1+s}|_{s=0}}{2e^{2s}|_{s=0}}=\frac{1}{2}$$
+$$
+\lim_{t\to \pi}\frac{\cos t+1}{\pi-t}=-(\cos t)'|_{t=\pi}=\sen t|_{t=0}=0\,.$$
+$$
+\lim_{x\to 0}\frac{\sen x}{x^2+3x}=\frac{(\sen
+x)'|_{x=0}}{(x^2+3x)'|_{x=0}}
+=\frac{\cos 0}{2\cdot 2+3}=\frac{1}{3}\,.
+$$
+No terceiro, o teorema não se aplica: apesar das funções $1-\cos(\alpha)$ e 
+$\sen(\alpha+\frac{\pi}{2})$ serem deriváveis em $\alpha=0$, temos
+$\sen (0+\pi/2)=1\neq 0$. Logo o limite se calcula sem a regra de B.H.:
+$\lim_{\alpha\to 0}\frac{1-\cos(\alpha)}{\sen (\alpha+\pi/2)}=\tfrac01=0$.
+\end{sol}
+\end{exo}
+
+O resultado acima pode ser generalizado a situações em que
+$\frac{f'(a)}{g'(a)}$ não existe, ou em que $f$ e $g$ nem são definidas em $a$:
+
+\begin{teo}[Regra de Bernoulli-l'Hôpital, Segunda versão]\label{Teo:BH2}\mbox{}
+\begin{enumerate}
+ \item \grasA{Limites $x\to a^+$:}
+Sejam $f$, $g$ duas funções deriváveis em $(a,b)$, 
+com $g(x)\neq 0$, $g'(x)\neq 0$ para todo $x\in (a,b)$. Suponha que $f$ e
+$g$ são 
+tais
+que $\lim_{x\to a^+}f(x)=\pm \alpha$ e $\lim_{x\to a^+}g(x)=\pm \alpha$, com
+$\alpha\in \{0,\infty\}$. Se $\lim_{x\to
+a^+}\frac{f'(x)}{g'(x)}$ existir, ou se for $\pm \infty$, então
+\eq{\lim_{x\to a^+}\frac{f(x)}{g(x)}=\lim_{x\to a^+}\frac{f'(x)}{g'(x)}\,.}
+(Uma afirmação equivalente pode ser formulada para $x\to b^-$.)
+\item \grasA{Limites $x\to \infty$:}
+Sejam $f$, $g$ duas funções deriváveis em todo $x$ suficientemente grande, e
+tais
+que $\lim_{x\to \infty}f(x)=\pm \alpha$, $\lim_{x\to \infty}g(x)=\pm \alpha$,
+com $\alpha\in \{0,\infty\}$. Se
+$\lim_{x\to
+\infty}\frac{f'(x)}{g'(x)}$ existir ou se for $\pm \infty$, então
+\eq{\lim_{x\to \infty}\frac{f(x)}{g(x)}=\lim_{x\to
+\infty}\frac{f'(x)}{g'(x)}\,.}
+(Uma afirmação equivalente pode ser formulada para limites $x\to -\infty$.)
+\end{enumerate}
+\end{teo}
+\begin{proof} Provemos somente o primeiro item. Fixe $z\in (a,b)$.
+Podemos definir $f(a)\pardef 0$, $g(a)\pardef 0$, de modo tal que a função
+$F(x)\pardef
+(f(z)-f(a))g(x)-(g(z)-g(a))f(x)$ seja contínua em $[a,z]$ e derivável em
+$(a,z)$.
+Como $F(z)=F(a)$, o Teorema de Rolle \ref{Teo:Rolle} garante a existência de um
+$c_z\in (a,z)$ tal que $F'(c_z)=0$, isto é,
+$(f(z)-f(a))g'(c_z)-(g(z)-g(a))f'(c_z)=0$, que pode ser escrito
+$$
+\frac{f(z)-f(a)}{g(z)-g(a)}=\frac{f'(c_z)}{g'(c_z)}\,.
+$$
+Observe que se $z\to a^+$, então $c_z\to a^+$. Logo, com a mudança de variável
+$y\pardef c_z$,
+$$
+\lim_{z\to a^+}\frac{f(z)}{g(z)}
+=\lim_{z\to a^+}\frac{f(z)-f(a)}{g(z)-g(a)}=
+\lim_{z\to a^+}\frac{f'(c_z)}{g'(c_z)}\equiv 
+\lim_{y\to a^+}\frac{f'(y)}{g'(y)}\,,
+$$
+o que prova a afirmação.
+\end{proof}
+
+\begin{ex}
+Considere $\lim_{x\to 1}\frac{x^2-1}{x-1}$. No Capítulo
+\ref{Cap:Limites},
+calculamos esse limite da seguinte maneira: 
+$$\lim_{x\to
+1}\frac{x^2-1}{x-1}=\lim_{x\to 1}\frac{(x-1)(x+1)}{x-1}=\lim_{x\to
+1}(x+1)=2\,.$$ 
+Vejamos agora como esse mesmo limite pode ser calculado também usando a Regra de
+Bernoulli-l'Hôpital. Como o limite é da forma 
+$\lim_{x\to 1}\frac{f(x)}{g(x)}$, com $f(x)=x^2-1$ e $g(x)=x-1$ ambas deriváveis
+em $(1,2)$, que $g$ e $g'$ não se anulam nesse intervalo, e como $\lim_{x\to
+1^+}\frac{f'(x)}{g'(x)}=
+\lim_{x\to 1^+}\frac{2x}{1}=2$, o Teorema \ref{Teo:BH2} implica
+$\lim_{x\to
+1^+}\frac{x^2-1}{x-1}=2$. Do mesmo jeito, $\lim_{x\to
+1^-}\frac{x^2-1}{x-1}=2$, o que implica $\lim_{x\to
+1}\frac{x^2-1}{x-1}=2$.
+\end{ex}
+
+\begin{obs}
+A Regra de Bernoulli-l'Hôpital (que será às vezes abreviada "regra de B.H.") 
+fornece uma ferramenta poderosa para calcular alguns limites, mas é
+importante sempre verificar se as hipóteses do teorema são 
+satisfeitas, e \emph{não querer a usar para calcular qualquer limite}!
+Também, ela pode às vezes se aplicar mas não ser de nenhuma utilidade (ver o
+Exercício \ref{Exo:BHbasic}).
+\end{obs}
+
+
+% \begin{ex}
+% Considere $\lim_{x\to 0}\frac{\ln (1+x)}{x}$. Como $f(x)=\ln(1+x)$ e $g(x)=x$
+% são ambas deriváveis na vizinhança de 
+% \end{ex}
+
+Às vezes, é preciso usar a regra de B.H. mais de uma vez para calcular um
+limite:
+\begin{ex}
+Considere o limite $\lim_{x\to 0}\frac{1-\cos x}{x^2}$, já
+encontrado no Exercício \ref{Exo:variantessinxsurx}.
+Como $1-\cos x$ e $x^2$ ambas tendem a zero e são deriváveis na vizinhança de
+zero, as hipóteses do Teorema \eqref{Teo:BH2} são satisfeitas:
+$$\lim_{x\to 0^+}\frac{1-\cos x}{x^2}
+=\lim_{x\to 0^+}\frac{(1-\cos x)'}{(x^2)'}=
+\lim_{x\to 0^+}\frac{\sen x}{2x}.
+$$
+Já sabemos 
+que $\lim_{x\to 0}\frac{\sen x}{x}=1$. Mesmo assim, 
+sendo também da forma $\frac00$, esse limite pode ser calculado aplicando a
+regra de B.-H. uma segunda vez: $\lim_{x\to 0^+}\frac{\sen x}{x}=\lim_{x\to
+0^+}\frac{\cos
+x}{1}=1$. Logo, $\lim_{x\to 0^+}\frac{1-\cos x}{x^2}=\frac12$.
+Como a função é par, o limite lateral $x\to 0^-$ é igual ao limite
+lateral $x\to 0^+$, logo $\lim_{x\to 0}\frac{1-\cos x}{x^2}=\frac12$.
+\end{ex}
+
+Vejamos agora um exemplo de limite $x\to \infty$:
+\begin{ex}\label{Ex:logsurx}
+Considere $\lim_{x\to \infty}\frac{\ln x}{x}$ (já calculado na
+Seção~\ref{sec_Lim_parenteseAldo}, usando a fórmula do binômio
+de Newton). 
+Observe que $\frac{\ln x}{x}\equiv \frac{f(x)}{g(x)}$ 
+é um quociente de duas funções deriváveis para todo $x>0$, 
+e que $\lim_{x\to \infty}f(x)=\infty$, $\lim_{x\to \infty}g(x)=\infty$.
+Além disso, $\lim_{x\to \infty}\frac{f'(x)}{g'(x)}=\lim_{x\to
+\infty}\frac{1/x}{1}=0$, o que implica, pelo segundo item do 
+Teorema \ref{Teo:BH2},
+\eq{\lim_{x\to \infty}\frac{\ln x}{x}=0\,.}
+\end{ex}
+
+Vejamos em seguida um exemplo em que é necessário tomar um limite lateral:
+
+\begin{ex}\label{Ex:xlogxemzero}
+Considere $\lim_{x\to 0^+}x\ln x$. Aqui, consideremos $f(x)=\ln x$ e
+$g(x)=\tfrac1x$, ambas deriváveis no intervalo $(0,1)$. Além disso, $g(x)\neq
+0$ e $g'(x)\neq 0$ para todo  $x\in (0,1)$.
+O limite pode ser escrito na forma de um quociente, escrevendo 
+$x\ln x=\frac{\ln x}{1/x}$. Logo,
+$$\lim_{x\to 0^+}x\ln x=\lim_{x\to 0^+}\frac{\ln x}{1/x}=
+\lim_{x\to 0^+}\frac{1/x}{-1/x^2}=-\lim_{x\to 0^+}x=0\,,
+$$
+onde B.H. foi usada na segunda igualdade.
+
+Um outro jeito de calcular o limite acima é de fazer uma mudança de variável:
+se $y\pardef 1/x$, então $x\to 0^+$ implica $y\to
++\infty$. Logo, 
+$$
+\lim_{x\to 0^+}x\ln x=\lim_{y\to \infty}\tfrac{1}{y}\ln \tfrac{1}{y}
+=-\lim_{y\to \infty}\tfrac{\ln y}{y}\,,
+$$
+e já vimos no último exemplo que esse limite vale $0$.
+\end{ex}
+
+
+\begin{exo}\label{Exo:BHbasic}
+Calcule os limites abaixo. Se quiser usar a Regra de Bernoulli-l'Hôpital,
+verifique primeiro que as hipóteses sejam satisfeitas.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itexBH1} $\lim_{x\to 0^+}\frac{x}{3}$
+\item\label{itexBH2} $\lim_{x\to 2}\frac{x^2-x-2}{3x^2-5x-2}$
+\item\label{itexBH2b} $\lim_{x\to 1^+}\frac{x^2-2x+2}{x^2+x-2}$
+\item\label{itexBH3} $\lim_{x\to 0}\frac{(\sen x)^2}{x^2}$
+\item\label{itexBH4} $\lim_{x\to 0}\frac{\ln\frac{1}{1+x}}{\sen x}$
+\item\label{itexBH14} $\lim_{x\to 0}\frac{1+\sen x-\cos x}{\tan x}$ %D76
+\item\label{itexBH7} $\lim_{x\to 0}\frac{x-\sen x}{1-\cos x}$
+\item\label{itexBH5} $\lim_{x\to 0^+}\frac{x-\sen x}{x\sen x}$
+\item\label{itexBH10} $\lim_{x\to 0}\frac{\sen x-x}{x^3}$
+\item\label{itexBH9} $\lim_{x\to 0}\frac{\tan x -x}{x^3}$
+\item\label{itexBH922} $\lim_{x\to 0}\frac{\ln(1+\sen x)}{x}$
+\item\label{itexBH11} $\lim_{x\to 0}\frac{x\sen x}{1+\cos(x-\pi)}$ %D76
+\item\label{itexBH12} $\lim_{x\to 0^+}\frac{\sqrt{x}}{\ln x}$
+\item\label{itexBH12aa} $\lim_{x\to 0^+}x(\ln x)^2$
+\item\label{itexBH12a} $\lim_{x\to \infty}\frac{(\ln x)^2}{x}$
+\item\label{itexBH12ab} $\lim_{x\to \infty}\frac{x}{e^{x}}$
+\item\label{itexBH12b} $\lim_{x\to 0^+}\frac{e^{\ln x}}{x}$
+\item\label{itexBH12c} $\lim_{x\to \infty}\frac{\sqrt{x+1}}{\sqrt{x-1}}$
+\item\label{itexBH12d} $\lim_{x\to
+\infty}\frac{x^{100}-x^{99}}{20x-3x^{100}}$
+\item\label{itexBH13} $\lim_{x\to 0}\frac{\ln (1+x)-\ln(1-x)}{\sen x}$ %D76
+
+\item\label{itexBH15} $\lim_{x\to 0}\frac{\sen^2x}{1-x^2}$ 
+\item\label{itexBH16} $\lim_{x\to \infty}\frac{x+\sen x}{x}$ 
+\item\label{itexBH6} $\lim_{x\to 0^+}\frac{x^2-\sen^2 x}{x^2\sen^2 x}$
+\item\label{itexBH17} $\lim_{x\to 0^+}\frac{x^2 \sen \frac{1}{x}}{x}$ 
+%%ZWAHLEN p.105
+\item\label{itexBH18} $\lim_{x\to 0}\frac{e^{\tan x}-e^x}{x^3}$ %D77
+\item\label{itexBHww8} $\lim_{x\to
+0^+}\bigl(\frac{1}{x}-\frac{1}{e^x-1}\bigr)$ %D77
+\item\label{itexBH20} $\lim_{x\to 0^+}\frac{\arctan(\frac1x)-\pisobredois}{x}$ 
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itexBH1} $0$ (B.H. não se aplica)
+\eqref{itexBH2} $\tfrac37$
+\eqref{itexBH2b} $+\infty$ (B.H. não se aplica)
+\eqref{itexBH3} $\lim_{x\to 0}\frac{(\sen x)^2}{x^2}=(\lim_{x\to 0}\frac{\sen
+x}{x})^2=1^2=1$ (não precisa de B.H.)
+\eqref{itexBH4} Usando B.H.,  $\lim_{x\to 0}\frac{\ln\frac{1}{1+x}}{\sen x}
+=-\lim_{x\to 0}\frac{\ln(1+x)}{\sen x}=-\lim_{x\to 0}\frac{\frac{1}{x+1}}{\cos
+x}=-1$.
+\eqref{itexBH14} $1$
+\eqref{itexBH7} $0$
+\eqref{itexBH5} $0$
+\eqref{itexBH10} $-\frac{1}{6}$
+\eqref{itexBH9} $\tfrac13$ 
+\eqref{itexBH922} $1$
+\eqref{itexBH11} $2$
+\eqref{itexBH12} $0$ (B.H. não se aplica)
+\eqref{itexBH12aa} $0$ 
+\eqref{itexBH12a} $0$ (aplicando duas vezes B.H.)
+\eqref{itexBH12ab} $0$
+\eqref{itexBH12b} Como $e^{\ln x}=x$, o limite é $1$ (B.H. se aplica mas não
+serve para nada!)
+\eqref{itexBH12c} Esse limite se calcula como no Capítulo \ref{Cap:Limites}:
+$\lim_{x\to \infty}\frac{\sqrt{x+1}}{\sqrt{x-1}}=
+\lim_{x\to \infty}\frac{\sqrt{x}\sqrt{1+\frac1x}}{\sqrt{x}\sqrt{1-\frac1x}}=
+1$. 
+\eqref{itexBH12d} $-1/3$ (sem B.H.!)
+\eqref{itexBH13} $2$
+\eqref{itexBH15} $0$ (B.H. não se aplica)
+\eqref{itexBH16} $\lim_{x\to \infty}\frac{x+\sen x}{x}=\lim_{x\to
+\infty}(1+\frac{\sen x}{x})=1+0=1$ (Obs: Aqui B.H. não se aplica, porqué
+$\lim_{x\to \infty}\frac{(x+\sen x)'}{(x)'}=\lim_{x\to
+\infty}(1+\cos x)$, que  não existe.)
+\eqref{itexBH6} $\tfrac13$
+\eqref{itexBH17} $\lim_{x\to 0^+}\frac{x^2 \sen \frac{1}{x}}{x}=
+\lim_{x\to 0^+} x\sen \frac{1}{x}=0$, com um ``sanduíche''. Aqui B.H. não se
+aplica, porqué o limite $\lim_{x\to 0^+}(x^2 \sen \frac{1}{x})'$ não existe.
+\eqref{itexBH18} $\frac13$. \eqref{itexBH20} (Segunda prova, Segundo semestre de
+2011) Como $\lim_{y \to
+\infty}\arctan y=\frac{\pi}{2}$, o limite 
+é da forma $\frac00$. As funções são deriváveis em $x>0$, logo pela
+regra de B.H.,
+$$
+\lim_{x\to 0^+}\frac{\arctan(\frac1x)-\tfrac{\pi}{2}}{x}=
+\lim_{x\to 0^+}\frac{\frac{1}{1+(\frac{1}{x})^2}(-\frac{1}{x^2})}{1}=
+\lim_{x\to 0^+}\frac{-1}{1+x^2}=-1\,.
+$$
+\eqref{itexBHww8} $1/2$.
+\end{sol}
+\end{exo}
+
+
+Vários outros tipos de limites, por exemplo indeterminações
+``$1^\infty$'', podem ser calculados usando o Teorema
+\ref{Teo:BH2}. Aqui usaremos \emph{exponenciação}.
+\begin{ex}
+Para calcular $\lim_{x\to \infty}(\frac{x}{x-a})^x$, que é da forma 
+c``$1^\infty$'', comecemos exponenciando
+$$\Bigl(\frac{x}{x-a}\Bigr)^x=\exp\Bigl(x\ln \frac{x}{x-a}\Bigr)\,.$$ 
+Como
+$x\mapsto e^x$ é contínua, $\lim_{x\to \infty}(\frac{x}{x-a})^x=\exp(
+\lim_{x\to \infty}x\ln \frac{x}{x-a})$ (lembre da Seção \ref{Sec:FuncConteLim}).
+Ora, o limite $\lim_{x\to \infty}x\ln \frac{x}{x-a}$ pode ser escrito na forma
+de um quociente:
+$$
+\lim_{x\to \infty}x\ln\frac{x}{x-a}=\lim_{x\to
+\infty}\frac{\ln\frac{x}{x-a}}{\frac{1}{x}}
+=\lim_{x\to\infty}\frac{\frac{1}{x}-\frac{1}{x-a}}{-\frac{1}{x^2}}=
+\lim_{x\to \infty}\frac{ax^2}{x(x-a)}=a\,.
+$$
+A segunda igualdade é justificada pela regra de B.-H. (as funções
+são {deriváveis} em todo $x$ suficientemente grande), 
+a última por uma conta fácil de limite, colocando $x^2$ em evidência.
+Portanto, 
+$$
+\lim_{x\to \infty}\Bigl(\frac{x}{x-a}\Bigr)^x=\exp\Big(
+\lim_{x\to \infty}x\ln \frac{x}{x-a}\Big)=e^a\,.
+$$
+% Observe que o limite original podia também ser calculado escrevendo
+% $$\lim_{x\to
+% \infty}\Big(\frac{x}{x-a}\Big)^x=\lim_{x\to
+% \infty}\frac{1}{\big(1+\frac{-a}{x}\big)^x}\to
+% \frac{1}{e^{-a}}
+% =\frac{1}{\lim_{x\to
+% \infty}\big(1+\frac{-a}{x}\big)^x}\to
+% \frac{1}{e^{-a}}
+% =e^a\,.$$
+\end{ex}
+
+\begin{ex} Considere $\lim_{x\to 0}(\cos x)^{1/x^2}=\exp(\lim_{x\to
+0}\frac{\ln(\cos x)}{x^2})$.
+Como $\ln(\cos x)$ e $x^2$ são ambas deriváveis na vizinhança de zero, e como
+$$
+\lim_{x\to 0}\frac{(\ln(\cos x))'}{(x^2)'}=
+\lim_{x\to 0}\frac{-\tan x}{2x}=
+-\tfrac12\lim_{x\to 0}\frac{\sen x}{x}\frac{1}{\cos x}=-\tfrac12\,,
+$$
+temos 
+$$\lim_{x\to 0}(\cos x)^{1/x^2}
+=e^{-\tfrac12}=\frac{1}{\sqrt{e}}\,.
+$$
+\end{ex}
+
+\begin{exo} Calcule:
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itexBHB1} $\lim_{x\to 0^+}(\sqrt{1+x})^{\tfrac1x}$
+\item\label{itexBHB2} $\lim_{x\to 0^+}x^x$
+\item\label{itexBHB3} $\lim_{x\to 0}(1+\sen (2x))^{\tfrac1x}$
+\item\label{itexBHB5} $\lim_{x\to 0}(\sen x)^{\sen x}$
+\item\label{itexBHB58} $\lim_{x\to \infty}(e^x+ x^2)^{\tfrac1x}$
+\item\label{itexBHB6} $\lim_{x\to \infty}(\ln x)^{\tfrac1x}$
+\item\label{itexBHB7} $\lim_{x\to 0^+}(1+x)^{\ln x}$
+\item\label{itexBHB75} $\lim_{x\to \infty}(xe^{\tfrac1x}-x)$
+\item\label{itexBHB8} {\footnotesize{$\lim_{x\to \infty}{(\pisobredois-\arctan
+x)^{\tfrac{1}{\ln x}}}$}}
+\item\label{itexBHB2bis} $\lim_{x\to 0^+}x^{x^x}$
+\item\label{itexBHB4} $\lim_{x\to 0^+}\frac{(1+x)^{\tfrac1x}-e}{x}$
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol} 
+\eqref{itexBHB1} $\sqrt{e}$
+\eqref{itexBHB2} $\lim_{x\to 0^+}x^x=\exp(\lim_{x\to 0^+}x\ln x)=e^0=1$.
+\eqref{itexBHB3} $e^2$
+\eqref{itexBHB5} $1$
+\eqref{itexBHB58} $e$
+\eqref{itexBHB6} $1$
+\eqref{itexBHB7} $1$
+\eqref{itexBHB75} $1$
+\eqref{itexBHB8} $e^{-1}$
+\eqref{itexBHB2bis} $0$
+\eqref{itexBHB4} $-e/2$
+\end{sol}
+\end{exo}
+
+\begin{exo} (Segunda prova, 27 de maio de 2011)
+ Calcule os limites 
+$$\lim_{z\to \infty}\Bigl(\frac{z+9}{z-9}\Bigr)^z\,,\quad\quad
+\lim_{x\to \infty}x^{\ln x}e^{-x}\,,\quad
+\lim_{x\to \infty}\frac{\sqrt{2x+1}}{\sqrt{x-1000}}\,.
+$$
+\begin{sol} Para o primeiro,
+\begin{align*}
+ \lim_{z\to \infty}\bigl(\frac{z+9}{z-9}\bigr)^z&=\exp \Bigl(\lim_{z\to \infty}
+z \ln \frac{z+9}{z-9}\Bigr)\\
+&=\exp \Bigl(\lim_{z\to \infty} \frac{\ln (z+9)-\ln
+(z-9)}{\frac{1}{z}}\Bigr)\text{ e as hipót. de BH satisfeitas, logo}\\
+&=\exp \Bigl(\lim_{z\to \infty}
+\frac{\frac{1}{z+9}-\frac{1}{z-9}}{\frac{-1}{z^2}}\Bigr)\\
+&=\exp \Bigl(\lim_{z\to \infty} \frac{18 z^2}{z^2-81}\Bigr)\\
+&=e^{18}\,. 
+\end{align*}
+Para o segundo,
+\begin{align*}
+ \lim_{x\to \infty}x^{\ln x}e^{-x}&=\exp \Bigl(\lim_{x\to \infty} \big((\ln
+x)^2-x \big)\Bigr)
+=\exp \Bigl(\lim_{x\to \infty} x\big(\frac{(\ln x)^2}{x}-1
+\big)\Bigr)
+\end{align*}
+Usando BH duas vezes, verifica-se que $\lim_{x\to \infty}\frac{(\ln
+x)^2}{x}=0$, 
+o que implica $\lim_{x\to \infty} x(\frac{(\ln
+x)^2}{x}-1)=-\infty$.
+Logo, $\lim_{x\to \infty}x^{\ln x}e^{-x}=0$.
+O último limite se calcula sem usar B.H.:
+$$\lim_{x\to \infty}\frac{\sqrt{2x+1}}{\sqrt{x-1000}}=\sqrt{2}\lim_{x\to
+\infty}\frac{\sqrt{1+\frac{1}{2x}}}{\sqrt{1-\frac{1000}{x}}}=\sqrt{2}\frac{1}{1}
+=\sqrt{2}\,.$$
+\end{sol}
+\end{exo}
+
+%%%%INSERIR ASSINTOTAS OBLIQUAS:
+
+
+

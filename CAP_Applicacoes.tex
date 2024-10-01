@@ -1,0 +1,1927 @@
+
+% !TeX spellcheck = pt_BR
+% !TEX encoding = UTF-8 Unicode
+
+\chapter{Aplicações}\label{CAP:Applicacoes}
+
+\ifdefined\updateans
+% Only need to run once in a lifetime, when the file ans.tex needs to be updated.
+\Writetofile{ans}{\protect\section*{Capítulo \ref{CAP:Applicacoes}}}
+\fi
+
+\section{Comprimento de arco}
+\index{comprimento de arco}
+O procedimento usado na definição da integral de Riemann (cortar, somar, tomar
+um limite) pode ser útil em outras situações.
+As três próximas seções serão dedicadas ao uso de integrais para
+calcular  quantidades geométricas associadas a funções.
+Começaremos com o comprimento de arco.\\
+
+Vimos acima que a integral de Riemann permite calcular a área debaixo 
+do gráfico de uma função $f:[a,b]\to \bR$. 
+Mostraremos agora como calcular o \emph{comprimento} 
+do gráfico, via uma outra integral formada a partir da função.\\
+
+Procederemos seguindo a mesma ideia, \emph{aproximando} o comprimento 
+por uma soma. Escolhamos uma subdivisão do intervalo $[a,b]$ por intervalos $[x_i,x_{i+1}]$:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.5]
+\newcommand{\func}[1]{(#1)^2/4+1}
+\pgfmathsetmacro{\a}{0};
+\pgfmathsetmacro{\b}{2};
+\pgfmathsetmacro{\n}{5};
+\pgfmathsetmacro{\d}{(\b - \a )/\n};
+\draw[>=latex, ->] (\a-0.2,0)--(\b+0.2,0);
+\draw [thin, domain=\a:\b] plot (\x,{\func{\x}});
+
+\foreach \j in {1,...,\n}{
+\draw[color=blue] 
+({\a+\j*\d},{\func{\a+\j*\d}})--({\a+(\j-1)*\d},{\func{\a+(\j-1)*\d}});
+\fill ({\a+\j*\d},{\func{\a+\j*\d}}) circle (0.40mm);
+%\pgfmathsetmacro{\x}{0};
+}
+\draw ({\a+2*\d},0) node[below]{\footnotesize{$x_{i}$}};
+\draw[dotted] ({\a+2*\d},0)--({\a+2*\d},{\func{\a+2*\d}});
+
+\draw ({\a+3*\d},0) node[below]{\footnotesize{$x_{i+1}$}};
+\draw[dotted] ({\a+3*\d},0)--({\a+3*\d},{\func{\a+3*\d}});
+
+\draw[dashed] (\a,0) node[below]{$a$}--(\a,{\func{\a}});
+\draw[dashed] (\b,0) node[below]{$b$}--(\b,{\func{\b}});
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Aproximaremos o comprimento do gráfico da função, 
+em cada intervalo $[x_i,x_{i+1}]$, pelo comprimento do segmento que liga 
+$(x_i,f(x_i))$ a $(x_{i+1},f(x_{i+1}))$, dado por 
+\begin{align*}
+ \sqrt{\Delta x_i^2+(f(x_{i+1})-f(x_i))^2}
+&=\Delta x_i\sqrt{1+\Bigl(\frac{f(x_{i+1})-f(x_i)}{\Delta x_i}\Bigr)^2}\,,
+\end{align*}
+em que $\Delta x_i=x_{i+1}-x_i$. Quando $\Delta x_i\to 0$, o quociente 
+$\frac{f(x_{i+1})-f(x_i)}{\Delta x_i}$ tende a $f'(x_i)$. Logo, o comprimento
+do gráfico, $L$, é aproximado pela soma
+$$\sum_{i=1}^n\sqrt{1+f'(x_i)^2}\Delta x_i\,,$$
+que é uma soma de Riemann associada à função $\sqrt{1+f'(x)^2}$. Logo, 
+tomando
+um limite em que o número de intervalos cresce e o tamanho de cada intervalo
+tende a zero,
+obtemos uma expressão para $L$ via uma integral:
+\eq{\label{eq:ComprimentoArco}\boxed{L=\int_a^b\sqrt{1+f'(x)^2}\,dx\,.}}
+
+\begin{ex}
+Calculemos o comprimento do gráfico da curva $y=\tfrac23 x^{3/2}$, entre $x=0$ e $x=1$.
+Como $(\tfrac23 x^{3/2})'=\sqrt{x}$, 
+$$
+L=\int_0^1\sqrt{1+(\sqrt{x})^2}\,dx=\int_0^1\sqrt{1+x}\,dx=
+\tfrac23(\sqrt{8}-1)\,.
+$$
+\end{ex}
+Devido à raiz que apareceu na fórmula \eqref{eq:ComprimentoArco} (após o uso do
+Teorema de Pitágoras), as integrais que aparecem para calcular comprimentos de
+gráficos podem ser difíceis de calcular, isso mesmo quando a função $f$ é
+simples:
+
+\begin{ex}\label{ex:comprparabdifiss}
+O comprimento da parábola $y=x^2$ entre $x=-1$ e $x=1$ é dado pela integral 
+$$L=\int_{-1}^1\sqrt{1+4x^2}\,dx\,.$$
+Vimos na Seção \ref{Sec:MetodoSubstitTrig} (ver o Exercício \ref{exo:comprparabola}) 
+como calcular a primitiva de $\sqrt{1+4x^2}$ usando uma substituição
+trigonométrica.
+\end{ex}
+
+\begin{exo}
+Mostre, usando uma integral, que a circunferência de um disco de raio $R$ é $2\pi R$.
+\begin{sol} Representando a metade superior do círculo de raio $R$ centrado na origem com a função $f(x)=\sqrt{R^2-x^2}$, podemos expressar o 
+comprimento da circunferência como
+$$
+2\int_{-R}^R\sqrt{1+[(\sqrt{R^2-x^2})']^2}\,dx=2R\int_{-R}^R\frac{dx}{\sqrt{R^2-x^2}}=2R\int_{-1}^1\frac{du}{\sqrt{1-u^2}}=2\pi R\,.
+$$
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Calcule o comprimento da corda pendurada entre dois pontos $A$ e $B$, descrita pelo gráfico
+ da função $f(x)=\cosh x$, entre $x=-1$ e $x=1$.  
+\begin{sol}
+Lembrando que $\cosh'(x)=\senh x$, que $\cosh^2 x-\senh^2x=1$, e que $\cosh x$ é par,
+\begin{align*}
+ L=\int_{-1}^1\sqrt{1+(\senh x)^2}\,dx=2\int_{0}^1\cosh x\,dx=2\senh (1)=e-e^{-1}\,.
+\end{align*} 
+\end{sol}
+\end{exo}
+
+\begin{exo}\label{Exo_finalmente}
+Calcule o comprimento do gráfico da função exponencial $f(x)=e^x$, entre $x=0$
+e $x=1$. (\emph{Dica}: $u=\sqrt{1+e^{2x}}$.)
+\begin{sol}
+O comprimento é dado por $L=\int_0^1\sqrt{1+e^{2x}}\,dx$.
+Se $u=\sqrt{1+e^{2x}}$, então $dx=\frac{u}{u^2-1}du$, logo
+$$L=\int_{\sqrt{2}}^{\sqrt{1+e^4}}\frac{u^2}{u^2-1}du
+=\int_{\sqrt{2}}^{\sqrt{1+e^4}}1\,du+\int_{\sqrt{2}}^{\sqrt{1+e^4}}\frac{du}{
+u^2-1}\,.
+$$ 
+Essa última integral pode ser calculada como no Exemplo \ref{Ex:unsurxdeuxmun}:
+$\int\frac{du}{
+u^2-1}=\tfrac{1}{2}\ln\Bigl|\frac{u-1}{u+1}\Bigr|+C$. Logo,
+$$
+L=\sqrt{1+e^4}-\sqrt{2}+\tfrac12\ln\Bigl[\frac{\sqrt{1+e^4}-1}{\sqrt{1+e^4}
++1}\cdot\frac{\sqrt{2}+1}{\sqrt{2}-1}\Bigr]\,.
+$$
+\end{sol}
+\end{exo}
+
+\section{Sólidos de revolução}\label{Sec_Solidos}
+\index{sólidos de revolução}
+Nesta seção usaremos a integral para calcular o volume de um 
+tipo particular de região do
+espaço, chamada de \emph{sólidos de revolução}. (Em Cálculo III, volumes de regiões mais
+gerais serão calculados usando integral tripla.)\\
+
+Considere uma função \emph{positiva} no intervalo $[a,b]$, $f:[a,b]\to
+\bR_+$. Seja $R$ a região 
+delimitada pelo gráfico de $f$, pelo eixo $x$ e pelas retas $x=a$,
+$x=b$:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\newcommand{\funcao}[1]{{1/((#1)^2+1)}}
+\pgfmathsetmacro{\a}{0.2};
+\pgfmathsetmacro{\b}{1.5};
+\pgfmathsetmacro{\c}{(\a+\b)/2};
+\draw[->] (0,-0.1)--(0,1.3);
+\fill[areagrafico] (\a,0)--plot[domain=\a:\b](\x,\funcao{\x})
+--(\b,0)--cycle;
+\draw[->] (-0.1,0)--({\b+0.3},0) node[right]{$x$};
+\draw[thick, domain=\a:\b] plot (\x,\funcao{\x});
+\draw[dotted] (\a,0) node[below]{$a$} -- (\a,\funcao{\a});
+\draw[dotted] (\b,0) node[below]{$b$} -- (\b,\funcao{\b});
+\draw (\c,{(\funcao{\c})*0.5}) node{$R$};
+\draw (\c,{(\funcao{\c})*1.2}) node[above]{$f(x)$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Sabemos que a área de $R$ é dada pela integral de Riemann 
+$$\text{área}(R)=\int_a^bf(x)\,dx\,.$$
+
+Consideremos agora o
+sólido $S$ obtido girando a região $R$ em torno do
+eixo $x$, como na figura abaixo:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\tdplotsetmaincoords{55}{115}
+
+\newcommand{\funcao}[1]{(1/((#1)^2+1))}
+
+\pgfmathsetmacro{\a}{0.2};
+\pgfmathsetmacro{\b}{1.5};
+
+\begin{scope}[tdplot_main_coords]
+\pgfmathsetmacro{\nx}{20};
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+
+\pgfmathsetmacro{\alphamin}{0};
+\pgfmathsetmacro{\alphamax}{20};
+\pgfmathsetmacro{\nalpha}{10};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,{\b+0.3},0) node[anchor=north west]{$x$};
+\draw[->] (0,0,0) -- (0,0,1.2);
+
+%desenhar a flechinha de tras:
+\draw[->, domain=0:330, variable=\alpha, samples=50] plot
+({sin(\alpha)*(\funcao{\a})},\a,{cos(\alpha)*(\funcao{\a})}); 
+%desenhar a linha pontilhada de tras:
+\draw[thick, dotted] (0,\a,0)--(0,\a,{\funcao{\a}});
+
+\fill[areagrafico]
+(0,\a,0)--plot[domain=\a:\b](0,\x,{\funcao{\x}})--(0,\b,0)--cycle;
+%desenhar o grafico de f em [a,b]
+\draw[thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}}); 
+%desenhar a flechinha de frente:
+\draw[->, domain=0:320, variable=\alpha] plot
+({sin(\alpha)*\funcao{\b}},\b,{cos(\alpha)*\funcao{\b}}); 
+%desenhar a linha pontilhada de frente:
+\draw[thick,dotted] (0,\b,0)--(0,\b,{\funcao{\b}});
+\end{scope}
+
+\begin{scope}[xshift=2.5cm,tdplot_main_coords]
+\pgfmathsetmacro{\nx}{15};
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+\pgfmathsetmacro{\alphamin}{-40};
+\pgfmathsetmacro{\alphamax}{150};
+\pgfmathsetmacro{\nalpha}{35};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,{\b+0.3},0) node[anchor=north west]{$x$};
+\draw[->] (0,0,0) -- (0,0,1.2);
+%desenhar o grande circulo de tras:
+\draw[domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\funcao{\a}},\a,{cos(\alpha)*\funcao{\a}}); 
+%desenhar a linha pontilhada de tras:
+\draw[thick, dotted] (0,\a,0)--(0,\a,{\funcao{\a}});
+%desenhar o grande circulo de frente:
+\draw[domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\funcao{\b}},\b,{cos(\alpha)*\funcao{\b}}); 
+
+\fill[areagrafico]
+(0,\a,0)--plot[domain=\a:\b](0,\x,{\funcao{\x}})--(0,\b,0)--cycle;
+\foreach \i in {0,...,\nalpha} {
+\draw[thick, color=gray, domain=\a:\b, variable=\t] plot
+({sin(\alphamin+\Dalpha*\i)*\funcao{\t}},\t,{cos(\alphamin+\Dalpha*\i)*\funcao{\t}}); 
+}
+\foreach \i in {0,...,\nx} {
+\pgfmathsetmacro{\point}{\a+(\i*\Dx)};
+\draw[thick, color=gray, domain=\alphamin:\alphamax, variable=\alpha] plot
+({sin(\alpha)*\funcao{\point}},\point,{cos(\alpha)*\funcao{\point}}); 
+ }
+%desenhar o grafico de f em [a,b]
+\draw[thick, thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}}); 
+%desenhar a linha pontilhada de frente:
+\draw[thick,dotted] (0,\b,0)--(0,\b,{\funcao{\b}});
+\end{scope}
+
+\begin{scope}[xshift=5cm,tdplot_main_coords]
+\pgfmathsetmacro{\nx}{20};
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+\pgfmathsetmacro{\alphamin}{-40};
+\pgfmathsetmacro{\alphamax}{150};
+\pgfmathsetmacro{\nalpha}{40};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+
+\foreach \i in {0,...,\nalpha} {
+\draw[thick, color=gray, domain=\a:\b, variable=\t] plot
+({sin(\alphamin+\Dalpha*\i)*\funcao{\t}},\t,{cos(\alphamin+\Dalpha*\i)*\funcao{\t}}); 
+}
+\foreach \i in {0,...,\nx} {
+\pgfmathsetmacro{\point}{\a+(\i*\Dx)};
+\draw[thick, color=gray, domain=\alphamin:\alphamax, variable=\alpha] plot
+({sin(\alpha)*\funcao{\point}},\point,{cos(\alpha)*\funcao{\point}}); 
+ }
+
+%Encher o disco de frente:
+\filldraw[color=gray] plot[domain=0:360, variable=\alpha] 
+({sin(\alpha)*\funcao{\b}},\b,{cos(\alpha)*\funcao{\b}}); 
+
+\draw (0,\b,{\funcao{\b}+0.5}) node[left]{$S$};
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Sólidos que podem ser gerados dessa maneira, girando uma região em torno de
+um eixo, são chamados de
+\grasA{sólidos de revolução}. 
+Veremos situações em que a região não precisa ser delimitada pelo 
+gráfico de uma função, e que o eixo não precisa ser o eixo $x$.	
+
+\begin{exo}
+Quais dos seguintes 
+corpos são sólidos de revolução? (Quando for o caso, dê a região e
+o eixo)
+\begin{enumerate}
+\item\label{itexsolrev1} A esfera de raio $r$.
+\item\label{itexsolrev2} O cilindro com base circular de raio $r$, e de altura $h$.
+\item\label{itexsolrev3} O cubo de lado $L$.
+\item\label{itexsolrev4} O cone de base circular de raio $r$ e de altura $h$.
+\item\label{itexsolrev5} O toro de raios $0<r<R$.
+\end{enumerate}
+\begin{sol}
+\eqref{itexsolrev1} A esfera pode ser obtida girando o semi-disco,
+delimitado pelo gráfico da função
+$f(x)=\sqrt{r^2-x^2}$, $x\in [-r,r]$, em torno do eixo $x$.
+\eqref{itexsolrev2} O cilíndro pode ser obtido girando o gráfico da função
+constante $f(x)=r$, no intervalo $[0,h]$.
+\eqref{itexsolrev3} O cubo não é um sólido de revolução.
+\eqref{itexsolrev4} O cone pode ser obtido girando o gráfico da função
+$f(x)=\frac{r}{h}x$ (ou $f(x)=r-\frac{r}{h}x$), no intervalo $[0,h]$. 
+\end{sol}
+\end{exo}
+
+
+Nesta seção desenvolveremos 
+métodos para \emph{calcular o volume $V(S)$ de um sólido de
+revolução $S$}. Antes de começar, consideremos um caso elementar, que será também usado para o caso geral.
+
+\begin{ex}\label{Ex_vol_cilindro}
+Suponha que $f$ é constante em $[a,b]$, isto é: $f(x)=r>0$ para todo $x\in [a,b]$:
+
+%
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\tdplotsetmaincoords{55}{115}
+\pgfmathsetmacro{\r}{0.6};
+\newcommand{\funcao}[1]{(\r)}
+\pgfmathsetmacro{\a}{0.2};
+\pgfmathsetmacro{\b}{1.5};
+\pgfmathsetmacro{\c}{(\a+\b)/2};
+\draw[->] (0,-0.1)--(0,\r+0.3);
+\fill[areagrafico]
+(\a,0)--plot[domain=\a:\b](\x,{\funcao{\x}})--(\b,0)--cycle;
+\draw[->] (-0.1,0)--({\b+0.3},0);
+\draw[thick, domain=\a:\b] plot (\x,{\funcao{\x}});
+\draw[dotted] (\a,0) node[below]{$a$} --
+(\a,{\funcao{\a}});
+\draw[dotted] (\b,0) node[below]{$b$} --
+(\b,{\funcao{\b}});
+%\draw (\c,{0.5*\funcao{\c}}) node{$R$};
+\draw[dashed] (-0.1,\r)--(\b,\r);
+\draw (-0.1,\r) node[left]{$r$};
+
+\begin{scope}[xshift=3.5cm, yshift=0.5cm, tdplot_main_coords]
+\pgfmathsetmacro{\nx}{20};
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+\pgfmathsetmacro{\alphamin}{-40};
+\pgfmathsetmacro{\alphamax}{150};
+\pgfmathsetmacro{\nalpha}{40};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,{\b+0.3},0) node[anchor=north west]{$x$};
+\draw[->] (0,0,0) -- (0,0,1.2);
+%desenhar o grande circulo de tras:
+\draw[domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\funcao{\a}},{\a},{cos(\alpha)*\funcao{\a}}); 
+%desenhar a linha pontilhada de tras:
+\draw[thick, dotted] (0,\a,0)--(0,\a,{\funcao{\a}});
+%desenhar o grande circulo de frente:
+\draw[domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\funcao{\b}},{\b},{cos(\alpha)*\funcao{\b}}); 
+
+\fill[areagrafico]
+(0,\a,0)--plot[domain=\a:\b](0,\x,{\funcao{\x}})--(0,\b,0)--cycle;
+\foreach \i in {0,...,\nalpha} {
+\draw[thick, color=gray, domain=\a:\b, variable=\t] plot
+({sin(\alphamin+\Dalpha*\i)*\funcao{\t}},\t,{cos(\alphamin+\Dalpha*\i)*\funcao{\t}}); 
+}
+\foreach \i in {0,...,\nx} {
+\pgfmathsetmacro{\point}{\a+(\i*\Dx)};
+\draw[thick, color=gray, domain=\alphamin:\alphamax, variable=\alpha] plot
+({sin(\alpha)*\funcao{\point}},\point,{cos(\alpha)*\funcao{\point}}); 
+ }
+%desenhar o grafico de f em [a,b]
+\draw[thick, thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}}); 
+%desenhar a linha pontilhada de frente:
+\draw[thick,dotted] (0,\b,0)--(0,\b,{\funcao{\b}});
+\draw[thick, ->] (0,\b,0)--({sin(120)*\funcao{\b}},\b,{cos(120)*\funcao{\b}})
+node[midway, right]{$r$};
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+%
+Neste caso, o sólido gerado $S$ é um cilindro (deitado). 
+\index{cilindro}
+A sua base é circular de
+raio $r$, e a sua altura é $b-a$. Pela fórmula bem conhecida do volume
+de um cilíndro,
+\begin{equation}
+V(S)=\text{área da base }\times\text{ altura}=\pi r^2(b-a)\,.
+\end{equation}
+\end{ex}
+
+Queremos agora calcular $V(S)$ 
+para um sólido de revolução qualquer.\\
+
+O procedimento será o mesmo que levou à propria definição
+\index{integral de Riemann}da integral de Riemann:
+\emph{aproximaremos $S$ por sólidos mais elementares}. Usaremos dois tipos
+de sólidos elementares: cilíndros e cascas. 
+
+
+\subsection{Aproximação por cilindros}
+\index{aproximação!por cilindros}
+Voltemos para 
+o sólido de revolução da seção anterior. Um jeito de decompor o sólido $S$ 
+é de aproximá-lo por uma união de fatias verticais, centradas no eixo
+$x$:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\tdplotsetmaincoords{55}{115}
+
+\newcommand{\funcao}[1]{( 1/((#1)^2+1) )}
+\pgfmathsetmacro{\a}{0.2};
+\pgfmathsetmacro{\b}{1.5};
+\pgfmathsetmacro{\c}{(\a+\b)/2};
+
+%nombre de tranches:
+\pgfmathsetmacro{\n}{10};
+
+\draw[->] (0,-0.1)--(0,1.3);
+\pgfmathsetmacro{\dx}{(\b-\a)/\n};
+
+\foreach \i in {1,...,\n} {
+\filldraw[corretangulos] ({\a+(\i-1)*\dx},0)
+rectangle ({\a+\i*\dx},{\funcao{\a+\i*\dx}});
+\draw ({\a+(\i-1)*\dx},0)
+rectangle ({\a+\i*\dx},{\funcao{\a+\i*\dx}});
+\fill ({\a+\i*\dx},{\funcao{\a+\i*\dx}}) circle (0.2mm);
+}
+
+\draw[->] (-0.1,0)--({\b+0.3},0);
+\draw[thick, domain=\a:\b] plot (\x,{\funcao{\x}});
+\draw[dotted] (\a,0) node[below]{$a$} --
+(\a,{\funcao{\a}});
+\draw[dotted] (\b,0) node[below]{$b$} --
+(\b,{\funcao{\b}});
+
+\begin{scope}[xshift=3cm, yshift=0.5cm, tdplot_main_coords]
+
+\pgfmathsetmacro{\nx}{2};
+\pgfmathsetmacro{\Dx}{\n/\nx};
+\pgfmathsetmacro{\alphamin}{-40};
+\pgfmathsetmacro{\alphamax}{150};
+\pgfmathsetmacro{\nalpha}{40};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+%dessiner les axes x et z
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,0,1.2);
+
+%dessiner le traitille de derriere:
+\draw[dotted] (0,\a,0)--(0,\a,{\funcao{\a}});
+
+
+%dessiner les tranches:
+\foreach \i in {1,...,\n} {
+\pgfmathsetmacro{\ap}{(\a+(\i-1)*\dx)};
+\pgfmathsetmacro{\bp}{(\a+(\i*\dx))};
+\pgfmathsetmacro{\valf}{ \funcao{\bp} };
+%remplir le premier cercle (derriere) de la tranche:
+\filldraw[corretangulos, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},{\ap},{cos(\alpha)*\valf}); 
+%prononcer un peu le bord:
+\draw[color=gray, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},{\ap},{cos(\alpha)*\valf}); 
+%dessiner les petits traits de la tranche:
+\foreach \j in {0,...,\nalpha} {
+\draw[color=gray, domain=\ap:\bp, variable=\t] plot
+({sin(\alphamin+\Dalpha*\j)*\valf},\t,{cos(\alphamin+\Dalpha*\j)*\valf}); 
+%remplir le disque (devant) de la tranche:
+\filldraw[corretangulos, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},\bp,{cos(\alpha)*\valf}); 
+%prononcer un peu le bord de ce disque
+\draw[color=gray, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},\bp,{cos(\alpha)*\valf}); 
+\fill (0,\bp,{\funcao{\bp}}) circle (0.2mm);
+}
+}
+
+%dessiner le graphe de la fonction
+\draw[thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}});
+%dessiner le petit traitille:
+\draw[dotted] (0,\b,0)--(0,\b,{\funcao{\b}});
+
+\draw[->] (0,\b,0) -- (0,{\b+0.3},0) node[right]{$x$};
+
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+%
+Cada fatia é obtida girando um retângulo cujo tamanho é determinado pela função $f$. Para
+ser mais preciso, escolhemos pontos no intervalo $[a,b]$,
+$x_0\equiv a<x_1<x_2<\dots<x_{n-1}<x_n\equiv b$, e a cada intervalo
+$[x_{i-1},x_{i}]$ associamos o retângulo cuja base tem tamanho
+$(x_i-x_{i-1})$ e cuja altura é de $f(x_i)$. Ao
+girar em torno do eixo $x$, cada um desses retângulos gera uma
+fatia cilíndrica $F_i$, como no Exemplo
+\ref{Ex_vol_cilindro}:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\tdplotsetmaincoords{55}{115}
+\newcommand{\funcao}[1]{( 1/((#1)^2+1) )}
+\pgfmathsetmacro{\a}{0.2};
+\pgfmathsetmacro{\b}{1.5};
+\pgfmathsetmacro{\c}{(\a+\b)/2};
+
+%nombre de tranches:
+\pgfmathsetmacro{\n}{10};
+
+\draw[->] (0,-0.1)--(0,1.3);
+%\fill[areagrafico] (\a,0)--plot[domain=\a:\b](\x,{\funcao{}})--(\b,0)--cycle;
+
+\pgfmathsetmacro{\dx}{(\b-\a)/\n};
+
+\foreach \i in {\n/2} {
+%\draw ({\a + \i*\dx},0)--(1,1);
+\filldraw[corretangulos] ({\a+(\i-1)*\dx},0)
+rectangle ({\a+\i*\dx},{\funcao{\a+\i*\dx}});
+\draw ({\a+(\i-1)*\dx},0)
+rectangle ({\a+\i*\dx},{\funcao{\a+\i*\dx}});
+\fill ({\a+\i*\dx},{\funcao{\a+\i*\dx}}) circle (0.2mm);
+\draw[<-] ({\a+(\i-1)*\dx},-0.02)--
+({\a+(\i-1)*\dx-0.2},-0.25) node[below]{$x_{i-1}$};
+\draw[<-] ({\a+(\i)*\dx},-0.02)--({\a+(\i)*\dx+0.2},-0.25) node[below]{$x_{i}$}; 
+}
+
+\draw[->] (-0.1,0)--({\b+0.3},0);
+\draw[thick, domain=\a:\b] plot (\x,{\funcao{\x}});
+\draw[dotted] ({\a},0) node[below]{$a$} --
+(\a,{\funcao{\a}});
+\draw[dotted] (\b,0) node[below]{$b$} -- (\b,{\funcao{\b}});
+
+\begin{scope}[xshift=3.5cm, yshift=0cm, tdplot_main_coords]
+
+\pgfmathsetmacro{\nx}{2};
+\pgfmathsetmacro{\Dx}{\n/\nx};
+\pgfmathsetmacro{\alphamin}{-40};
+\pgfmathsetmacro{\alphamax}{150};
+\pgfmathsetmacro{\nalpha}{40};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+%dessiner les axes x et z
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,0,1.2);
+
+%dessiner le traitille de derriere:
+\draw[dotted] (0,\a,0)--(0,\a,{\funcao{\a}});
+
+\foreach \i in {\n/2} {
+\pgfmathsetmacro{\ap}{(\a+(\i-1)*\dx)};
+\draw (0,0,0)--(0,{\ap},0);
+\pgfmathsetmacro{\bp}{\a+(\i*\dx)};
+\pgfmathsetmacro{\valf}{\funcao{\bp}};
+%remplir le premier cercle (derriere) de la tranche:
+
+\filldraw[corretangulos, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},{\ap},{cos(\alpha)*\valf}); 
+
+%prononcer un peu le bord:
+\draw[color=gray, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},{\ap},{cos(\alpha)*\valf}); 
+
+%dessiner les petits traits de la tranche:
+\foreach \j in {0,...,\nalpha} {
+\draw[color=gray, domain=\ap:\bp, variable=\t] plot
+({sin(\alphamin+\Dalpha*\j)*\valf},{\t},{cos(\alphamin+\Dalpha*\j)*\valf}); 
+%remplir le disque (devant) de la tranche:
+\filldraw[corretangulos, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},{\bp},{cos(\alpha)*\valf}); 
+%prononcer un peu le bord de ce disque
+\draw[color=gray, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},{\bp},{cos(\alpha)*\valf}); 
+\fill (0,\bp,{\funcao{\bp}}) circle (0.2mm);
+}
+
+%terminer le bout de l'axe des x:
+\draw[thin] (0,{\bp},0)--(0,{\b},0);
+\draw[thin] ({1.3*\valf},{\bp},0) node[left]{$F_i$};
+}
+
+%dessiner le graphe de la fonction
+\draw[thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}});
+%dessiner le petit traitille:
+\draw[dotted] (0,{\b},0)--(0,\b,{\funcao{\b}});
+%terminer l'axe des x:
+\draw[->] (0,{\b},0) -- (0,{\b+0.3},0) node[right]{$x$};
+
+\end{scope}
+
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+
+Mas, como a fatia $F_i$ é um cilindro deitado de 
+raio $f(x_i)$ e de altura $\Delta x_i=x_i-x_{i-1}$, o seu
+volume é dado por $V(F_i)=\pi f(x_i)^2\Delta x_i$.
+Logo, o volume do sólido $S$ pode ser aproximado 
+pela soma dos volumes das fatias, que é 
+uma soma de Riemann:
+$$
+\sum_{j=1}^nV(F_i)=\sum_{i=1}^n\pi f(x_i)^2\Delta x_i\,.
+$$
+Quando o número de retângulos
+$n\to \infty$ e que todos os $\Delta x_i\to 0$, esta soma
+converge (quando $f(x)^2$ pe contínua, por exemplo) 
+para a uma integral de
+Riemann que permite (em princípio) calcular o volume exato do sólido $S$:
+\begin{equation}\label{eq_formula_volume}
+\boxed{V(S)=\int_a^b\pi f(x)^2\,dx\,.}
+\end{equation}
+
+\begin{ex}\label{ex_giraseno}
+Seja $R$ a região delimitada pela curva $y=\sen x$, pelo eixo $x$, e pelas duas retas
+verticais $x=0$ e $x=\pi$.
+Calculemos o volume do sólido $S$ obtido girando $R$ em torno do eixo $x$:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.7]
+\tdplotsetmaincoords{55}{115}
+
+%\newcommand{\funcao}[1]{{(1-(#1)^2)}}
+\newcommand{\funcao}[1]{(sin(#1 r))}
+
+\pgfmathsetmacro{\a}{0};
+\pgfmathsetmacro{\b}{pi};
+
+\begin{scope}
+\fill[areagrafico]
+(\a,0)--plot[domain=\a:\b](\x,{\funcao{\x}})--(\b,0)--cycle;
+\draw[thick] (\a,0) plot[domain=\a:\b](\x,{\funcao{\x}});
+\draw[->] (\a-0.2,0)--(\b+0.2,0);
+\draw[->] (0,-0.2)--(0,1.2);
+\draw (pi,0) node[below]{$\pi$};
+\end{scope}
+
+\begin{scope}[xshift=5cm, yshift=0.7cm, tdplot_main_coords]
+\pgfmathsetmacro{\nx}{20};
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,{\b+0.3},0) node[anchor=north west]{$x$};
+\draw[->] (0,0,0) -- (0,0,1.2);
+\fill[areagrafico]
+(0,\a,0)--plot[domain=\a:\b](0,\x,{\funcao{\x}})--(0,\b,0)--cycle;
+%desenhar a flechinha de frente:
+\draw[->, domain=0:320, variable=\alpha] plot
+({sin(\alpha)*\funcao{\b}},\b,{cos(\alpha)*\funcao{\b}}); 
+%desenhar a linha pontilhada de frente:
+\draw[thick,dotted] (0,\b,0)--(0,\b,{\funcao{\b}});
+\draw (0,pi,0) node[above right]{$\pi$};
+
+\pgfmathsetmacro{\alphamin}{-50};
+\pgfmathsetmacro{\alphamax}{150};
+\pgfmathsetmacro{\nalpha}{50};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+%Encher o grande disco de tras:
+% \filldraw[color=gray!50] plot[domain=0:360, variable=\alpha] 
+% ({sin(\alpha)*\funcao{\a}},\a,{cos(\alpha)*\funcao{\a}}); 
+
+\foreach \i in {0,...,\nalpha} {
+\draw[thick, color=gray, domain=\a:\b, variable=\t] plot
+({sin(\alphamin+\Dalpha*\i)*\funcao{\t}},\t,{cos(\alphamin+\Dalpha*\i)*\funcao{\t}}); 
+}
+\foreach \i in {0,...,\nx} {
+\pgfmathsetmacro{\point}{\a+(\i*\Dx)};
+\draw[thick, color=gray, domain=\alphamin:\alphamax, variable=\alpha] plot
+({sin(\alpha)*\funcao{\point}},\point,{cos(\alpha)*\funcao{\point}}); 
+}
+
+\draw[thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}}); 
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+%AQUI
+
+
+Pela fórmula 
+\eqref{eq_formula_volume}, o volume deste sólido é dado pela integral 
+$$V=\int_{0}^\pi\pi(\sen x)^2\,dx=\pi \Bigl\{
+\frac{x}{2}-\frac{\sen (2x)}{4}
+\Bigr\}\Big|_{0}^\pi=\tfrac12 \pi^2\,.
+$$
+
+\end{ex}
+
+
+O método permite calcular volumes clássicos da geometria.
+
+\begin{ex}\label{ex_giradisco}
+Seja $r>0$ fixo e $R$ a região delimitada pela semi-circunferência 
+$y=\sqrt{r^2-x^2}$, entre $x=-r$ e $x=+r$, e pelo eixo $x$.
+O sólido $S$ obtido girando $R$ em torno do eixo $x$ é uma esfera
+\index{esfera} de raio $r$ centrada na origem:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.7]
+\tdplotsetmaincoords{55}{105}
+
+%\newcommand{\funcao}[1]{{(1-(#1)^2)}}
+\pgfmathsetmacro{\r}{1};
+\newcommand{\funcao}[1]{(sqrt((\r)^2-(#1)^2))}
+\pgfmathsetmacro{\a}{-\r};
+\pgfmathsetmacro{\b}{\r};
+
+\begin{scope}
+\fill[areagrafico]
+(\a,0)--plot[domain=\a:\b, samples=200](\x,{\funcao{\x}})--(\b,0)--cycle;
+\draw[thick] (\a,0) plot[domain=\a:\b, samples=220](\x,{\funcao{\x}});
+\draw[->] (\a-0.2,0)--(\b+0.2,0);
+\draw[->] (0,-0.2)--(0,1.2);
+\draw (\a,0) node[below]{$-r$};
+\draw (\b,0) node[below]{$+r$};
+\end{scope}
+
+%\iffalse
+\begin{scope}[xshift=4cm, yshift=0.2cm, tdplot_main_coords]
+\pgfmathsetmacro{\nx}{40};
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+
+\draw (0,0,0) -- (\r,0,0);
+\draw[->] (0,0,0) -- (0,{\b+0.3},0) node[anchor=north west]{$x$};
+
+% Dessiner la region R:
+\fill[areagrafico]
+(0,\a,0)--plot[domain=\a:\b](0,\x,{\funcao{\x}})--(0,\b,0)--cycle;
+
+\pgfmathsetmacro{\alphamin}{-50};
+\pgfmathsetmacro{\alphamax}{150};
+\pgfmathsetmacro{\nalpha}{50};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+% Dessiner les cercles inclines:
+\foreach \i in {0,...,\nalpha} {
+\draw[thick, color=gray, domain=\a:\b, variable=\t] plot
+({sin(\alphamin+\Dalpha*\i)*\funcao{\t}},\t,{cos(\alphamin+\Dalpha*\i)*\funcao{\t}}); 
+}
+%Dessiner les tranches verticales:
+\foreach \i in {0,...,\nx} {
+\pgfmathsetmacro{\point}{\a+(\i*\Dx)};
+\draw[thick, color=gray, domain=\alphamin:\alphamax, variable=\alpha,
+samples=220] plot
+({sin(\alpha)*\funcao{\point}},\point,{cos(\alpha)*\funcao{\point}}); 
+}
+
+\draw[thick, domain=\a:\b, variable=\t, samples=220] plot
+(0,\t,{\funcao{\t}}); 
+
+% Le petit bout de l'axe z:
+\draw[->] (0,0,\r) -- (0,0,\r+0.5);
+% Le petit bout de l'axe x:
+\draw[->] (\r,0,0) -- (\r+0.8,0,0);
+\end{scope}
+%\fi
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Pela fórmula 
+\eqref{eq_formula_volume}, o volume da esfera é dado pela integral 
+\begin{align*}
+V(\text)&=\int_{-r}^{+r}\pi\bigl(\sqrt{r^2-x^2}\bigr)^2\,dx\\
+&=\pi\int_{-r}^{+r}(r^2-x^2)\,dx\\
+&=\pi\Bigl\{r^2x-\tfrac{x^3}{3}\Bigr\}\Big|_{-r}^{+r}\\
+&=\frac{4}{3}\pi r^3\,...
+\end{align*}
+
+\end{ex}
+
+
+\begin{exo}
+Um vaso \'e obtido rodando a curva $y=f(x)$ em torno do eixo
+$x$, onde
+$$
+f(x)=
+\begin{cases}
+-x+3&\text{ se }0\leq x\leq 2,\\
+x-1&\text{ se }2<x\leq 3\,.
+\end{cases}
+$$
+Esboce o vaso obtido, em três dimensões, e calcule o seu volume.
+\begin{sol} $11\pi$
+ \end{sol}
+\end{exo}
+
+O importante, nesta seção, é de não tentar
+\emph{decorar fórmulas}, e sim entender como montar uma nova
+fórmula em cada situação. Vejamos como, no seguinte exemplo.
+
+\begin{ex}\label{ex_gira_parabola}
+Considere a região $R$ do primeiro quadrante, delimitada pelo gráfico
+da função $f(x)=1-x^2$. Considere os sólidos $S_1$ e $S_2$, obtidos
+rodando $R$ em torno, respectivamente, do eixo $x$ e $y$:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.7]
+\tdplotsetmaincoords{55}{115}
+
+\newcommand{\funcao}[1]{(1-(#1)^2)}
+%\newcommand{\funcao}[1]{{sin(#1 r)}}
+\pgfmathsetmacro{\a}{0};
+\pgfmathsetmacro{\b}{1};
+
+\begin{scope}
+\fill[areagrafico]
+(\a,0)--plot[domain=\a:\b](\x,{\funcao{\x}})--(\b,0)--cycle;
+\draw[thick] (\a,0) plot[domain=\a:\b](\x,{\funcao{\x}});
+\draw[->] (\a-0.2,0)--(\b+0.2,0);
+\draw[->] (0,-0.2)--(0,1.2);
+\draw (\b,0) node[below]{$1$};
+\end{scope}
+
+\begin{scope}[xshift=3cm, yshift=0.6cm, tdplot_main_coords]
+\pgfmathsetmacro{\nx}{20};
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+
+%Encher o grande disco de tras:
+ \filldraw[color=gray!50] plot[domain=0:360, variable=\alpha] 
+ ({sin(\alpha)*\funcao{\a}},\a,{cos(\alpha)*\funcao{\a}}); 
+
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,{\b+0.3},0) node[anchor=north west]{$x$};
+\draw[->] (0,0,0) -- (0,0,1.2);
+
+\fill[areagrafico]
+(0,\a,0)--plot[domain=\a:\b](0,\x,{\funcao{\x}})--(0,\b,0)--cycle;
+
+%desenhar a flechinha de frente:
+\draw[->, domain=0:320, variable=\alpha] plot
+({sin(\alpha)*\funcao{\b}},\b,{cos(\alpha)*\funcao{\b}}); 
+
+%desenhar a linha pontilhada de frente:
+\draw[thick,dotted] (0,\b,0)--(0,\b,{\funcao{\b}});
+\draw (0,1,0) node[below right]{$1$};
+
+\pgfmathsetmacro{\alphamin}{-50};
+\pgfmathsetmacro{\alphamax}{150};
+\pgfmathsetmacro{\nalpha}{50};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+
+\foreach \i in {0,...,\nalpha} {
+\draw[thick, color=gray, domain=\a:\b, variable=\t] plot
+({sin(\alphamin+\Dalpha*\i)*\funcao{\t}},\t,{cos(\alphamin+\Dalpha*\i)*\funcao{\t}}); 
+}
+\foreach \i in {0,...,\nx} {
+\pgfmathsetmacro{\point}{\a+(\i*\Dx)};
+\draw[thick, color=gray, domain=\alphamin:\alphamax, variable=\alpha] plot
+({sin(\alpha)*\funcao{\point}},\point,{cos(\alpha)*\funcao{\point}}); 
+}
+
+\draw[thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}}); 
+\draw (0.9,0,1.2) node{$S_1$};
+\end{scope}
+
+\begin{scope}[xshift=6.3cm, yshift=0.5cm, tdplot_main_coords]
+\pgfmathsetmacro{\nx}{20};
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+
+%Encher o grande disco debaixo:
+ \filldraw[color=gray!50] plot[domain=0:360, variable=\alpha] 
+ ({sin(\alpha)*\funcao{\a}},{cos(\alpha)*\funcao{\a}},0); 
+
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,{\b+0.3},0) node[anchor=north west]{$x$};
+\draw[->] (0,0,0) -- (0,0,1.2);
+
+\fill[areagrafico]
+(0,\a,0)--plot[domain=\a:\b](0,\x,{\funcao{\x}})--(0,\b,0)--cycle;
+
+\pgfmathsetmacro{\alphamin}{0};
+\pgfmathsetmacro{\alphamax}{360};
+\pgfmathsetmacro{\nalpha}{50};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+\foreach \i in {0,...,\nalpha} {
+\draw[thick, color=gray, domain=\a:\b, variable=\t] plot
+({sin(\alphamin+\Dalpha*\i)*\funcao{\t}},{cos(\alphamin+\Dalpha*\i)*\funcao{\t}},\t); 
+}
+\foreach \i in {0,...,\nx} {
+\pgfmathsetmacro{\point}{\a+(\i*\Dx)};
+\draw[thick, color=gray, domain=\alphamin:\alphamax, variable=\alpha] plot
+({sin(\alpha)*\funcao{\point}},{cos(\alpha)*\funcao{\point}},\point); 
+}
+
+\draw[thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}}); 
+\draw (0,1.2,1.1) node{$S_2$};
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Calculemos, para começar, o volume do sólido $S_1$.
+O raciocíno já descrito acima permite usar a fórmula:
+$$
+V(S_1)=\int_0^1 \pi
+(1-x^2)^2\,dx=\pi\int_0^1\{1-2x^2+x^4\}\,dx=\tfrac{8\pi}{15}\,.
+$$
+Consideremos agora o sólido $S_2$.
+Por ser um sólido de revolução em torno do eixo $y$, a aproximação mais
+natural é de usar fatias horizontais, centradas no eixo $y$, 
+como na figura a seguir:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\tdplotsetmaincoords{55}{115}
+\newcommand{\funcao}[1]{(sqrt(1-(#1)))}
+\pgfmathsetmacro{\a}{0};
+\pgfmathsetmacro{\b}{1};
+\pgfmathsetmacro{\c}{(\a+\b)/2};
+
+%nombre de tranches:
+\pgfmathsetmacro{\n}{10};
+
+%\fill[areagrafico]
+%(\a,0)--plot[domain=\a:\b](\x,{\funcao{\x}})--(\b,0)--cycle;
+
+
+\pgfmathsetmacro{\dx}{(\b-\a)/\n};
+
+
+%%desenhar os retangulos no plano
+\foreach \i in {1,...,\n} {
+%\draw ({\a + \i*\dx},0)--(1,1);
+\filldraw[corretangulos] (0,{\a+(\i-1)*\dx})
+rectangle ({\funcao{\a+\i*\dx}},{\a+\i*\dx});
+\draw (0,{\a+(\i-1)*\dx})
+rectangle ({\funcao{\a+\i*\dx}},{\a+\i*\dx});
+\fill ({\funcao{\a+\i*\dx}},{\a+\i*\dx}) circle (0.2mm);
+}
+\draw (0,1) node[left]{$1$};
+\draw[->] (-0.1,0)--({\b+0.3},0);
+\draw[thick, domain=\a:\b] plot ({\funcao{\x}},\x);
+\draw[dotted] (\a,0) node[below]{$0$} --
+(\a,{\funcao{\a}});
+\draw[dotted] (\b,0) node[below]{$1$} --
+(\b,{\funcao{\b}});
+
+\begin{scope}[xshift=3cm, yshift=0.5cm, tdplot_main_coords]
+
+\pgfmathsetmacro{\nx}{2};
+\pgfmathsetmacro{\Dx}{\n/\nx};
+\pgfmathsetmacro{\alphamin}{-40};
+\pgfmathsetmacro{\alphamax}{150};
+\pgfmathsetmacro{\nalpha}{40};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+%dessiner les axes x et z
+\draw[->] (0,0,0) -- (1.2,0,0);
+%\draw[->] (0,0,0) -- (0,0,1.2);
+
+%dessiner le traitille de derriere:
+\draw[dotted] (0,\a,0)--(0,\a,{\funcao{\a}});
+
+
+%dessiner les tranches:
+\foreach \i in {1,...,\n} {
+\pgfmathsetmacro{\ap}{(\a+(\i-1)*\dx)};
+\pgfmathsetmacro{\bp}{(\a+(\i*\dx))};
+\pgfmathsetmacro{\valf}{\funcao{\bp}};
+%remplir le premier cercle (derriere) de la tranche:
+\filldraw[corretangulos, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},{cos(\alpha)*\valf},{\ap}); 
+%prononcer un peu le bord:
+\draw[color=gray, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},{cos(\alpha)*\valf},{\ap}); 
+%dessiner les petits traits de la tranche:
+\foreach \j in {0,...,\nalpha} {
+\draw[color=gray, domain=\ap:\bp, variable=\t] plot
+({sin(\alphamin+\Dalpha*\j)*\valf},{cos(\alphamin+\Dalpha*\j)*\valf},\t); 
+%remplir le disque (devant) de la tranche:
+\filldraw[corretangulos, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},{cos(\alpha)*\valf},\bp); 
+%prononcer un peu le bord de ce disque
+\draw[color=gray, domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\valf},{cos(\alpha)*\valf},\bp); 
+\fill (0,{\funcao{\bp}},\bp) circle (0.2mm);
+}
+}
+%dessiner le graphe de la fonction
+\draw[thick, domain=\a:\b, variable=\t, samples=15] plot
+(0,{\funcao{\t}},\t);
+%dessiner le petit traitille:
+\draw[dotted] (0,\b,0)--(0,\b,{\funcao{\b}});
+
+\draw[->] (0,\b,0) -- (0,{\b+0.3},0) node[right]{$x$};
+
+\draw[->] (0,1)--(0,1.3);
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+%%
+Neste caso, dividimos o intervalo $y\in [0,1]$ em
+intervalos $[y_{i-1},y_{i}]$. Ao intervalo $[y_{i-1},y_i]$ 
+associamos uma fatia horizontal
+$F_i$ de altura $\Delta y_i=y_i-y_{i-1}$ de
+de raio $\sqrt{1-y_i}$. De fato, já que $F_i$ está na altura $y_i$, o
+seu raio é dado pelo \emph{inverso} da função $x\to 1-x^2$
+(isto é
+$y\mapsto \sqrt{1-y}$) no ponto $y_i$. Assim, $V(F_i)=\pi \sqrt{1-y_i}^2
+\Delta y_i$, e o volume de $V(S_2)$ é aproximado pela soma das fatias:
+$$
+\sum_{i=1}^nV(F_i)=\sum_{i=1}^n\pi(1-y_i)\Delta y_i\,.
+$$
+Portanto, no limite $n\to \infty$, combinado com $\Delta y_i\to 0$,
+obtemos:
+$$
+V(S_2)=\int_0^1\pi (1-y)\,dy=\tfrac{\pi}{2}\,.
+$$
+Na próxima seção mostraremos um outro jeito de calcular $V(S_2)$.
+\end{ex}
+
+\begin{exo}
+Considere a região finita $R$ contida no primeiro quadrante, 
+delimitada pelas curvas $y=x^2$, $y=x^4$.
+Calcule o volume do sólido de revolução obtido girando $R$ em torno do
+eixo $y$.
+\begin{sol}
+$\tfrac{\pi}{6}$.
+\end{sol}
+\end{exo}
+(Haverá mais exercícios no fim da próxima seção.)
+
+\subsection{Aproximação por cascas}
+\index{aproximação!por cascas}
+Os exemplos considerados na seção anterior partiam de uma decomposição
+do sólido usando \emph{fatias cilíndricas}.
+Vejamos agora um outro tipo de decomposição, usando \emph{cascas}.
+
+\begin{ex}
+Considere de novo a região $R$ do 
+Exemplo \ref{ex_gira_parabola} (a área debaixo da parábola), e
+o sólido $S_2$ gerado pela rotação de $R$ em torno do eixo $y$.
+Lá, $V(S_2)$ foi calculado usando uma integral, que foi construida
+a partir de uma soma de cilindros, obtidos
+pela rotação de retangulos \emph{horizontais} em torno do
+eixo $y$. Procuremos agora calcular o mesmo volume
+$V(S_2)$, mas com uma integral obtida a partir de uma soma de
+\emph{cascas}. Cascas são obtidas pela rotação de
+retângulos \emph{verticais}, em torno do eixo $y$:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2.3]
+\tdplotsetmaincoords{70}{110}
+\newcommand{\funcao}[1]{{(1-(#1)^2)}}
+\pgfmathsetmacro{\a}{0};
+\pgfmathsetmacro{\b}{1};
+%nombre de tranches:
+\pgfmathsetmacro{\n}{6};
+%la largeur d'un rectangle
+\pgfmathsetmacro{\dx}{(\b-\a)/\n};
+
+
+%la tranche que je vais faire tourner:
+\pgfmathsetmacro{\num}{4}
+
+%le xmin
+\pgfmathsetmacro{\xmin}{\a+(\num-1)*\dx}
+%le xmax
+\pgfmathsetmacro{\xmax}{\a+\num*\dx}
+
+
+
+%%%LE GRAPHE DE LA FONCTION ET LE RECTANGLE%%%%%
+\draw[->] (0,-0.1)--(0,1.3);
+%%desenhar um retangulo no plano
+\filldraw[corretangulos] ({\a+(\num-1)*\dx},0)
+rectangle ({\a+\num*\dx},\funcao{\a+\num*\dx});
+\draw ({\a+(\num-1)*\dx},0)
+rectangle ({\a+\num*\dx},\funcao{\a+\num*\dx});
+\fill ({\a+\num*\dx},\funcao{\a+\num*\dx}) circle (0.2mm);
+%desenhar a funcao
+\draw[->] (-0.1,0)--({\b+0.3},0);
+\draw[thick, domain=\a:\b] plot (\x, \funcao{\x});
+
+\draw[<-, >=latex] (\xmin,0)--({\xmin-0.3},-0.3)
+node[below]{$x_{i-1}$};
+\draw[<-, >=latex] (\xmax,0)--({\xmax+0.3},-0.3)
+node[below]{$x_{i}$};
+
+\draw[decorate, decoration=brace] 
+(\xmax+0.1,{\funcao{\xmax}})--(\xmax+0.1,0)node[midway,
+right]{$f(x_i)$};
+
+%3D%%% 
+%dessin en trois dimension da casca
+\begin{scope}[xshift=3.5cm, yshift=0cm, tdplot_main_coords]
+\pgfmathsetmacro{\alphamin}{-40};
+\pgfmathsetmacro{\alphamax}{150};
+%dessiner les axes x et z
+\draw (-\b+0.2,0,0) -- (\b-0.2,0,0);
+\draw (0,-\b+0.2,0) -- (0,\b-0.2,0);
+\draw[->] (0,0,0) -- (0,0,1.2);
+%dessiner les deux cercles du bas:
+\draw[domain=0:360, variable=\angle, samples=50, densely
+dotted] 
+plot ({\xmin*cos(\angle)},{\xmin*sin(\angle)},-0.005);
+\draw[domain=0:360, variable=\angle, samples=50, densely
+dotted] 
+plot ({\xmax*cos(\angle)},{\xmax*sin(\angle)},-0.005);
+
+%dessiner le rectangle en traitille:
+\fill[corretangulos] (0,\xmin,0)--(0,\xmax,0)--
+(0,\xmax,{\funcao{\xmax}})--(0,\xmin,{\funcao{\xmax}})--cycle;
+\draw[thick] (0,\xmin,0)--(0,\xmax,0)--
+(0,\xmax,{\funcao{\xmax}})--(0,\xmin,{\funcao{\xmax}})--cycle;
+\pgfmathsetmacro{\tetaz}{50};
+\fill[corretangulos]
+({\xmin*cos(\tetaz)},{\xmin*sin(\tetaz)},0)--
+({\xmax*cos(\tetaz)},{\xmax*sin(\tetaz)},0)--
+({\xmax*cos(\tetaz)},{\xmax*sin(\tetaz)},{\funcao{\xmax}})--
+({\xmin*cos(\tetaz)},{\xmin*sin(\tetaz)},{\funcao{\xmax}})--cycle;
+
+\draw[dotted]
+(0,0,0)--
+({\xmax*cos(\tetaz)},{\xmax*sin(\tetaz)},0)--
+({\xmax*cos(\tetaz)},{\xmax*sin(\tetaz)},{\funcao{\xmax}})--
+(0,0,{\funcao{\xmax}})--cycle;
+\draw[thick]
+({\xmin*cos(\tetaz)},{\xmin*sin(\tetaz)},0)--
+({\xmax*cos(\tetaz)},{\xmax*sin(\tetaz)},0)--
+({\xmax*cos(\tetaz)},{\xmax*sin(\tetaz)},{\funcao{\xmax}})--
+({\xmin*cos(\tetaz)},{\xmin*sin(\tetaz)},{\funcao{\xmax}})--cycle;
+
+%dessiner les parois EXTERNE de DEVANT:
+\pgfmathsetmacro{\valf}{ \funcao{\xmax} };
+%ATENCAO: nangles eh o num de angulos em 180!!!
+\pgfmathsetmacro{\nangles}{20};
+\pgfmathsetmacro{\angleinit}{290};
+\pgfmathsetmacro{\dalpha}{180/\nangles}
+
+\foreach \i in {\nangles,...,1} {
+\pgfmathsetmacro{\angleA}{\angleinit+(\i-1)*\dalpha};
+\pgfmathsetmacro{\angleB}{\angleinit+\i*\dalpha};
+\fill[corretangulos]({\xmax*cos(\angleA)},{\xmax*sin(\angleA)},0) --
+ ({\xmax*cos(\angleB)},{\xmax*sin(\angleB)},0) --
+ ({\xmax*cos(\angleB)},{\xmax*sin(\angleB)},{\valf}) --
+ ({\xmax*cos(\angleA)},{\xmax*sin(\angleA)},{\valf}) -- cycle;
+}
+
+
+%dessiner le COUVERCLE
+\pgfmathsetmacro{\xmin}{ \a + (\num-1)*\dx };
+\pgfmathsetmacro{\xmax}{ \a + (\num*\dx) };
+\pgfmathsetmacro{\valf}{\funcao{\xmax}};
+%ATENCAO: nangles eh o num de angulos em 180!!!
+\pgfmathsetmacro{\nangles}{20};
+\pgfmathsetmacro{\angleinit}{0};
+\pgfmathsetmacro{\dalpha}{360/\nangles}
+\foreach \i in {\nangles,...,1} {
+\pgfmathsetmacro{\angleA}{\angleinit+(\i-1)*\dalpha};
+\pgfmathsetmacro{\angleB}{\angleinit+\i*\dalpha};
+\fill[corretangulos]
+({\xmin*cos(\angleA)},{\xmin*sin(\angleA)},{\valf}) --
+({\xmax*cos(\angleA)},{\xmax*sin(\angleA)},{\valf}) --
+({\xmax*cos(\angleB)},{\xmax*sin(\angleB)},{\valf}) --
+({\xmin*cos(\angleB)},{\xmin*sin(\angleB)},{\valf}) 
+-- cycle;
+}
+
+
+%dessiner les deux cercles du haut:
+\draw[domain=0:360, variable=\angle, samples=50, densely dotted] 
+plot ({\xmin*cos(\angle)},{\xmin*sin(\angle)},{\funcao{\xmax}});
+\draw[domain=0:360, variable=\angle, samples=50, densely
+dotted] 
+plot ({\xmax*cos(\angle)},{\xmax*sin(\angle)},{\funcao{\xmax}});
+
+
+%dessiner le graphe de la fonction
+\draw[thick, domain=\a:\b, variable=\t, samples=15] plot
+(0,\t, \funcao{\t});
+
+\draw[->] (0,\xmax,0) -- (0,{\b+0.3},0) node[right]{$x$};
+
+\fill (0,\xmax,{\funcao{\xmax}}) circle (0.2mm);
+\draw (0,-0.6,0.85) node{$C_i$};
+
+%Dessiner les fleches qui montrent que ca tourne:
+\draw[domain=90:\tetaz, variable=\angle, samples=20, ->, thick] 
+plot
+({\xmax*cos(\angle)},{\xmax*sin(\angle)},{(\funcao{\xmax})*(0.5)});
+\draw[domain=90:50, variable=\angle, samples=20, ->, thick] 
+plot ({\xmax*cos(\angle)},{\xmax*sin(\angle)},{(\funcao{\xmax})});
+\draw[domain=90:50, variable=\angle, samples=20, ->, thick] 
+plot ({\xmax*cos(\angle)},{\xmax*sin(\angle)},0);
+\end{scope}
+
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+O volume da casca $C_i$ pode ser calculado pela diferença dos
+volumes de dois cilindros: o externo tem raio $x_i$, o
+interno tem raio $x_{i-1}$, e ambos têm altura $f(x_i)$.
+Logo, 
+$$V(C_i)=\pi x_{i}^2\times f(x_i)-\pi x_{i-1}^2\times
+f(x_i)=\pi(x_i^2-x_{i-1}^2)f(x_i)\,.$$
+Fatorando,
+$x_i^2-x_{i-1}^2=(x_i+x_{i-1})(x_i-x_{i-i})$. Quando 
+$\Delta x_i=x_i-x_{i-1}$ for muito pequeno, isto é quando
+$x_i$ e $x_{i-1}$ forem muito próximos, podemos
+aproximar $x_i+x_{i+1}$ por $2x_i$. Logo, 
+$$
+V(C_i)\simeq 2\pi x_if(x_i)\Delta x_i\,.
+$$
+Obs: essa fórmula é facil de entender observando que a  
+casca $C_i$ pode ser obtida torcendo um paralelepípedo
+cuja base é o retângulo de base $(x_{i}-
+x_{i-1})\times f(x_i)$ e de altura dada pela
+circunferência do círculo de raio $x_i$, isto é $2\pi
+x_i$. (Atenção: esse raciocíno é correto somente se a
+base do retângulo é pequena em relação à sua distância ao
+eixo de rotação!)\\
+
+Portanto, o volume so sólido $S_2$ pode ser calculado via
+a integral associada às somas de Riemann dos $V(C_i)$,
+isto é:
+$$
+\boxed{
+V(S_2)=\int_0^12\pi x f(x)\,dx\,.}
+$$
+Como era de se esperar, essa integral vale 
+$$V(S_2)=\int_0^12\pi x(1-x^2)\,dx=\pisobredois\,.$$
+\end{ex}
+
+
+O último exemplo mostrou que o volume de um sólido pode ser calculado de
+várias maneiras, usando cilindros ou cascas para o mesmo sólido
+pode levar a integrar funções muito diferentes, e uma escolha
+pode facilitar o cálculo da primitiva.
+
+\begin{ex}\label{exemplo:solidos_girados}
+Considere o triângulo $\cT$ determinado pelos pontos $A=(1,0)$,
+$B=(1,1)$, $C=(2,0)$. 
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\coordinate (A) at (1,0);
+\coordinate (B) at (1,1);
+\coordinate (C) at (2,0);
+\draw[->] (-0.2,0)--(3,0);
+\draw[->] (0,-0.2)--(0,1);
+\fill[areagrafico]  (A)--(B)--(C)--cycle;
+\draw[thick] (A)--(B)--(C)--cycle;
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Para começar, considere o cone $S_1$ obtido girando
+$\cT$ em torno do eixo $x$:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\tdplotsetmaincoords{55}{115}
+
+\newcommand{\funcao}[1]{(2-(#1))}
+
+\pgfmathsetmacro{\a}{1};
+\pgfmathsetmacro{\b}{2};
+
+\begin{scope}[tdplot_main_coords]
+\pgfmathsetmacro{\nx}{20};
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+
+\pgfmathsetmacro{\alphamin}{0};
+\pgfmathsetmacro{\alphamax}{20};
+\pgfmathsetmacro{\nalpha}{10};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,{\b+0.3},0) node[anchor=north west]{$x$};
+\draw[->] (0,0,0) -- (0,0,1.2);
+
+%desenhar a flechinha de tras:
+\draw[->, domain=0:330, variable=\alpha, samples=50] plot
+({sin(\alpha)*(\funcao{\a})},\a,{cos(\alpha)*(\funcao{\a})}); 
+%desenhar a linha pontilhada de tras:
+\draw[thick, dotted] (0,\a,0)--(0,\a,{\funcao{\a}});
+
+\fill[areagrafico]
+(0,\a,0)--plot[domain=\a:\b](0,\x,{\funcao{\x}})--(0,\b,0)--cycle;
+%desenhar o grafico de f em [a,b]
+\draw[thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}}); 
+%desenhar a flechinha de frente:
+\draw[->, domain=0:320, variable=\alpha] plot
+({sin(\alpha)*\funcao{\b}},\b,{cos(\alpha)*\funcao{\b}}); 
+%desenhar a linha pontilhada de frente:
+\draw[thick,dotted] (0,\b,0)--(0,\b,{\funcao{\b}});
+\end{scope}
+
+\begin{scope}[xshift=3.5cm,tdplot_main_coords]
+\pgfmathsetmacro{\nx}{15};
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+\pgfmathsetmacro{\alphamin}{-50};
+\pgfmathsetmacro{\alphamax}{155};
+\pgfmathsetmacro{\nalpha}{35};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,{\b+0.3},0) node[anchor=north west]{$x$};
+\draw[->] (0,0,0) -- (0,0,1.2);
+%desenhar o grande circulo de tras:
+\draw[domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\funcao{\a}},\a,{cos(\alpha)*\funcao{\a}}); 
+%desenhar a linha pontilhada de tras:
+\draw[thick, dotted] (0,\a,0)--(0,\a,{\funcao{\a}});
+%desenhar o grande circulo de frente:
+\draw[domain=0:360, variable=\alpha] plot
+({sin(\alpha)*\funcao{\b}},\b,{cos(\alpha)*\funcao{\b}}); 
+
+\fill[areagrafico]
+(0,\a,0)--plot[domain=\a:\b](0,\x,{\funcao{\x}})--(0,\b,0)--cycle;
+\foreach \i in {0,...,\nalpha} {
+\draw[thick, color=gray, domain=\a:\b, variable=\t] plot
+({sin(\alphamin+\Dalpha*\i)*\funcao{\t}},\t,{cos(\alphamin+\Dalpha*\i)*\funcao{\t}}); 
+}
+\foreach \i in {0,...,\nx} {
+\pgfmathsetmacro{\point}{\a+(\i*\Dx)};
+\draw[thick, color=gray, domain=\alphamin:\alphamax, variable=\alpha] plot
+({sin(\alpha)*\funcao{\point}},\point,{cos(\alpha)*\funcao{\point}}); 
+ }
+%desenhar o grafico de f em [a,b]
+\draw[thick, thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}}); 
+%desenhar a linha pontilhada de frente:
+\draw[thick,dotted] (0,\b,0)--(0,\b,{\funcao{\b}});
+\draw (0,\b,{\funcao{\b}+0.8}) node[left]{$S_1$};
+\end{scope}
+
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Podemos calcular o volume de $S_1$ de duas maneiras. Primeiro,
+girando retângulos verticais:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\coordinate (A) at (1,0);
+\coordinate (B) at (1,1);
+\coordinate (C) at (2,0);
+\draw[->] (0,0)--(2.5,0);
+\draw[->] (0,-0.2)--(0,1);
+%\fill[areagrafico]  (A)--(B)--(C)--cycle;
+\draw (A)--(B)--(C)--cycle;
+
+\pgfmathsetmacro{\s}{1.45};
+\pgfmathsetmacro{\t}{1.55};
+\fill[areagrafico] (\s,0)--(\s,{2-\t})--(\t,{2-\t})--(\t,0)--cycle;
+\draw (\s,0)--(\s,{2-\t})--(\t,{2-\t})--(\t,0)--cycle;
+
+\pgfmathsetmacro{\l}{0.3};
+\draw[dotted] (\s,0)--(\s,{-\l});
+\draw[dotted] (\t,0)--(\t,{-\l});
+\draw[decorate, decoration=brace] 
+(\t,{-\l})--(\s,{-\l})node[midway, below]{$dx$};
+
+\draw (\t,0) node[below]{$x$};
+\draw[thick] (1,0)node[below]{$1$}--(2,0)node[below]{$2$};
+
+\pgfmathsetmacro{\g}{0.6};
+\draw[decorate, decoration=brace] 
+({\t+\g},{2-\t})--({\t+\g},{0})node[midway, right]{$f(x)$};
+\draw[dotted] 
+({\t+\g},{2-\t})--({\t},{2-\t});
+\draw[dotted] 
+({\t},{0})--({\t+\g},{0});
+
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Seremos um pouco informais: 
+o retângulo infinitesimal baseado em $x$ tem uma largura $dx$ e
+uma altura $f(x)=2-x$ (que é a equação da reta que passa por $B$
+e $C$). 
+Ao girar em torno do eixo $x$, ele gera um
+cilindro infinitesimal cuja base tem área igual a $\pi f(x)^2$, e altura 
+$dx$.  Logo, o volume do cilindro é $\pi f(x)^2\times
+dx=\pi(2-x)^2dx$, e o volume
+de $S_1$ é obtido integrando todos os cilindros, quando $x$ varia de
+$1$ até $2$:
+\begin{equation}\label{eq_int_1}
+V(S_1)=\int_1^2 \pi (2-x)^2\,dx\,.
+\end{equation}
+
+Mas é possível também calcular $V(S_1)$ girando retângulos
+horizontais:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\coordinate (A) at (1,0);
+\coordinate (B) at (1,1);
+\coordinate (C) at (2,0);
+\draw[->] (0,0)--(2.5,0);
+\draw[->] (0,-0.2)--(0,1.2);
+%\fill[areagrafico]  (A)--(B)--(C)--cycle;
+\draw (A)--(B)--(C)--cycle;
+
+\pgfmathsetmacro{\s}{0.45};
+\pgfmathsetmacro{\t}{0.55};
+\fill[areagrafico] (1,\s)--({2-\t},\s)--({2-\t},\t)--(1,\t)--cycle;
+\draw (1,\s)--({2-\t},\s)--({2-\t},\t)--(1,\t)--cycle;
+
+\pgfmathsetmacro{\l}{0.3};
+\draw[dotted] (1,\s)--({1-\l},\s);
+\draw[dotted] (1,\t)--({1-\l},\t);
+\draw[decorate, decoration=brace] ({1-\l},\s)--
+({1-\l},\t) node[midway, left]{$dy$};
+
+\draw (0,\t) node[left]{$y$};
+\draw[dotted] (0,\t)--(1,\t);
+\draw[dashed] (0,1)node[left]{$1$}--(1,1);
+\draw (0,0)node[left]{$0$};
+\draw[thick] (0,0)--(0,1);
+
+\draw[dotted] (1,\s)--({1},{-\l});
+\draw[dotted] ({2-\t},\s)--({2-\t},{-\l});
+\draw[decorate, decoration=brace] ({2-\t},{-\l})-- 
+(1,{-\l}) node[midway, below]{$h(y)$};
+
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Um retângulo horizontal infinitesimal 
+é definido pela sua posição com respeito
+ao eixo $y$, pela sua altura, dada por $h(y)=(2-y)-1=1-y$ (aqui
+calculamos a diferença entre a posição do seu ponto mais a
+direita e do seu ponto mais a esquerda). 
+Ao girar em torno do eixo $x$, esse retângulo gera uma casca
+cujo raio é $y$, cuja altura é $h(y)$ e cuja espessura é $dy$,
+logo, o seu volume é $2\pi y \times h(y)\times dy=2\pi y(1-y)dy$. Integrando
+sobre todas as cascas, com $y$ variando entre $0$ e $1$:
+\begin{equation}\label{eq_int_2}
+V(S_1)=\int_0^12\pi y (1-y)\,dy\,.
+\end{equation}
+
+
+\begin{exo}\label{exo:verificar}
+Verifique que os valores das integrais em \eqref{eq_int_1} e \eqref{eq_int_2}
+são iguais.
+\end{exo}
+
+Consideremos agora o solído $S_2$ obtido girando $\cT$ em torno
+da reta de equação $x=3$.
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=1.8]
+\tdplotsetmaincoords{55}{115}
+
+\newcommand{\funcao}[1]{(2-(#1))}
+
+\pgfmathsetmacro{\a}{1};
+\pgfmathsetmacro{\b}{2};
+
+\begin{scope}[tdplot_main_coords]
+\pgfmathsetmacro{\nx}{20};
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+
+\pgfmathsetmacro{\alphamin}{0};
+\pgfmathsetmacro{\alphamax}{20};
+\pgfmathsetmacro{\nalpha}{10};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,{5.5},0);
+\draw[->] (0,0,0) -- (0,0,1.2);
+
+%desenhar o eixo de rotacao:
+\draw[dashed] (0,3,-0.4)--(0,3,1.6);
+
+%desenhar a linha pontilhada de tras:
+\draw[thick, dotted] (0,\a,0)--(0,\a,{\funcao{\a}});
+
+%desenhar a flechinha de tras:
+\draw[->, domain=180:-140, variable=\alpha, samples=50] plot
+({2*sin(\alpha)},{3+2*cos(\alpha)},0); 
+
+\draw (0,3,0.6) node[above right]{$x=3$};
+
+\fill[areagrafico]
+(0,\a,0)--plot[domain=\a:\b](0,\x,{\funcao{\x}})--(0,\b,0)--cycle;
+%desenhar o grafico de f em [a,b]
+\draw[thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}}); 
+
+\end{scope}
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Comecemos girando retângulos verticais:
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\coordinate (A) at (1,0);
+\coordinate (B) at (1,1);
+\coordinate (C) at (2,0);
+\draw[->] (0,0)--(4,0);
+\draw[->] (0,-0.2)--(0,1);
+%\fill[areagrafico]  (A)--(B)--(C)--cycle;
+\draw (A)--(B)--(C)--cycle;
+
+\pgfmathsetmacro{\s}{1.45};
+\pgfmathsetmacro{\t}{1.55};
+\fill[areagrafico] (\s,0)--(\s,{2-\t})--(\t,{2-\t})--(\t,0)--cycle;
+\draw (\s,0)--(\s,{2-\t})--(\t,{2-\t})--(\t,0)--cycle;
+
+\pgfmathsetmacro{\l}{0.3};
+\draw[dotted] (\s,0)--(\s,{-\l});
+\draw[dotted] (\t,0)--(\t,{-\l});
+\draw[decorate, decoration=brace] 
+(\t,{-\l})--(\s,{-\l})node[midway, below]{$dx$};
+
+\draw (\t,0) node[below]{$x$};
+\draw[thick] (1,0)node[below]{$1$}--(2,0)node[below]{$2$};
+
+\pgfmathsetmacro{\g}{0.6};
+\draw[decorate, decoration=brace] ({\g},{0})--
+({\g},{2-\t})node[midway, left]{$f(x)$};
+\draw[dotted] 
+({\g},{2-\t})--({\t},{2-\t});
+\draw[dotted] 
+({\t},{0})--({\g},{0});
+
+\draw[dashed] (3,-0.3)--(3,1.3);
+\draw[decorate, decoration=brace] (\t,{2-\t})--
+(3,{2-\t})node[midway, above]{$r(x)$};
+
+\draw (3,0) node[below right]{$3$};
+
+
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Ao girar o retângulo representado na figura em torno da reta $x=3$,
+isto gera uma casca de raio
+$r(x)=3-x$, de altura $f(x)=2-x$ e de espessura $dx$. Logo, o seu
+volume é dado por $2\pi r(x)\times f(x)\times
+dx=2\pi(3-x)(2-x)dx$. O volume de $S_2$ é obtido integrando com
+respeito a $x$, entre $1$ e $2$:
+\[ V(S_2)=\int_1^22\pi(3-x)(2-x)\,dx\,.  \]
+Girando agora retângulos horizontais:
+
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\coordinate (A) at (1,0);
+\coordinate (B) at (1,1);
+\coordinate (C) at (2,0);
+\draw[->] (0,0)--(4,0);
+\draw[->] (0,-0.2)--(0,1.2);
+%\fill[areagrafico]  (A)--(B)--(C)--cycle;
+\draw (A)--(B)--(C)--cycle;
+
+
+\draw[dashed] (3,-0.3)--(3,1.3);
+\draw (3,0) node[above right]{$3$};
+
+\pgfmathsetmacro{\s}{0.45};
+\pgfmathsetmacro{\t}{0.55};
+\fill[areagrafico] (1,\s)--({2-\t},\s)--({2-\t},\t)--(1,\t)--cycle;
+\draw (1,\s)--({2-\t},\s)--({2-\t},\t)--(1,\t)--cycle;
+
+\pgfmathsetmacro{\l}{0.3};
+\draw[dotted] (1,\s)--({1-\l},\s);
+\draw[dotted] (1,\t)--({1-\l},\t);
+\draw[decorate, decoration=brace] ({1-\l},\s)--
+({1-\l},\t) node[midway, left]{$dy$};
+
+\draw (0,\t) node[left]{$y$};
+\draw[dotted] (0,\t)--(1,\t);
+\draw[dashed] (0,1)node[left]{$1$}--(1,1);
+\draw (0,0)node[left]{$0$};
+\draw[thick] (0,0)--(0,1);
+
+\draw[dotted] (1,\s)--({1},{-1.5*\l});
+\draw[dotted] ({2-\t},\s)--({2-\t},{-0.6*\l});
+\draw[decorate, decoration=brace] ({3},{-1.5*\l})-- 
+(1,{-1.5*\l}) node[midway, below]{$R(y)$};
+\draw[decorate, decoration=brace] ({3},{-0.6*\l})-- 
+({2-\t},{-0.6*\l}) node[midway, below]{$r(y)$};
+
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Ao girar em torno da reta vertical $x=3$, o retângulo horizontal gera um
+anel, de altura $dy$, de raio exterior $R(y)=2$, de raio
+interior $r(y)=3-(2-y)=1+y$. O volume desse anel é dado por 
+$\pi R(y)^2 \times dy-\pi r(y)^2\times dy$. Logo, o volume de
+$S_2$ é dado pela integral
+$$
+V(S_2)=\int_0^1 (\pi 2^2-\pi (1+y)^2)\,dy\,.
+$$
+
+\end{ex}
+
+\subsection{Exercícios}
+
+\begin{exo}
+Considere a região $R$ delimitada pelo gráfico da função $y=\sen x$,
+pelo eixo $x$, e pelas duas retas $x=\pi/2$, $x=\pi$.
+Calcule a área de $R$. Em seguida,
+monte uma integral (não precisa calculá-la) cujo valor dê o volume so sólido
+obtido girando $R$: 1) em torno do eixo $x$, 2) em torno da reta $x=\pi$.
+\begin{sol}
+A área é dada por 
+$$\int_{\pi/2}^\pi\sen (x)dx=-\cos (x)|^{\pi}_{\pi/2}=-(-1)-0=1\,.$$
+Girando em torno do eixo $x$:
+$V_1=\int_{\pi/2}^{\pi}\pi(\sen x)^2\,dx$.
+Ou, com as cascas: $V_1=\int_0^12\pi y (\pi/2-\arcsen y)\,dy$.
+Em torno da reta $x=\pi$, usando as cascas:
+$V_2=\int_{\pi/2}^\pi2\pi(\pi-x)\sen x\,dx$.
+Sem usar as cascas:
+$V_2=\pi(\tfrac{\pi}{2})^2\cdot 1-\int_0^1\pi (\arcsen y)^2\,.dy$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Mostre que o volume de um cone de base circular de raio $R$ e de altura $H$ é
+igual a $V=\frac{1}{3}\pi R^2H$.
+\begin{sol}
+O cone pode ser (tem vários jeitos, mas esse é o mais simples) 
+obtido girando o gráfico da função $f(x)=\frac{R}{H}x$, $0\leq x\leq H$, em
+torno do eixo $x$. Logo,
+$$
+V=\int_0^H\pi\big(\frac{R}{H}x\Big)^2dx=\pi\frac{R^2}{H^2}\int_0^Hx^2dx=
+\pi\frac{R^2}{H^2}\frac{H^3}{3}=\frac{1}{3}\pi R^2H \,\,$$
+Obs: pode também rodar o gráfico da função $f(x)=-\frac{H}{R}x+H$, $0\leq x\leq
+R$, em torno do eixo $y$.
+\end{sol}
+\end{exo}
+
+\begin{exo}(Prova 3, 2010, Turmas N)
+Calcule o volume do sólido obtido girando a região $R=\{(x,y):1\leq x\leq
+e\,,\,0\leq y\leq \sqrt{x}\ln x\}$ em torno da reta $y=0$.
+\begin{sol}
+O volume é dado por $V=\int_1^e\pi(\sqrt{x}\ln x)^2dx$. Integrando duas vezes
+por partes, obtem-se
+\begin{align*}
+\int x(\ln x)^2dx&=\frac{x^2}{2}(\ln x)^2-\int \frac{x^2}{2}2(\ln
+x)\frac{1}{x}dx\\
+&=\frac{x^2}{2}(\ln x)^2-\int x\ln xdx\\
+&=\frac{x^2}{2}(\ln x)^2-\big\{\frac{x^2}{2}\ln x-\int\frac{x^2}{2}\frac{1}{x}dx
+\big\}\\
+&=\frac{x^2}{2}(\ln x)^2-\frac{x^2}{2}\ln x+\frac{x^2}{4}+C
+\end{align*}
+Logo, $V=\pi\frac{e^2-1}{4}$.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Considere a região $R$ delimitada pela parábola $y=x^2$, 
+pelo eixo $x$ e pela reta $x=1$,
+contida no primeiro quadrante.
+Para cada uma das retas abaixo, monte uma integral (sem calculá-la) que dê o volume do
+sólido obtido girando $R$ em torno da reta $r$, usando a) cílindros, b) cascas.
+\begin{multicols}{3}
+\begin{enumerate}
+\item\label{itexorotsol1}  $y=0$,
+\item\label{itexorotsol2} $y=1$,
+\item\label{itexorotsol3}   $y=-1$,
+\item\label{itexorotsol4} $x=0$,
+\item\label{itexorotsol5} $x=1$,
+\item\label{itexorotsol6} $x=-1$.
+\end{enumerate}
+\end{multicols}
+\vspace{0.01cm}
+\begin{sol}
+\eqref{itexorotsol1}
+Cil.: $\int_0^1\pi (x^2)^2\,dx$, 
+Casc.:
+$\int_0^12\pi y(1-\sqrt{y})\,dy$.
+\eqref{itexorotsol2}
+Cil.: $\int_0^1\pi(1^2-(1-x^2)^2)\,dx$
+Casc.: $\int_0^12\pi(1-y)(1-\sqrt{y})\,dy$,
+\eqref{itexorotsol3}
+Cil.: $\int_0^1\pi((1+x^2)^2-1^2)\,dx$
+Casc.: $\int_0^1 2\pi(1+y)(1-\sqrt{y})\,dy$
+\eqref{itexorotsol4}
+Cil.: $\int_0^1\pi(1^2-\sqrt{y}^2)\,dy$
+Casc.: $\int_0^12\pi x\cdot x^2\,dx$
+\eqref{itexorotsol5}
+Cil. $\int_0^1\pi(1-\sqrt{y})^2\,dy$
+Casc.: $\int_0^12\pi(1-x)x^2\,dx$
+\eqref{itexorotsol6}
+Cil.: $\int_0^1\pi(2^2-(1+\sqrt{y})^2)\,dy$
+Casc. $\int_0^12\pi(1+x)x^2\,dx$
+\end{sol}
+\end{exo}
+
+
+\begin{exo}
+Monte uma integral cujo valor seja igual ao volume do
+sólido obtido girando a região $R$ (finita, delimitada pela curva $y=1-(x-2)^2$
+e o eixo $x$) em torno da reta $y=2$.
+\begin{sol}
+Com o método dos cilíndros,
+$$V=\int_1^3\pi 2^2dx-\int_1^3\pi\big(2-(1-(x-2)^2)\big)^2dx\,\,.$$
+OU, usando o método das cascas, 
+$$
+V=\int_0^12\pi(2-y)2\sqrt{1-y}dy\,.
+$$
+OU, transladando o gráfico da função, e girando a nova região (finita,
+delimitada pela nova curva $y=-1-x^2$ e o eixo $x$),
+$$V=\int_{-1}^{+1}\pi 2^2dx-\int_{-1}^{+1}\pi(-1-x^2)^2dx\,.$$
+\end{sol}
+\end{exo}
+
+
+\begin{exo}
+Considere o sólido $S$ obtido girando o gráfico da função $f(x)=\cosh(x)$ em
+torno da reta $y=0$, entre $x=-1$ e $x=+1$. Esboce $S$, e calcule o seu volume.
+(Lembre que $\cosh(x)\pardef\frac{e^x+e^{-x}}{2}$.)
+\begin{sol}
+O volume é dado pela integral 
+\begin{align*}
+V=\int_{-1}^{+1}\pi \cosh^2xdx&=\pi\int_{-1}^{+1}\frac{e^{2x}+2+e^{-2x}}{4}dx\\
+&=\frac{\pi}{4}\Big\{
+\frac{e^{2x}}{2}+2x-\frac{e^{-2x}}{2}
+\Big\}_{-1}^{+1}\\
+&=\frac{\pi}{4}\big\{e^2+4-e^{-2}\big\}
+\end{align*}
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Considere a região $R$ delimitada pelo gráfico da função
+$f(x)=\cos x$, pelas retas
+$x=\frac{\pi}{2}$, $x=\pi$, e pelo eixo $x$.
+Monte duas integrais, cujos valores dão o volume do
+sólido de revolução obtido girando
+$R$ em torno 1) da reta $x=\pi$, 2) da reta $y=-1$.
+\begin{sol}
+Em torno da reta $x=\pi$:
+$$
+V=\int_{\pi/2}^{\pi}2\pi(\pi-x)|\cos x|\,dx\,,\quad\text{ ou }
+\quad V=\int_{-1}^0\pi(\pi-\arcos y)^2\,dy\,.
+$$
+Em torno da reta $y=-1$:
+$$
+V=\int_{\pi/2}^\pi \pi\cdot 1^2\,dx-\int_{\pi/2}^\pi\pi(\cos
+x -(-1))^2\,dx\,,\quad\text{ ou }
+\quad V=\int_{-1}^02\pi (y-(-1))(\pi-\arcos y)\,dy\,.
+$$
+\end{sol}
+\end{exo}
+
+
+\begin{exo}
+Um toro é obtido girando um disco de raio $r$ em torno de
+um eixo vertical, mantendo o centro do disco a distância
+$R$ ($R>r$) do eixo.
+Mostre que o volume desse toro é igual a $2\pi^2 r^2R$.
+\end{exo}
+
+\section{Áreas de superfícies de revolução}
+
+Suponha que se queira calcular a \emph{área da superfície} do
+sólido do início da Seção
+\ref{Sec_Solidos} (sem os dois discos de frente
+e de trás), denotada $A(S)$.
+De novo, aproximaremos a área $A(S)$ por uma soma de áreas mais
+simples.\\
+
+Para decompor a área em áreas mais elementares, 
+escolhamos uma divisão $a=x_0<x_1<\dots<x_n=b$,
+e para cada intervalo $[x_{i-1},x_i]$, consideremos o anel $J_i$
+obtido girando o segmento ligando $(x_{i-1},f(x_{i-1}))$ a 
+$(x_i,f(x_i))$ em torno do eixo $x$:
+
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}[scale=2]
+\tdplotsetmaincoords{55}{115}
+
+\newcommand{\funcao}[1]{(1/((#1)^2+1))}
+
+\pgfmathsetmacro{\a}{0.2};
+\pgfmathsetmacro{\b}{1.5};
+
+\pgfmathsetmacro{\nx}{7};
+\pgfmathsetmacro{\len}{3}
+\pgfmathsetmacro{\Dx}{(\b-\a)/\nx};
+
+\pgfmathsetmacro{\point}{\a+(\len*\Dx)};
+\pgfmathsetmacro{\pointb}{\a+((\len+1)*\Dx)};
+
+\draw[->] (0,0) -- ({\b+0.3},0);
+\draw[->] (0,0) -- (0,1.2);
+
+\draw[dotted] (\a,0) -- (\a,{\funcao{\a}});
+\draw[dotted] (\b,0) -- (\b,{\funcao{\b}});
+
+\draw[densely dotted] (\point,0)--(\point,{\funcao{\point}});
+\draw[densely dotted] (\pointb,0)--(\pointb,{\funcao{\pointb}});
+
+\draw[color=gray!50, domain=\a:\b, variable=\t] plot
+(\t,{\funcao{\t}}); 
+
+\draw[thick] (\point,{\funcao{\point}})--
+(\pointb,{\funcao{\pointb}});
+
+\draw[<-,>=latex] (\point,0)--({\point-0.1},-0.2)
+node[left]{$x_{i-1}$};
+
+
+\draw[<-,>=latex] (\pointb,0)--({\pointb+0.1},-0.2)
+node[right]{$x_{i}$};
+
+\begin{scope}[xshift=4cm, yshift=0.5cm, tdplot_main_coords]
+
+\pgfmathsetmacro{\alphamin}{0};
+\pgfmathsetmacro{\alphamax}{360};
+\pgfmathsetmacro{\nalpha}{40};
+\pgfmathsetmacro{\Dalpha}{(\alphamax-\alphamin)/\nalpha};
+
+\draw (0,\pointb,{\funcao{\pointb}+0.2}) node[above right]{$J_i$};
+
+\draw[->] (0,0,0) -- (1.2,0,0);
+\draw[->] (0,0,0) -- (0,{\b+0.3},0) node[anchor=north west]{$x$};
+\draw[->] (0,0,0) -- (0,0,1.2);
+
+\draw[thick, dotted] (0,\a,0)--(0,\a,{\funcao{\a}});
+
+\draw[thick, color=gray, domain=\alphamin:\alphamax, variable=\alpha] plot
+({sin(\alpha)*\funcao{\point}},\point,{cos(\alpha)*\funcao{\point}}); 
+\draw[dotted] (0,\point,{\funcao{\point}})--(0,\point,0);
+\draw[dotted] (0,\pointb,{\funcao{\pointb}})--(0,\pointb,0);
+\foreach \j in {0,...,\nalpha} {
+\draw ({sin(\alphamin+\Dalpha*\j)*\funcao{\point}},
+\point,{cos(\alphamin+\Dalpha*\j)*\funcao{\point}})--
+({sin(\alphamin+\Dalpha*\j)*\funcao{\pointb}},
+\pointb,{cos(\alphamin+\Dalpha*\j)*\funcao{\pointb}})--
+({sin(\alphamin+\Dalpha*(\j+1))*\funcao{\pointb}},
+\pointb,{cos(\alphamin+\Dalpha*(\j+1))*\funcao{\pointb}});
+}
+
+\draw[thick, thick, domain=\a:\b, variable=\t] plot
+(0,\t,{\funcao{\t}}); 
+\draw[thick,dotted] (0,\b,0)--(0,\b,{\funcao{\b}});
+\end{scope}
+
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+
+Pode ser verificado que o anel $J_i$ tem uma área dada por 
+\begin{equation}\label{eq_area_anel}
+A(J_i)=\pi\sqrt{(x_i-x_{i-1})^2+(f(x_i)-f(x_{i-1}))^2}(f(x_i)+f(x_{i-1}))\,.
+\end{equation}
+
+Quando $\Delta x_i=x_i-x_{i-1}$ for suficientemente pequeno, e se
+$f$ for contínua, $f(x_i)+f(x_{i-1})$ pode ser aproximada por
+$2f(x_i)$.
+Logo, colocando $\Delta x_i$ em evidência dentro da raiz,
+\begin{equation}
+A(J_i)\simeq 2 \pi f(x_i)\sqrt{1+\Bigl(\frac{f(x_i)-f(x_{i-1})}{\Delta
+x_i}\Bigr)^2)}\Delta x_i\,.
+\end{equation}
+Quando $\Delta x_i$ for pequeno, o quociente $(\frac{f(x_i)-f(x_{i-1})}{\Delta
+x_i}$ pode ser aproximado por $f'(x_i)$. Logo, a 
+área total pode ser aproximada pela soma de Riemann
+$$
+\sum_{i=1}^n A(J_i)\simeq \sum_{i=1}^n 
+2\pi f(x_i)\sqrt{1+(f'(x_i))^2}\Delta x_i\,. 
+$$
+Quando $n\to \infty$ e todos os $\Delta x_i\to 0$, a soma de
+Riemann acima converge para a integral
+\begin{equation}
+A(S)=\int_a^b2\pi f(x)\sqrt{1+(f'(x))^2}\,dx\,.
+\end{equation}
+
+\begin{ex}
+Considere a superfície gerada pela rotação da curva
+$y=\sqrt{x}$ em torno do eixo $x$, entre $x=0$ e $x=1$. A sua
+área é dada pela integral 
+\begin{align*}
+A(S)&=\int_0^1
+2\pi\sqrt{x}\sqrt{1+(\tfrac{1}{2\sqrt{x}})^2}\,dx=
+\pi\int_0^1 \sqrt{1+4 x}\,dx=\tfrac{\pi}{6}(5^{3/2}-1)\,.
+\end{align*}
+\end{ex}
+
+\begin{exo}
+Prove \eqref{eq_area_anel}.
+\begin{sol}
+Se trata de mostrar que 
+a área lateral de um cone truncado de raios $r\leq R$ 
+e de altura $h$ é dada por 
+$$
+A=\pi (R+r)\sqrt{h^2+(R-r)^2}\,.
+$$
+De fato, fazendo o corte,
+\begin{center}
+\begin{bmlimage}\begin{tikzpicture}
+\coordinate (A) at (0,0);
+\coordinate (B) at (0,1);
+\coordinate (C) at (0,3);
+\coordinate (D) at (1.333,1);
+\coordinate (E) at (2,0);
+\draw (A)--(B) node[midway, left]{$h$}--
+(C)--(E)--(A) node[midway, above]{$R$};
+\draw (B)--(D) node[midway, above]{$r$};
+\draw (C) node[left]{$C$};
+\draw (D) node[right]{$D$};
+\draw (E) node[right]{$E$};
+\end{tikzpicture}\end{bmlimage}
+\end{center}
+Chamando a distância $CD$ de $l$, e a distância $CE$ de $L$, temos
+$A=\pi R L-\pi rl$. Uma conta elementar mostra que
+$l=\frac{r}{R-r}\sqrt{h^2+(R-r)^2}$, e que 
+$L=\frac{R}{R-r}\sqrt{h^2+(R-r)^2}$.
+Isso dá a fórmula desejada.
+\end{sol}
+\end{exo}
+
+\begin{exo}
+Mostre que a área da superfície de uma esfera de raio $R$ é igual a $4\pi R^2$.
+\begin{sol}
+Como a esfera é obtida girando o gráfico de
+$f(x)=\sqrt{R^2-x^2}$, a sua área é dada por 
+$$
+A=2\pi\int_{-R}^R\sqrt{R^2-x^2}\sqrt{1+\bigl(\sqrt{R^2-x^2}'\bigr)^2}\,dx
+=2\pi R\int_{-R}^R\,dx= 4\pi R^2\,.
+$$
+\end{sol}
+\end{exo}
+
+\section{Energia potencial}
+(em construção)
+\section{Resolvendo equações diferenciais}
+(em construção)

@@ -1,0 +1,327 @@
+%&pdflatex
+% !TeX spellcheck = pt_BR
+% !TEX encoding = UTF-8 Unicode
+
+\documentclass[12pt, reqno]{book}
+
+%\def\updateans {}
+% Only need to enable once in a lifetime, when the file ans.tex needs to be updated.
+
+\synctex=1
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage{bookml}
+
+\title{Cálculo 1}
+
+\usepackage{amssymb, framed, amsmath, amsthm, amscd, graphicx, amsfonts, color, xcolor}
+
+\iflatexml
+\else
+\usepackage{polynom}
+%%PACKAGES TIKZ
+\usepackage{pgf, tikz}
+\usepackage{tkz-tab}
+%\usepackage{pgf}
+%\usepackage{3dplot}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{decorations.text}
+\usetikzlibrary{calc}
+%\usetikzlibrary{external}
+%\tikzexternalize[prefix=tikzexfig/]
+\usetikzlibrary{arrows,snakes,backgrounds,automata}
+\usepackage{pgfplots}
+%%%CORES NO TIKZ%%%
+\tikzstyle{areagrafico}=[color=gray!20]
+\tikzstyle{areafuncaoarea}=[color=gray!35]
+\tikzstyle{corretangulos}=[color=gray!30, opacity=0.5]
+\tikzstyle{corretangulos_back}=[color=gray!10, opacity=0.2]
+\tikzstyle{corretangulos_front}=[color=gray!40, opacity=0.8]
+%%%para os intervalos fechados:
+\tikzstyle{intfechado}=[fill=black]
+%%%e abertos:
+\tikzstyle{intaberto}=[draw=black, fill=white]
+%%CORES TRIGO
+\newcommand{\coulseno}{gray!90}
+\newcommand{\coulcoseno}{gray!70!black}
+\newcommand{\coultang}{gray!50!black}
+\fi
+
+\usepackage{wrapfig}
+
+\usepackage[top=3cm,left=2.5cm,right=2.5cm,bottom=3cm,a4paper]{geometry}
+
+\usepackage{multicol}
+\usepackage{caption}
+
+\usepackage{verbatim}
+
+\ifdefined\updateans
+% Only need to run once in a lifetime, when the file ans.tex needs to be updated.
+\usepackage{answers}
+\Newassociation{sol}{Solution}{ans}
+\Newassociation{resp}{Resposta}{ans}
+\renewcommand{\Solutionlabel}[1]{\emph{{\bf #1}:}}
+\renewcommand{\Respostalabel}[1]{\emph{Resposta do Exercício #1:}}
+\else
+\let\sol=\comment
+\let\endsol=\endcomment
+\let\ans=\comment
+\let\endans=\endcomment
+\fi
+
+\newcommand{\questao}[3]{\item(#1pts) #2}
+
+\newcommand{\pt}[1]{(\mathbf{#1}{\text{\bf pts}})}
+
+
+\newcommand{\grasA}[1]{\textbf{#1}}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\al}[1]{\begin{align}#1\end{align}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\half}{\frac{1}{2}}
+
+%LETTRES
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cJ}{\mathcal{J}}
+\newcommand{\cK}{\mathcal{K}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cV}{\mathcal{V}}
+\newcommand{\cW}{\mathcal{W}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\cY}{\mathcal{Y}}
+\newcommand{\cZ}{\mathcal{Z}}
+
+\newcommand{\bA}{\mathbb{A}}
+\newcommand{\bB}{\mathbb{B}}
+\newcommand{\bL}{\mathbb{L}}
+\newcommand{\bC}{\mathbb{C}}
+\newcommand{\bR}{\mathbb{R}}
+\newcommand{\bK}{\mathbb{K}}
+\newcommand{\bP}{\mathbb{P}}
+\newcommand{\bE}{\mathbb{E}}
+\newcommand{\bQ}{\mathbb{Q}}
+\newcommand{\bS}{\mathbb{S}}
+\newcommand{\bF}{\mathbb{F}}
+\newcommand{\bN}{\mathbb{N}}
+\newcommand{\bT}{\mathbb{T}}
+\newcommand{\bX}{\mathbb{X}}
+\newcommand{\bZ}{\mathbb{Z}}
+
+
+\usepackage{thmtools}
+%\usepackage{ntheorem}
+
+\theoremstyle{plain}
+
+\declaretheorem[name=Teorema, numberwithin=chapter, 
+shaded={bgcolor={RGB}{205,205,205}}]{teo}
+\declaretheorem[name=Proposição, numberwithin=chapter, 
+shaded={bgcolor={RGB}{210,210,210}}]{pro}
+\declaretheorem[name=Corolário, numberwithin=chapter, 
+shaded={bgcolor={RGB}{215,215,215}}]{cor}
+\declaretheorem[name=Lema, numberwithin=chapter, 
+shaded={bgcolor={RGB}{220,220,220}}]{lem}
+\declaretheorem[name=Exercício, numberwithin=chapter, 
+shaded={bgcolor={RGB}{235,235,235}}]{exo}
+\declaretheorem[name=Definição, numberwithin=chapter, 
+shaded={bgcolor={RGB}{225,225,225}}]{defin}
+
+\theoremstyle{definition}
+\newtheorem{regra}{Regra}
+
+\declaretheoremstyle[
+headfont=\bfseries,
+notefont=\bfseries,
+headpunct={.},
+numbered=yes
+]{estilo_exemplo}
+
+\declaretheoremstyle[
+headfont=\bfseries,
+notefont=\bfseries,
+headpunct={.},
+numbered=yes
+]{estilo_obs}
+
+\iflatexml
+\else
+\theoremstyle{estilo_exemplo}
+\fi
+
+\declaretheorem[name=Exemplo, numberwithin=chapter, 
+qed={$\diamond$}]{ex}
+\declaretheorem[name=Observação, numberwithin=chapter, 
+qed={$\bullet$}]{obs}
+
+\newcommand{\detalhes}[1]{
+{#1}
+}
+
+\newcommand{\citacao}[2]{
+\begin{quotation}
+ ``\emph{#1}''
+\begin{flushright}
+#2 
+\end{flushright}
+\end{quotation}
+}
+
+
+%% DEFINICOES FUNCOES
+
+\newcommand{\pardef}{{:=}}
+\newcommand{\sen}{\operatorname{sen}}
+\newcommand{\senh}{\operatorname{senh}}
+\renewcommand{\cot}{{\rm cotan\,}}
+
+\newcommand{\arcsen}{\operatorname{arcsen}}
+\newcommand{\arcos}{\operatorname{arcos}}
+\newcommand{\imagem}{\operatorname{Im}}
+
+\newcommand{\li}[2]{\lim_{{#1}\to {#2}}}
+\newcommand{\pisobredois}{\tfrac{\pi}{2}}
+\newcommand{\pisobretres}{\tfrac{\pi}{3}}
+\newcommand{\pisobrequatro}{\tfrac{\pi}{4}}
+\newcommand{\pisobreseis}{\tfrac{\pi}{6}}
+
+\newcommand{\fracinfty}{\frac{\infty}{\infty}}
+
+\usepackage{hyperref}
+
+\usepackage{makeidx}
+\makeindex
+
+
+
+\begin{document}
+
+
+\frontmatter
+
+\author{Sacha Friedli
+\\
+\\
+Departamento de Matemática
+\\
+Instituto de Ciências Exatas
+\\
+Universidade Federal de Minas Gerais
+}
+\maketitle
+
+\chapter{Licença e créditos}
+
+\copyright\ 2010-2015 Sacha Friedli.
+Permitido o uso nos termos da licença CC BY-SA 4.0. 
+\\
+
+
+\noindent
+\textbf{Créditos}.
+\\
+Para fazer atribuição em derivados deste material, incluir a referência:
+\\
+S. Friedli. Cálculo 1, 2015 (BY-SA).
+\\
+com um link para: https://github.com/leorolla/friedlicalculo
+
+%\thispagestyle{empty}
+%\vspace*{2cm}
+%\begin{center}
+%   {\Huge\bfseries Cálculo 1}\\[3mm]
+%{\large S.  Friedli}\\ 
+%{Departamento de Matemática}\\ 
+%{Instituto de Ciências Exatas}\\ 
+%{Universidade Federal de Minas Gerais}\\
+%\vspace*{2cm}
+%
+%\vspace{10cm}
+%\textbf{Versão 1.02}\\ \today\\
+%\end{center}
+
+
+\include{CAP_Introducao}
+
+
+\iflatexml
+\else
+\setcounter{tocdepth}{2}
+\tableofcontents
+\fi
+
+
+\mainmatter
+
+
+%\setlength{\parindent}{5pt}
+\setlength{\parskip}{0cm}
+
+\include{CAP_Fundamentos}
+\include{CAP_Funcoes}
+\include{CAP_FuncoesFundamentais}
+\include{CAP_Limites}
+\include{CAP_Continuidade}
+\include{CAP_Derivacao}
+\include{CAP_Extremos}
+\include{CAP_Estudos}
+\include{CAP_Integral}
+\include{CAP_Applicacoes}
+\include{CAP_Improprias}
+
+
+
+\appendix
+
+
+
+\chapter{Soluções dos exercícios}
+
+\ifdefined\updateans
+% Only need to run once in a lifetime, when the file ans.tex needs to be updated.
+\Closesolutionfile{ans}
+{\scriptsize{\Readsolutionfile{ans}}}
+\else
+\newenvironment{Solution}{\textbf}{}
+{
+\iflatexml\else\scriptsize\fi
+\input{ans1}\par
+}
+\fi
+
+
+\cleardoublepage
+\phantomsection
+\iflatexml
+%\chapter*{(vazio)}
+\else
+\addcontentsline{toc}{chapter}{\indexname}
+\fi
+\printindex
+
+
+\end{document}
+
